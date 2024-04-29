@@ -15,7 +15,7 @@ This project entails an international web application specifically tailored for 
 ## Technologies
 
 - **Programming Languages:** Python, HTML, CSS, JavaScript
-- **Frontend:** HTML, CSS, JavaScript
+- **Frontend:** HTML, CSS, JavaScript (Built upon a modified template)
 - **Backend:** Django
 - **Database:** PostgreSQL
 - **Additional Libraries:** Bootstrap, Django REST framework
