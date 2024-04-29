@@ -28,8 +28,6 @@ This project entails an international web application specifically tailored for 
 
 ![uppload](https://github.com/eddy3o/rinderline/assets/105234157/38bd0493-7329-40e8-afbe-4c4b85839140)
 
-![user](https://github.com/eddy3o/rinderline/assets/105234157/0032fc69-e8a6-4a4f-b11d-fcdd06e629f8)
-
 ## Usage
 
 Rinderline is a project owned by San Jose Farms. If you are interested in using a similar application for your company, feel free to contact at edgardo.gonzalez.23@hotmail.com
