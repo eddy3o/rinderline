@@ -8,6 +8,11 @@ on:
     branches:
       - main
 
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
@@ -22,17 +27,15 @@ jobs:
           ruby-version: "3.1"
           bundler-cache: true
 
-      - name: Install dependencies
-        run: |
-          bundle install
-
       - name: Build Jekyll site
         run: |
           bundle exec jekyll build
 
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v2
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./_site
-          cname: eddy3o.github.io
+          path: "./_site"
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v2
