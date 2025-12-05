@@ -1,6 +1,14 @@
-# DOCUMENTACIÓN TÉCNICA - FRONTEND RINDERLINE
+---
+layout: default
+title: Documentación Frontend
+nav_order: 3
+has_children: true
+description: "Documentación técnica del Frontend de Rinderline"
+---
 
-**Versión:** 2.0  
+# Documentación Técnica - Frontend de Rinderline
+
+**Versión:** 1.0  
 **Fecha:** Noviembre 2025  
 **Framework:** Next.js 15.4.2 + React 19 + TypeScript  
 **UI Library:** Shadcn/ui + Radix UI + Tailwind CSS  
@@ -10,17 +18,58 @@
 
 ## ÍNDICE
 
-1. Introducción Técnica
-2. **Acceso y Autenticación**
-3. Interfaz General
-4. Dashboard / Pantalla de Inicio
-5. Módulo Principal (Documentos)
-6. Módulo de Aprobaciones
-7. Notificaciones
-8. Perfil y Configuración
-9. Sección de Administración
-10. Exportaciones y Reportes
-11. Errores Comunes
+1. [Introducción Técnica](#1-introducción-técnica)
+2. [Acceso y Autenticación](#2-acceso-y-autenticación)
+3. [Interfaz General](#3-interfaz-general)
+4. [Dashboard / Pantalla de Inicio](#4-dashboard--pantalla-de-inicio)
+5. [Módulo Principal (Documentos)](#5-módulo-principal-documentos)
+6. [Módulo de Aprobaciones](#6-módulo-de-aprobaciones)
+7. [Notificaciones](#7-notificaciones)
+8. [Perfil y Configuración](#8-perfil-y-configuración)
+9. [Sección de Administración](#9-sección-de-administración)
+10. [Exportaciones y Reportes](#10-exportaciones-y-reportes)
+11. [Errores Comunes](#11-errores-comunes)
+
+---
+
+## RESUMEN EJECUTIVO
+
+El frontend de Rinderline es una **aplicación web moderna construida con Next.js y React** que proporciona una interfaz intuitiva para la gestión de gastos empresariales internacionales. La plataforma se sincroniza en tiempo real con el backend Django REST API.
+
+### Características Clave:
+
+- **App Router de Next.js:** Rutas organizadas en carpetas con layouts automáticos y renderizado híbrido (SSR/SSG/CSR)
+- **TypeScript Strict:** Tipado completo para mayor seguridad en desarrollo
+- **Gestión de Estado:** Zustand para store global con persistencia opcional
+- **Formularios Robustos:** React Hook Form + Zod para validación declarativa
+- **Design System:** Shadcn/ui + Radix UI con Tailwind CSS para estilo consistente
+- **Multiidioma:** i18next con soporte para ES, EN, FR, DE
+- **Dark Mode:** Temas oscuro/claro con next-themes
+- **Gráficos Interactivos:** Recharts para dashboards y reportes visuales
+- **Autenticación Token:** Bearer tokens almacenados en localStorage con refresh automático
+
+### Rutas Principales:
+
+| Sección          | Ruta               | Acceso     | Propósito                           |
+| ---------------- | ------------------ | ---------- | ----------------------------------- |
+| **Login**        | `/login`           | Público    | Autenticación de usuarios           |
+| **Registro**     | `/signup`          | Público    | Crear nueva cuenta                  |
+| **Dashboard**    | `/web`             | Protegido  | Panel principal del empleado        |
+| **Gastos**       | `/web/expenses`    | Protegido  | Crear y gestionar documentos        |
+| **Aprobaciones** | `/web/appraisal-*` | Protegido  | Flujo de aprobación (3 niveles)     |
+| **Admin**        | `/web/admin`       | Solo admin | Gestión de usuarios y configuración |
+| **Perfil**       | `/web/settings`    | Protegido  | Configuración personal              |
+
+### Tecnologías:
+
+- **Frontend:** Next.js 15.4.2, React 19, TypeScript 5
+- **Styling:** Tailwind CSS 3.4.1, Shadcn/ui, Radix UI
+- **Estado:** Zustand 5.0.8
+- **Formularios:** React Hook Form + Zod
+- **API Client:** Axios 1.7.9 con interceptores
+- **Internacionalización:** i18next
+- **Gráficos:** Recharts 3.1.2
+- **Temas:** next-themes (Light/Dark mode)
 
 ---
 

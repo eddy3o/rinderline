@@ -1,0 +1,64 @@
+# Jekyll configuration for Rinderline Documentation
+
+title: Rinderline Documentation
+description: "Complete technical and user documentation for Rinderline expense management system"
+url: "https://eddy3o.github.io"
+baseurl: ""
+
+# Theme - Use just-the-docs
+theme: just-the-docs
+
+# Plugins
+plugins:
+  - jekyll-seo-tag
+
+# Appearance
+color_scheme: light
+search_enabled: true
+heading_anchors: true
+
+# Navigation
+aux_links:
+  "GitHub Repository":
+    - "https://github.com/eddy3o/rinderline"
+  "Backend Repository":
+    - "https://github.com/eddy3o/rinderline_backend"
+
+# Footer
+footer_content: "Copyright &copy; 2024-2025 Rinderline. All rights reserved."
+
+# Markdown processor
+markdown: kramdown
+kramdown:
+  syntax_highlighter: rouge
+  toc_levels: 2..6
+
+# Mermaid diagram support
+mermaid:
+  version: 10.6.1
+  theme: default
+  securityLevel: loose
+
+# Sass
+sass:
+  sass_dir: _sass
+
+# Build settings
+exclude:
+  - .gitignore
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - vendor/bundle/
+  - vendor/cache/
+  - vendor/gems/
+  - vendor/ruby/
+  - run-docs.ps1
+  - run-docs.sh
+  - backend.md
+  - frontend.md
+  - manual.md
+  - JEKYLL_SETUP.md
+  - SETUP_COMPLETE.md
+  - START_HERE.md
+  - README.md

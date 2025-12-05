@@ -1,14 +1,65 @@
-# Tech Documentation - Rinderline Backend
+---
+layout: default
+title: Documentación Backend
+nav_order: 2
+has_children: true
+description: "Documentación técnica del Backend de Rinderline"
+---
+
+# Documentación Técnica - Backend de Rinderline
+
+**Versión:** 1.0  
+**Fecha:** Noviembre 2025  
+**Framework:** Django 5.2.8 + Django REST Framework 3.15.2 + PostgreSQL  
+**Stack:** Python 3.11+ | Django ORM | Token Authentication  
+**Despliegue:** Gunicorn + Nginx (Render/Railway) | AWS S3
+
+---
+
+## ÍNDICE
+
+1. [Introducción Técnica](#1-introducción)
+2. [Arquitectura General](#2-arquitectura-general)
+3. [Estructura del Proyecto](#3-estructura-del-proyecto)
+4. [Modelos y Base de Datos](#4-modelos-y-base-de-datos)
+5. [API y Endpoints](#5-api-y-endpoints)
+6. [Autenticación y Seguridad](#6-autenticación-y-seguridad)
+7. [Servicios y Lógica de Negocio](#7-servicios-y-lógica-de-negocio)
+8. [Integraciones Externas](#8-integraciones-externas)
+9. [Configuración y Despliegue](#9-configuración-y-despliegue)
+10. [Troubleshooting y Errores Comunes](#10-troubleshooting-y-errores-comunes)
+
+---
+
+## RESUMEN EJECUTIVO
+
+El backend de Rinderline es una **API REST monolítica construida con Django REST Framework** que gestiona la lógica de negocio completa para la administración de gastos empresariales internacionales.
+
+### Características Clave:
+
+- **Autenticación Token-based:** Sin JWT, utilizando DRF Token Authentication con soporte para múltiples usuarios
+- **Arquitectura de Capas:** Views → Services → ORM → Database, con separación clara por features
+- **Integraciones:** AWS S3 (almacenamiento), SAP ERP (en desarrollo), APIs de tasas de cambio, Sentry (monitoreo)
+- **Soft Delete:** Eliminación lógica en documentos para auditoría completa
+
+### Tecnologías:
+
+- **Backend:** Python 3.11+, Django 5.2.8, DRF 3.15.2
+- **BD:** SQLite (dev), PostgreSQL (prod)
+- **Autenticación:** Token DRF (no JWT)
+- **Almacenamiento:** AWS S3
+- **Monitoreo:** Sentry + Prometheus
+- **Despliegue:** Gunicorn + Nginx + Render/Railway
 
 ---
 
 ## 1. Introducción
 
-**Nota:** Esta documentación cubre exclusivamente el backend de Rinderline; los detalles del frontend se documentan en su repositorio correspondiente.
+**Nota:** Esta documentación cubre exclusivamente el backend de Rinderline; los detalles del frontend se documentan en su apartado correspondiente.
 
 ### 1.1 Objetivo del Sistema
 
-El backend de Rinderline está diseñado para ofrecer una API robusta y escalable que permita a las empresas gestionar sus gastos internacionales de forma eficiente y segura. Su principal objetivo es centralizar el registro, procesamiento y análisis de gastos —incluyendo viáticos, proveedores y aprobaciones multinivel— con soporte para múltiples monedas y regiones.
+El backend de Rinderline está diseñado para ofrecer una API robusta y escalable que permita a las empresas gestionar sus gastos internacionales de forma eficiente y segura. Su principal objetivo es centralizar el registro, procesamiento y análisis de gastos —incluyendo viáticos, proveedores y aprobaciones multinivel— con soporte para múltiples monedas y corporativos.
 
 ### 1.2 Contexto y Alcance del Backend
 
@@ -17,14 +68,13 @@ Dentro de la arquitectura de Rinderline, el backend cumple la función de:
 - **Exponer endpoints RESTful** que implementan la lógica de negocio
 - **Validar y almacenar datos** en la base PostgreSQL
 - **Gestionar autenticación y autorización** mediante tokens seguros
-- **Generar reportes y exportar información** en múltiples formatos
 - **Interactuar con servicios externos** (SAP, AWS S3, APIs de tipo cambio)
 
 El alcance de esta documentación se centra únicamente en los componentes y procesos correspondientes al backend.
 
 ### 1.3 Separación de Responsabilidades con el Frontend
 
-Para garantizar una arquitectura desacoplada y mantenible, Rinderline sigue el patrón de separación clara de responsabilidades:
+Para garantizar una arquitectura desacoplada y mantenible, además de escalable y pensada a futuro para su versión móvil, Rinderline sigue el patrón de separación clara de responsabilidades:
 
 **Backend:**
 
@@ -51,69 +101,55 @@ Este enfoque facilita:
 
 ### 2.1 Diagrama General del Sistema
 
-```
-┌─────────────────────────────────────────────────────────────────────────┐
-│                         RINDERLINE FRONTEND (Next.js)                   │
-│                                                                         │
-│  ┌─────────────┐  ┌──────────────┐  ┌──────────────┐  ┌──────────┐    │
-│  │   Login     │  │  Documents   │  │ Approvals    │  │Dashboard │    │
-│  │   Signup    │  │   Management │  │   System     │  │ Analytics│    │
-│  └─────────────┘  └──────────────┘  └──────────────┘  └──────────┘    │
-│          │                │                 │                │         │
-└──────────┼────────────────┼─────────────────┼────────────────┼─────────┘
-           │                │                 │                │
-           └────────────────┼─────────────────┼────────────────┘
-                            │                 │
-                            ▼                 ▼
-        ┌─────────────────────────────────────────────────┐
-        │      RINDERLINE BACKEND API (Django REST)       │
-        │                  Port: 8000                     │
-        │    ┌─────────────────────────────────────────┐  │
-        │    │  API v1 Endpoints                       │  │
-        │    │  - /api/v1/app/auth/                   │  │
-        │    │  - /api/v1/app/documents/              │  │
-        │    │  - /api/v1/app/approvals/              │  │
-        │    │  - /api/v1/app/dashboards/             │  │
-        │    │  - /api/v1/app/sap/                    │  │
-        │    │  - /api/v1/app/admin/                  │  │
-        │    └─────────────────────────────────────────┘  │
-        │                                                 │
-        │    ┌─────────────────────────────────────────┐  │
-        │    │  Middleware & Interceptors              │  │
-        │    │  - CORS Handler                         │  │
-        │    │  - Token Authentication                 │  │
-        │    │  - Error Handler                        │  │
-        │    │  - Locale Middleware                    │  │
-        │    └─────────────────────────────────────────┘  │
-        │                                                 │
-        │    ┌─────────────────────────────────────────┐  │
-        │    │  Services Layer                         │  │
-        │    │  - Dashboard Service                    │  │
-        │    │  - Approver Dashboard Service           │  │
-        │    │  - Appraisal Service                    │  │
-        │    │  - Document Builder                     │  │
-        │    │  - Exchange Rate Service                │  │
-        │    └─────────────────────────────────────────┘  │
-        │                                                 │
-        │    ┌─────────────────────────────────────────┐  │
-        │    │  Data Access Layer                      │  │
-        │    │  - ORM (Django Models)                  │  │
-        │    │  - Query Optimization                   │  │
-        │    │  - Filtering & Pagination               │  │
-        │    └─────────────────────────────────────────┘  │
-        └─────────────────────────────────────────────────┘
-                            │
-        ┌───────────────────┼───────────────────┐
-        │                   │                   │
-        ▼                   ▼                   ▼
-    ┌───────────┐       ┌────────────┐     ┌──────────┐
-    │ SQLite3   │       │ AWS S3     │     │ External │
-    │ Database  │       │ File Store │     │ APIs     │
-    │ (SQLAlchemy)│     └────────────┘     └──────────┘
-    │ - Models  │       - PDFs              - Exchange
-    │ - Relations│      - Documents         Rates API
-    │ - Indexes │       - Uploads           - SAP ERP
-    └───────────┘                          - Sentry
+```mermaid
+flowchart TB
+ subgraph Frontend["RINDERLINE FRONTEND"]
+        A1["Login / Signup"]
+        A2["Documents Management"]
+        A3["Approvals System"]
+        A4["Dashboard Analytics"]
+  end
+ subgraph Endpoints["API v1 Endpoints"]
+        E1[/"api/v1/app/auth"/]
+        E2[/"api/v1/app/documents"/]
+        E3[/"api/v1/app/approvals"/]
+        E4[/"api/v1/app/dashboards"/]
+        E5[/"api/v1/app/sap"/]
+        E6[/"api/v1/app/admin"/]
+  end
+ subgraph Middleware["Middleware & Interceptors"]
+        M1["CORS Handler"]
+        M2["Token Authentication"]
+        M3["Error Handler"]
+        M4["Locale Middleware"]
+  end
+ subgraph Services["Services Layer"]
+        S1["Dashboard Service"]
+        S2["Approver Dashboard Service"]
+        S3["AWS S3 File Store<br>- PDFs<br>- Documents<br>- Uploads"]
+        S4["Document Builder"]
+        S5["Exchange Rate Service"]
+  end
+ subgraph DAL["Data Access Layer"]
+        D1["Django ORM Models"]
+        D2["Query Optimization"]
+        D3["Filtering & Pagination"]
+  end
+ subgraph Backend["RINDERLINE BACKEND API"]
+        Endpoints
+        Middleware
+        Services
+        DAL
+  end
+ subgraph Storage["Storage"]
+        DB["SQLite3 Database<br>- SQLAlchemy<br>- Models<br>- Relations<br>- Indexes"]
+        APIs["External APIs<br>- Exchange Rates<br>- SAP ERP<br>- Sentry"]
+  end
+    A1 --> Backend
+    A2 --> Backend
+    A3 --> Backend
+    A4 --> Backend
+    Backend --> Storage
 ```
 
 ---
@@ -123,8 +159,6 @@ Este enfoque facilita:
 #### **A. API Backend (Django REST Framework)**
 
 **Tecnología:** Django 5.2.8 + Django REST Framework 3.15.2
-
-**Ubicación:** `u:\proyectos\rinderline_backend\rinderline\`
 
 **Responsabilidades:**
 
@@ -177,8 +211,6 @@ app/
 
 **Tipo:** SQLite3 (Desarrollo) / PostgreSQL (Producción)
 
-**Ubicación:** `u:\proyectos\rinderline_backend\rinderline\db.sqlite3`
-
 **Modelos Principales:**
 
 | Modelo              | Descripción               | Relaciones                        |
@@ -186,7 +218,7 @@ app/
 | **User**            | Usuarios del sistema      | Company, Groups, Area             |
 | **Company**         | Empresas/Organizaciones   | Groups, Currency                  |
 | **CostCenter**      | Centros de costo          | Company                           |
-| **Document**        | Documentos de gasto       | User, Company, CostCenter         |
+| **Document**        | Documentos o informes     | User, Company, CostCenter         |
 | **DocumentExpense** | Gastos individuales       | Document, Supplier, Tax, Currency |
 | **DocumentTravel**  | Viajes                    | Document, Route                   |
 | **DocumentPerDiem** | Viáticos                  | Document, PerDiem                 |
@@ -280,20 +312,20 @@ DocumentBuilder()
 1. **Estilo REST**
 
    - Métodos HTTP estándar: GET, POST, PUT, PATCH, DELETE
-   - Recursos bien definidos (/documents, /approvals, etc.)
+   - Recursos definidos (/documents, /approvals, etc.)
    - Versionado en URL (/api/v1/)
    - HATEOAS parcial (referencias en respuestas)
 
 2. **Arquitectura de Capas**
 
-   ```
-   Presentation Layer (Views/ViewSets)
-           ↓
-   Business Logic Layer (Services)
-           ↓
-   Data Access Layer (Models/ORM)
-           ↓
-   Database Layer (SQLite/PostgreSQL)
+   ```mermaid
+   flowchart TB
+    A["Presentation Layer<br/>(Views / ViewSets)"]
+    B["Business Logic Layer<br/>(Services)"]
+    C["Data Access Layer<br/>(Models / ORM)"]
+    D["Database Layer<br/>(SQLite / PostgreSQL)"]
+
+    A --> B --> C --> D
    ```
 
 3. **Patrones Utilizados**
@@ -315,202 +347,68 @@ DocumentBuilder()
 
 #### **Ciclo Completo de una Petición:**
 
-```
-┌────────────────────────────────────────────────────────────────┐
-│                     CLIENT REQUEST                             │
-│              POST /api/v1/app/documents/                       │
-└────────────────────────────────────────────────────────────────┘
-                            │
-                            ▼
-┌────────────────────────────────────────────────────────────────┐
-│                 1. DJANGO URL ROUTING                          │
-│                                                                │
-│  rinderline/urls.py → app/urls.py → features/web/urls.py     │
-│  Coincide con: path('documents/', DocumentListView.as_view()) │
-└────────────────────────────────────────────────────────────────┘
-                            │
-                            ▼
-┌────────────────────────────────────────────────────────────────┐
-│         2. MIDDLEWARE PROCESSING (Request Phase)              │
-│                                                                │
-│  ✓ CorsMiddleware         - Validar origen CORS              │
-│  ✓ SecurityMiddleware     - Headers de seguridad              │
-│  ✓ SessionMiddleware      - Sesión                            │
-│  ✓ AuthenticationMiddleware - Identificación                  │
-│  ✓ LocaleMiddleware       - Idioma                            │
-└────────────────────────────────────────────────────────────────┘
-                            │
-                            ▼
-┌────────────────────────────────────────────────────────────────┐
-│      3. VIEW/VIEWSET PROCESSING                               │
-│                                                                │
-│  DocumentListView.post(request)                               │
-│                                                                │
-│  a) Autenticación: TokenAuthentication                         │
-│     - Extraer token del header Authorization                   │
-│     - Validar token en DB (Token table)                       │
-│     - Asignar user a request.user                             │
-│                                                                │
-│  b) Permisos: IsAuthenticated                                 │
-│     - Verificar que request.user existe                       │
-│     - Verificar permisos customizados (si aplica)             │
-│                                                                │
-│  c) Throttling: AnonRateThrottle, UserRateThrottle            │
-│     - Limitar: 1000 requests/day por usuario                  │
-│                                                                │
-│  d) Filtrado: DjangoFilterBackend                             │
-│     - Aplicar filtros del query string                        │
-└────────────────────────────────────────────────────────────────┘
-                            │
-                            ▼
-┌────────────────────────────────────────────────────────────────┐
-│      4. SERIALIZER VALIDATION                                 │
-│                                                                │
-│  DocumentSerializer.is_valid()                                │
-│                                                                │
-│  ✓ Validar campos requeridos                                  │
-│  ✓ Validar tipos de datos                                     │
-│  ✓ Validar ranges (max_digits, decimal_places)                │
-│  ✓ Validar relaciones (Foreign Keys existen)                  │
-│  ✓ Ejecutar validadores customizados                          │
-│                                                                │
-│  Si hay errores → Return 400 Bad Request (JSend fail)        │
-└────────────────────────────────────────────────────────────────┘
-                            │
-                            ▼
-┌────────────────────────────────────────────────────────────────┐
-│      5. BUSINESS LOGIC (Services Layer)                       │
-│                                                                │
-│  DocumentService.create_document()                            │
-│                                                                │
-│  ✓ Usar DocumentBuilder para construcción compleja           │
-│  ✓ Validar reglas de negocio                                  │
-│  ✓ Calcular conversiones de divisas                           │
-│  ✓ Crear registros de auditoría si aplica                    │
-│  ✓ Enviar notificaciones si aplica                           │
-└────────────────────────────────────────────────────────────────┘
-                            │
-                            ▼
-┌────────────────────────────────────────────────────────────────┐
-│    6. DATABASE OPERATIONS (ORM Layer)                         │
-│                                                                │
-│  Document.objects.create(                                     │
-│      title=..., description=..., ...                         │
-│  )                                                            │
-│                                                                │
-│  ✓ Validaciones a nivel modelo (clean())                     │
-│  ✓ Insertar registro en DB                                    │
-│  ✓ Retornar objeto creado                                     │
-│                                                                │
-│  Si hay error DB → Excepción capturada → 500 Error           │
-└────────────────────────────────────────────────────────────────┘
-                            │
-                            ▼
-┌────────────────────────────────────────────────────────────────┐
-│      7. RESPONSE SERIALIZATION                                │
-│                                                                │
-│  DocumentSerializer(document_instance).data                   │
-│                                                                │
-│  ✓ Convertir objeto Python a diccionario                     │
-│  ✓ Incluir solo campos permitidos (read_only, write_only)    │
-│  ✓ Nesting de relaciones (depth, StringRelatedField, etc.)   │
-│  ✓ Aplicar transformaciones customizadas                     │
-└────────────────────────────────────────────────────────────────┘
-                            │
-                            ▼
-┌────────────────────────────────────────────────────────────────┐
-│      8. RENDERER (JSendRenderer)                              │
-│                                                                │
-│  JSendRenderer.render(data, context)                          │
-│                                                                │
-│  {                                                             │
-│    "status": "success",                                       │
-│    "data": {                                                  │
-│      "id": 1,                                                 │
-│      "title": "...",                                          │
-│      ...                                                      │
-│    }                                                          │
-│  }                                                            │
-└────────────────────────────────────────────────────────────────┘
-                            │
-                            ▼
-┌────────────────────────────────────────────────────────────────┐
-│    9. MIDDLEWARE PROCESSING (Response Phase)                  │
-│                                                                │
-│  ✓ CORS Headers - Permitir origen cliente                    │
-│  ✓ Security Headers - X-Content-Type-Options, etc.           │
-│  ✓ Content-Type - application/json                           │
-│                                                                │
-│  HTTP Response Headers:                                       │
-│  - Content-Type: application/json                             │
-│  - Access-Control-Allow-Origin: https://frontend.com         │
-│  - X-Content-Type-Options: nosniff                            │
-│  - X-Frame-Options: DENY                                      │
-└────────────────────────────────────────────────────────────────┘
-                            │
-                            ▼
-┌────────────────────────────────────────────────────────────────┐
-│                   RESPONSE TO CLIENT                          │
-│                                                                │
-│  HTTP/1.1 201 Created                                         │
-│  Content-Type: application/json                               │
-│                                                                │
-│  {                                                             │
-│    "status": "success",                                       │
-│    "data": {                                                  │
-│      "id": 1,                                                 │
-│      "title": "Gasto de viaje",                              │
-│      "state": "SAVED",                                        │
-│      "created_at": "2025-11-30T10:30:00Z",                   │
-│      ...                                                      │
-│    }                                                          │
-│  }                                                            │
-└────────────────────────────────────────────────────────────────┘
+```mermaid
+flowchart TB
+
+    %% CLIENT REQUEST
+    A["**CLIENT REQUEST**<br/>POST /api/v1/app/documents/"]
+
+    %% 1. URL ROUTING
+    B["**1. DJANGO URL ROUTING**<br/><br/>rinderline/urls.py → app/urls.py → features/web/urls.py<br/>Coincide con: path('documents/', DocumentListView.as_view())"]
+
+    %% 2. MIDDLEWARE (REQUEST)
+    C["**2. MIDDLEWARE PROCESSING (Request Phase)**<br/><br/>✓ CorsMiddleware – Validar origen CORS<br/>✓ SecurityMiddleware – Headers de seguridad<br/>✓ SessionMiddleware – Sesión<br/>✓ AuthenticationMiddleware – Identificación<br/>✓ LocaleMiddleware – Idioma"]
+
+    %% 3. VIEW/VIEWSET
+    D["**3. VIEW/VIEWSET PROCESSING**<br/><br/>DocumentListView.post(request)<br/><br/>a) Autenticación: TokenAuthentication<br/>- Extraer token del header Authorization<br/>- Validar token en DB<br/>- Asignar request.user<br/><br/>b) Permisos: IsAuthenticated<br/>- request.user debe existir<br/><br/>c) Throttling: Anon/User Rate Throttle<br/>- Límite 1000 req/day<br/><br/>d) Filtering: DjangoFilterBackend<br/>- Aplicar filtros"]
+
+    %% 4. SERIALIZER VALIDATION
+    E["**4. SERIALIZER VALIDATION**<br/><br/>DocumentSerializer.is_valid()<br/><br/>✓ Validar campos requeridos<br/>✓ Tipos de datos<br/>✓ Ranges (max_digits, decimal_places)<br/>✓ Validar Foreign Keys<br/>✓ Validadores custom<br/><br/>Si falla → 400 Bad Request (JSend fail)"]
+
+    %% 5. BUSINESS LOGIC (SERVICES)
+    F["**5. BUSINESS LOGIC (Services Layer)**<br/><br/>DocumentService.create_document()<br/><br/>✓ Usar DocumentBuilder<br/>✓ Validar reglas de negocio<br/>✓ Conversiones de divisas<br/>✓ Auditoría si aplica<br/>✓ Notificaciones si aplica"]
+
+    %% 6. ORM / DB OPERATIONS
+    G["**6. DATABASE OPERATIONS (ORM Layer)**<br/><br/>Document.objects.create(... )<br/><br/>✓ Validaciones de modelo (clean())<br/>✓ Insertar en DB<br/>✓ Retornar objeto<br/><br/>Si hay error → 500 Error"]
+
+    %% 7. RESPONSE SERIALIZATION
+    H["**7. RESPONSE SERIALIZATION**<br/><br/>DocumentSerializer(document).data<br/><br/>✓ Convertir objeto a dict<br/>✓ Campos permitidos<br/>✓ Relaciones anidadas<br/>✓ Transformaciones custom"]
+
+    %% 8. RENDERER
+    I["**8. RENDERER (JSendRenderer)**<br/><br/>{<br/>  status: 'success',<br/>  data: { ... }<br/>}"]
+
+    %% 9. MIDDLEWARE (RESPONSE)
+    J["**9. MIDDLEWARE PROCESSING (Response Phase)**<br/><br/>✓ CORS Headers<br/>✓ Security Headers<br/>✓ Content-Type JSON<br/><br/>Response Headers:<br/>• Content-Type: application/json<br/>• Access-Control-Allow-Origin: https://frontend.com<br/>• X-Content-Type-Options: nosniff<br/>• X-Frame-Options: DENY"]
+
+    %% FINAL RESPONSE
+    K["**RESPONSE TO CLIENT**<br/><br/>HTTP/1.1 201 Created<br/>Content-Type: application/json<br/><br/>{ status: 'success', data: { id: 1, title: 'Gasto de viaje', ... } }"]
+
+    %% FLOW CONNECTIONS
+    A --> B --> C --> D --> E --> F --> G --> H --> I --> J --> K
+
 ```
 
 ---
 
 #### **Casos de Error en el Ciclo:**
 
-```
-┌─────────────────────────────────────────┐
-│     ERROR: Token No Válido              │
-├─────────────────────────────────────────┤
-│ Status: 401 Unauthorized                │
-│ Fase: Authentication                    │
-│ Response: {"status": "fail",            │
-│           "message": "Invalid token"}   │
-└─────────────────────────────────────────┘
+```mermaid
+flowchart TB
 
-┌─────────────────────────────────────────┐
-│     ERROR: Validación de Datos          │
-├─────────────────────────────────────────┤
-│ Status: 400 Bad Request                 │
-│ Fase: Serializer Validation             │
-│ Response: {"status": "fail",            │
-│           "message": "Validation error",│
-│           "errors": {...}}              │
-└─────────────────────────────────────────┘
+    %% ERROR 401 - INVALID TOKEN
+    E401["**ERROR: Token No Válido**<br/><br/>Status: 401 Unauthorized<br/>Fase: Authentication<br/><br/>{<br/>  status: 'fail',<br/>  message: 'Invalid token'<br/>}"]
 
-┌─────────────────────────────────────────┐
-│     ERROR: Recurso No Encontrado        │
-├─────────────────────────────────────────┤
-│ Status: 404 Not Found                   │
-│ Fase: Database Query                    │
-│ Response: {"status": "fail",            │
-│           "message": "Document not found"│
-│           }                              │
-└─────────────────────────────────────────┘
+    %% ERROR 400 - VALIDATION ERROR
+    E400["**ERROR: Validación de Datos**<br/><br/>Status: 400 Bad Request<br/>Fase: Serializer Validation<br/><br/>{<br/>  status: 'fail',<br/>  message: 'Validation error',<br/>  errors: {...}<br/>}"]
 
-┌─────────────────────────────────────────┐
-│     ERROR: Error de Base de Datos       │
-├─────────────────────────────────────────┤
-│ Status: 500 Internal Server Error       │
-│ Fase: Database Operations               │
-│ Response: {"status": "error",           │
-│           "message": "An error occurred"}│
-│ Log: Enviado a Sentry                   │
-└─────────────────────────────────────────┘
+    %% ERROR 404 - NOT FOUND
+    E404["**ERROR: Recurso No Encontrado**<br/><br/>Status: 404 Not Found<br/>Fase: Database Query<br/><br/>{<br/>  status: 'fail',<br/>  message: 'Document not found'<br/>}"]
+
+    %% ERROR 500 - DATABASE ERROR
+    E500["**ERROR: Error de Base de Datos**<br/><br/>Status: 500 Internal Server Error<br/>Fase: Database Operations<br/><br/>{<br/>  status: 'error',<br/>  message: 'An error occurred'<br/>}<br/><br/>Log: Enviado a Sentry"]
+
+    %% ORDER (optional)
+    E401 --> E400 --> E404 --> E500
 ```
 
 ---
@@ -569,8 +467,6 @@ Métodos:
 - convert(amount, from_currency, to_currency) → float
 ```
 
-**Proveedor:** Por definir (Fixer.io, OpenExchangeRates, etc.)
-
 ---
 
 #### **C. Almacenamiento en AWS S3**
@@ -594,11 +490,10 @@ AWS_S3_CUSTOM_DOMAIN = 'bucket-name.s3.amazonaws.com'
 **Rutas:**
 
 - Documentos: `documents/{year}/{month}/{filename}`
-- Gastos: `expense_files/{id}/{filename}`
 
 ---
 
-#### **D. Integración SAP ERP**
+#### **D. Integración SAP ERP (en desarrollo)**
 
 **Endpoints:**
 
@@ -1210,19 +1105,6 @@ class DocumentSerializer(serializers.ModelSerializer):
 
 ---
 
-#### **H. Desarrollo (Opcional en requirements.txt)**
-
-```
-Estos no están listados pero son recomendados:
-- pytest / pytest-django     # Testing
-- black                       # Code formatting
-- flake8                      # Linting
-- mypy                        # Type checking
-- django-debug-toolbar        # Debug
-```
-
----
-
 ## Resumen de Estructura
 
 | Aspecto               | Detalle                                      |
@@ -1400,7 +1282,7 @@ Legend:
 
 - `id` (PK): Identificador único
 - `name` (CharField, max_length=40, unique=True): Nombre de la empresa
-- `rut` (CharField, max_length=10, unique=True): Identificador fiscal (RUT Chile)
+- `rut` (CharField, max_length=10, unique=True): Identificador fiscal (RUT, en el caso de Chile)
 - `address` (CharField, max_length=120): Dirección física
 - `email` (CharField, max_length=60): Email de contacto
 - `sap_code` (CharField, max_length=20): Código para integración SAP
@@ -1809,7 +1691,7 @@ def save(self):
 
 ##### **18. ExpenseConcept**
 
-**Propósito:** Clasificación de conceptos de gasto.
+**Propósito:** Clasificación de conceptos de gasto, también identificado como categoría.
 
 **Campos:**
 
@@ -1875,7 +1757,7 @@ def save():
 
 ##### **21. Location**
 
-**Propósito:** Ubicaciones geográficas para rutas.
+**Propósito:** Ubicaciones geográficas para rutas (a mejorar con integración a una API geográfica).
 
 **Campos:**
 
@@ -3522,9 +3404,9 @@ document = builder.create_document(data, user) \
 
 ### 6.3 Trabajo Asíncrono (Si Aplica: Celery, Workers, Cron Jobs)
 
-#### **Actualmente No Implementado**
+#### **Actualmente No Implementado, pensado para desarrollo en el futuro**
 
-Los siguientes procesos podrían optimizarse con Celery:
+Con Celery:
 
 ```python
 # Tareas pendientes de implementar
@@ -4063,29 +3945,6 @@ sessionStorage.setItem("authToken", response.token);
 // (Backend debe configurar)
 ```
 
-**Recomendación:**
-
-```python
-# Agregar expiración de tokens
-from datetime import timedelta
-from django.utils import timezone
-
-class Token(models.Model):
-    # ... campos actuales ...
-    expires_at = models.DateTimeField(null=True, blank=True)
-
-    @property
-    def is_expired(self):
-        if not self.expires_at:
-            return False
-        return timezone.now() > self.expires_at
-
-# En middleware
-if token.is_expired:
-    token.delete()
-    return Response({'detail': 'Token expired'}, status=401)
-```
-
 ---
 
 #### **C. Token Logout**
@@ -4207,16 +4066,6 @@ class DocumentSerializer(serializers.ModelSerializer):
         # Si necesitas HTML, usa mark_safe con cuidado
         # Por defecto Django escapea
         return obj.title  # Automáticamente escapado
-```
-
-**En Frontend (Next.js):**
-
-```javascript
-// ❌ Peligroso
-<div dangerouslySetInnerHTML={{ __html: data.title }} />
-
-// ✅ Seguro (escapea automáticamente)
-<div>{data.title}</div>
 ```
 
 ---
@@ -4450,51 +4299,6 @@ for record in history:
     print(f"Level {record.level}: {record.approver.username} "
           f"{'Approved' if record.is_approved else 'Rejected'} "
           f"at {record.operation_date}")
-```
-
----
-
-#### **C. Sentry Integration (Error Tracking)**
-
-**Instalación:**
-
-```bash
-pip install sentry-sdk
-```
-
-**Configuración:**
-
-```python
-# settings.py
-import sentry_sdk
-from sentry_sdk.integrations.django import DjangoIntegration
-
-sentry_sdk.init(
-    dsn=os.getenv('SENTRY_DSN'),
-    integrations=[DjangoIntegration()],
-    traces_sample_rate=1.0,
-    send_default_pii=False,  # No enviar datos personales
-    environment=os.getenv('ENVIRONMENT', 'development'),
-)
-```
-
-**Eventos Capturados Automáticamente:**
-
-```
-- Excepciones no manejadas (500 errors)
-- Errores de base de datos
-- Timeouts
-- Stack traces completos
-- Contexto de usuario (username, email)
-- Información de request (URL, método, headers)
-```
-
-**Alertas Configurables:**
-
-```
-- Threshold: > 10 errores/hora
-- Canal: Email, Slack, PagerDuty
-- Severidad: error, warning, info
 ```
 
 ---
@@ -4993,223 +4797,7 @@ psql -U rinderline_user -h localhost rinderline_db < backup.sql
 
 ---
 
-### 8.5 Email Configuration
-
-#### **A. Gmail SMTP**
-
-```python
-# settings.py
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
-EMAIL_USE_TLS = True
-DEFAULT_FROM_EMAIL = 'noreply@rinderline.com'
-```
-
-**Setup (Gmail):**
-
-1. Habilitar "Less secure app access" O usar "App Passwords"
-2. En .env:
-   ```
-   EMAIL_HOST_USER=your-email@gmail.com
-   EMAIL_HOST_PASSWORD=your-app-specific-password
-   ```
-
-**Enviar email:**
-
-```python
-from django.core.mail import send_mail
-
-send_mail(
-    subject='Document Approved',
-    message='Your document has been approved.',
-    from_email='noreply@rinderline.com',
-    recipient_list=['user@example.com'],
-    fail_silently=False,
-)
-```
-
----
-
-#### **B. Console Backend (Desarrollo)**
-
-```python
-# settings.py
-if DEBUG:
-    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-```
-
-Los emails se imprimen en la consola en lugar de enviarse.
-
----
-
-### 8.6 Redis & Celery (Async Tasks)
-
-#### **A. Instalación Local**
-
-**Windows (usando WSL2 o Docker):**
-
-```bash
-# Opción 1: Docker
-docker run -d -p 6379:6379 redis:7-alpine
-
-# Opción 2: WSL2
-wsl
-apt-get install redis-server
-redis-server
-```
-
-#### **B. Configuración Django**
-
-```python
-# settings.py
-CELERY_BROKER_URL = os.getenv('CELERY_BROKER_URL', 'redis://localhost:6379/0')
-CELERY_RESULT_BACKEND = os.getenv('CELERY_RESULT_BACKEND', 'redis://localhost:6379/0')
-CELERY_ACCEPT_CONTENT = ['json']
-CELERY_TASK_SERIALIZER = 'json'
-CELERY_RESULT_SERIALIZER = 'json'
-CELERY_TIMEZONE = 'UTC'
-```
-
-#### **C. Tareas Celery**
-
-```python
-# app/tasks.py
-from celery import shared_task
-from django.core.mail import send_mail
-
-@shared_task
-def send_approval_email(user_id, document_id):
-    user = User.objects.get(id=user_id)
-    document = Document.objects.get(id=document_id)
-
-    send_mail(
-        subject=f'Document {document.title} needs approval',
-        message=f'Please review and approve document {document.id}',
-        from_email='noreply@rinderline.com',
-        recipient_list=[user.email],
-    )
-
-@shared_task
-def export_report(company_id, start_date, end_date):
-    # Generar reporte PDF en S3
-    pass
-
-@shared_task
-def sync_with_sap(document_id):
-    # Sincronizar documento con SAP
-    pass
-```
-
-**Usar en views:**
-
-```python
-# views.py
-from app.tasks import send_approval_email
-
-@action(detail=True, methods=['post'])
-def approve(self, request, pk):
-    document = self.get_object()
-    # ... lógica de aprobación ...
-
-    # Enviar email de forma asíncrona
-    send_approval_email.delay(request.user.id, document.id)
-
-    return Response({'status': 'approved'})
-```
-
----
-
-### 8.7 Monitoreo y Logs
-
-#### **A. Sentry Configuration**
-
-```python
-# settings.py
-import sentry_sdk
-from sentry_sdk.integrations.django import DjangoIntegration
-
-sentry_sdk.init(
-    dsn=os.getenv('SENTRY_DSN'),
-    integrations=[DjangoIntegration()],
-    traces_sample_rate=0.1 if not DEBUG else 1.0,
-    send_default_pii=False,
-    environment=os.getenv('ENVIRONMENT', 'development'),
-    # Ignorar errores específicos
-    ignore_errors=[
-        Exception,  # Cambiar según sea necesario
-    ]
-)
-```
-
-**Dashboard Sentry:**
-
-- Errores en tiempo real
-- Stack traces completos
-- Contexto de usuario/request
-- Alertas automáticas
-
----
-
-#### **B. Logging Local**
-
-```python
-# settings.py
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'formatters': {
-        'verbose': {
-            'format': '{levelname} {asctime} {module} {message}',
-            'style': '{',
-        },
-        'simple': {
-            'format': '{levelname} {message}',
-            'style': '{',
-        },
-    },
-    'handlers': {
-        'console': {
-            'class': 'logging.StreamHandler',
-            'formatter': 'verbose',
-        },
-        'file': {
-            'class': 'logging.FileHandler',
-            'filename': os.path.join(BASE_DIR, 'logs', 'app.log'),
-            'formatter': 'verbose',
-        },
-    },
-    'root': {
-        'handlers': ['console', 'file'],
-        'level': 'INFO',
-    },
-    'loggers': {
-        'app': {
-            'handlers': ['console', 'file'],
-            'level': 'DEBUG' if DEBUG else 'INFO',
-            'propagate': False,
-        },
-    },
-}
-```
-
-**Usar en código:**
-
-```python
-import logging
-
-logger = logging.getLogger('app')
-
-logger.info(f"User {user.username} logged in")
-logger.warning(f"Failed approval attempt for document {doc_id}")
-logger.error(f"Exception in DocumentBuilder: {str(e)}")
-```
-
----
-
-### 8.8 Requirements.txt
+### 8.5 Requirements.txt
 
 ```
 Django==5.2.8
@@ -5245,7 +4833,7 @@ pip freeze > requirements.txt
 
 ---
 
-### 8.9 Checklist de Deployment
+### 8.6 Checklist de Deployment
 
 | Paso                 | Descripción                       | Prod | Staging | Dev |
 | -------------------- | --------------------------------- | ---- | ------- | --- |
@@ -5264,7 +4852,7 @@ pip freeze > requirements.txt
 
 ---
 
-### 8.10 Troubleshooting Común
+### 8.7 Troubleshooting Común
 
 #### **A. Errores de Migración**
 
