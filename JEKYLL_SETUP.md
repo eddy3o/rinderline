@@ -267,7 +267,7 @@ _Itálica_
 
 ```markdown
 [Texto del link](https://ejemplo.com)
-[Link relativo]({% link docs/archivo.md %})
+[Link relativo]({%link docs/01-backend.md %})
 ```
 
 ### Callouts
@@ -354,7 +354,7 @@ El archivo `_config.yml` contiene:
 4. **Escribe headings descriptivos** para mejorar SEO y navegación
 5. **Crea tablas de contenidos** al inicio de documentos largos
 6. **Usa ejemplos de código** para aclarar conceptos técnicos
-7. **Links internos** con `{% link docs/archivo.md %}`
+7. **Links internos** con `{% link docs/01-backend.md %}`
 8. **Imágenes:** Crea carpeta `assets/images/` y referencia como `![alt text](/assets/images/file.jpg)`
 
 ---

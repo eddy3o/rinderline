@@ -1,0 +1,60 @@
+# Jekyll configuration for local development
+
+title: Rinderline Documentation
+description: "Complete technical and user documentation for Rinderline expense management system"
+url: "http://localhost:4000"
+baseurl: ""
+
+# Theme - Use just-the-docs as remote theme
+remote_theme: just-the-docs/just-the-docs@v0.8.1
+
+# Plugins
+plugins:
+  - jekyll-seo-tag
+  - jekyll-remote-theme
+
+# Appearance
+color_scheme: light
+search_enabled: true
+heading_anchors: true
+
+# Navigation
+aux_links:
+  "GitHub Repository":
+    - "https://github.com/eddy3o/rinderline"
+  "Backend Repository":
+    - "https://github.com/eddy3o/rinderline_backend"
+
+# Footer
+footer_content: "Copyright &copy; 2024-2025 Rinderline. All rights reserved."
+
+# Markdown processor
+markdown: kramdown
+kramdown:
+  syntax_highlighter: rouge
+  toc_levels: 2..6
+
+# Mermaid diagram support
+mermaid:
+  version: 10.6.1
+  theme: default
+  securityLevel: loose
+
+# Sass
+sass:
+  sass_dir: _sass
+
+# Build settings
+exclude:
+  - .gitignore
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - vendor/bundle/
+  - vendor/cache/
+  - vendor/gems/
+  - vendor/ruby/
+  - run-docs.ps1
+  - run-docs.sh
+  - backend.md
+  - frontend.md

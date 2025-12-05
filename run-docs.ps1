@@ -48,7 +48,8 @@ Write-Host "====================================" -ForegroundColor Cyan
 Write-Host ""
 
 # Ejecutar Jekyll
-bundle exec jekyll serve
+Write-Host "[*] Iniciando servidor Jekyll en http://localhost:4000" -ForegroundColor Cyan
+bundle exec jekyll serve --config _config_local.yml --livereload
 
 Write-Host ""
 Write-Host "[OK] Servidor detenido" -ForegroundColor Green
