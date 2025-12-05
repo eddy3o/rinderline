@@ -423,7 +423,7 @@ Este módulo es exclusivo para perfiles con rol **ADMIN**.
 
 ### 14.4 Contacto de soporte
 
-- Email: [soporte@rinderline.com](mailto:soporte@rinderline.com)
+- Email: [edgardo.gonzalez.23@hotmail.com]
 - Disponibilidad: Lunes a viernes de 9am a 6pm.
 
 ---
