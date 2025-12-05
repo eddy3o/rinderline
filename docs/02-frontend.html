@@ -1,0 +1,5498 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Documentación Frontend | Rinderline Documentation</title>
+<meta name="generator" content="Jekyll v3.10.0" />
+<meta property="og:title" content="Documentación Frontend" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Documentación técnica del Frontend de Rinderline" />
+<meta property="og:description" content="Documentación técnica del Frontend de Rinderline" />
+<link rel="canonical" href="https://eddy3o.github.io/rinderline/rinderline/docs/02-frontend.html" />
+<meta property="og:url" content="https://eddy3o.github.io/rinderline/rinderline/docs/02-frontend.html" />
+<meta property="og:site_name" content="Rinderline Documentation" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Documentación Frontend" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","description":"Documentación técnica del Frontend de Rinderline","headline":"Documentación Frontend","url":"https://eddy3o.github.io/rinderline/rinderline/docs/02-frontend.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <link rel="stylesheet" href="/rinderline/assets/css/style.css?v=7e3c2e3e7989c3f30e183bd44d8e4bade0766ea3">
+    <!-- start custom head snippets, customize with your own _includes/head-custom.html file -->
+
+<!-- Setup Google Analytics -->
+
+
+
+<!-- You can set your favicon here -->
+<!-- link rel="shortcut icon" type="image/x-icon" href="/rinderline/favicon.ico" -->
+
+<!-- end custom head snippets -->
+
+  </head>
+  <body>
+    <div class="container-lg px-3 my-5 markdown-body">
+      
+      <h1><a href="https://eddy3o.github.io/rinderline/rinderline/">Rinderline Documentation</a></h1>
+      
+
+      <h1 id="documentación-técnica---frontend-de-rinderline">Documentación Técnica - Frontend de Rinderline</h1>
+
+<p><strong>Versión:</strong> 1.0<br />
+<strong>Fecha:</strong> Noviembre 2025<br />
+<strong>Framework:</strong> Next.js 15.4.2 + React 19 + TypeScript<br />
+<strong>UI Library:</strong> Shadcn/ui + Radix UI + Tailwind CSS<br />
+<strong>Despliegue:</strong> Vercel</p>
+
+<hr />
+
+<h2 id="índice">ÍNDICE</h2>
+
+<ol>
+  <li><a href="#1-introducción-técnica">Introducción Técnica</a></li>
+  <li><a href="#2-acceso-y-autenticación">Acceso y Autenticación</a></li>
+  <li><a href="#3-interfaz-general">Interfaz General</a></li>
+  <li><a href="#4-dashboard--pantalla-de-inicio">Dashboard / Pantalla de Inicio</a></li>
+  <li><a href="#5-módulo-principal-documentos">Módulo Principal (Documentos)</a></li>
+  <li><a href="#6-módulo-de-aprobaciones">Módulo de Aprobaciones</a></li>
+  <li><a href="#7-notificaciones">Notificaciones</a></li>
+  <li><a href="#8-perfil-y-configuración">Perfil y Configuración</a></li>
+  <li><a href="#9-sección-de-administración">Sección de Administración</a></li>
+  <li><a href="#10-exportaciones-y-reportes">Exportaciones y Reportes</a></li>
+  <li><a href="#11-errores-comunes">Errores Comunes</a></li>
+</ol>
+
+<hr />
+
+<h2 id="resumen-ejecutivo">RESUMEN EJECUTIVO</h2>
+
+<p>El frontend de Rinderline es una <strong>aplicación web moderna construida con Next.js y React</strong> que proporciona una interfaz intuitiva para la gestión de gastos empresariales internacionales. La plataforma se sincroniza en tiempo real con el backend Django REST API.</p>
+
+<h3 id="características-clave">Características Clave:</h3>
+
+<ul>
+  <li><strong>App Router de Next.js:</strong> Rutas organizadas en carpetas con layouts automáticos y renderizado híbrido (SSR/SSG/CSR)</li>
+  <li><strong>TypeScript Strict:</strong> Tipado completo para mayor seguridad en desarrollo</li>
+  <li><strong>Gestión de Estado:</strong> Zustand para store global con persistencia opcional</li>
+  <li><strong>Formularios Robustos:</strong> React Hook Form + Zod para validación declarativa</li>
+  <li><strong>Design System:</strong> Shadcn/ui + Radix UI con Tailwind CSS para estilo consistente</li>
+  <li><strong>Multiidioma:</strong> i18next con soporte para ES, EN, FR, DE</li>
+  <li><strong>Dark Mode:</strong> Temas oscuro/claro con next-themes</li>
+  <li><strong>Gráficos Interactivos:</strong> Recharts para dashboards y reportes visuales</li>
+  <li><strong>Autenticación Token:</strong> Bearer tokens almacenados en localStorage con refresh automático</li>
+</ul>
+
+<h3 id="rutas-principales">Rutas Principales:</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Sección</th>
+      <th>Ruta</th>
+      <th>Acceso</th>
+      <th>Propósito</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Login</strong></td>
+      <td><code class="language-plaintext highlighter-rouge">/login</code></td>
+      <td>Público</td>
+      <td>Autenticación de usuarios</td>
+    </tr>
+    <tr>
+      <td><strong>Registro</strong></td>
+      <td><code class="language-plaintext highlighter-rouge">/signup</code></td>
+      <td>Público</td>
+      <td>Crear nueva cuenta</td>
+    </tr>
+    <tr>
+      <td><strong>Dashboard</strong></td>
+      <td><code class="language-plaintext highlighter-rouge">/web</code></td>
+      <td>Protegido</td>
+      <td>Panel principal del empleado</td>
+    </tr>
+    <tr>
+      <td><strong>Gastos</strong></td>
+      <td><code class="language-plaintext highlighter-rouge">/web/expenses</code></td>
+      <td>Protegido</td>
+      <td>Crear y gestionar documentos</td>
+    </tr>
+    <tr>
+      <td><strong>Aprobaciones</strong></td>
+      <td><code class="language-plaintext highlighter-rouge">/web/appraisal-*</code></td>
+      <td>Protegido</td>
+      <td>Flujo de aprobación (3 niveles)</td>
+    </tr>
+    <tr>
+      <td><strong>Admin</strong></td>
+      <td><code class="language-plaintext highlighter-rouge">/web/admin</code></td>
+      <td>Solo admin</td>
+      <td>Gestión de usuarios y configuración</td>
+    </tr>
+    <tr>
+      <td><strong>Perfil</strong></td>
+      <td><code class="language-plaintext highlighter-rouge">/web/settings</code></td>
+      <td>Protegido</td>
+      <td>Configuración personal</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="tecnologías">Tecnologías:</h3>
+
+<ul>
+  <li><strong>Frontend:</strong> Next.js 15.4.2, React 19, TypeScript 5</li>
+  <li><strong>Styling:</strong> Tailwind CSS 3.4.1, Shadcn/ui, Radix UI</li>
+  <li><strong>Estado:</strong> Zustand 5.0.8</li>
+  <li><strong>Formularios:</strong> React Hook Form + Zod</li>
+  <li><strong>API Client:</strong> Axios 1.7.9 con interceptores</li>
+  <li><strong>Internacionalización:</strong> i18next</li>
+  <li><strong>Gráficos:</strong> Recharts 3.1.2</li>
+  <li><strong>Temas:</strong> next-themes (Light/Dark mode)</li>
+</ul>
+
+<hr />
+
+<h2 id="1-introducción-técnica">1. Introducción Técnica</h2>
+
+<h3 id="stack-tecnológico">Stack Tecnológico</h3>
+
+<ul>
+  <li><strong>Framework:</strong> Next.js 15.4.2 (App Router)</li>
+  <li><strong>Lenguaje:</strong> TypeScript 5 con tipado estricto</li>
+  <li><strong>Estado:</strong> Zustand 5.0.8 (store global)</li>
+  <li><strong>Formularios:</strong> React Hook Form + Zod (validación)</li>
+  <li><strong>API:</strong> Axios 1.7.9 con interceptores</li>
+  <li><strong>Autenticación:</strong> Token Bearer (almacenado en localStorage)</li>
+  <li><strong>Internacionalización:</strong> i18next (EN, ES, FR, DE)</li>
+  <li><strong>Temas:</strong> next-themes (Light/Dark mode)</li>
+  <li><strong>Estilos:</strong> Tailwind CSS 3.4.1</li>
+  <li><strong>Componentes:</strong> Radix UI + Shadcn/ui custom</li>
+  <li><strong>Gráficos:</strong> Recharts 3.1.2 (Chart.js alternative)</li>
+</ul>
+
+<h3 id="estructura-de-carpetas">Estructura de Carpetas</h3>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>src/
+├─ app/                   # Next.js app router
+│  ├─ layout.tsx         # Root layout
+│  ├─ page.tsx           # Home page
+│  ├─ login/             # Ruta pública
+│  ├─ signup/            # Ruta pública
+│  ├─ web/               # Rutas protegidas
+│  │  ├─ layout.tsx      # Layout con sidebar
+│  │  ├─ employee/
+│  │  ├─ expenses/
+│  │  ├─ appraisal*/     # Niveles de aprobación
+│  │  ├─ admin/
+│  │  └─ settings/
+│  └─ i18n.ts
+├─ components/           # Componentes reutilizables
+│  ├─ ui/               # Componentes base (Shadcn)
+│  ├─ forms/            # Formularios específicos
+│  ├─ tables/           # Tablas reutilizables
+│  └─ charts/           # Gráficos
+├─ services/            # API + lógica
+│  ├─ apiClient.ts      # Axios configurado
+│  ├─ auth.ts
+│  ├─ documents.ts
+│  └─ constants.ts
+├─ store/               # Zustand stores
+├─ hooks/               # Custom hooks
+├─ lib/                 # Utilidades (cn, etc)
+└─ locales/             # Archivos i18n JSON
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="2-acceso-y-autenticación">2. Acceso y Autenticación</h2>
+
+<h3 id="21-url-principal">2.1 URL Principal</h3>
+
+<p><strong>Base URL:</strong></p>
+
+<ul>
+  <li>Desarrollo: <code class="language-plaintext highlighter-rouge">http://localhost:3000</code></li>
+  <li>Producción: <code class="language-plaintext highlighter-rouge">https://rinderline-webapp.vercel.app</code></li>
+</ul>
+
+<p><strong>Rutas públicas:</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">/</code> - Home page</li>
+  <li><code class="language-plaintext highlighter-rouge">/login</code> - Inicio de sesión</li>
+  <li><code class="language-plaintext highlighter-rouge">/signup</code> - Registro</li>
+  <li><code class="language-plaintext highlighter-rouge">/forgot-password</code> - Recuperar contraseña</li>
+  <li><code class="language-plaintext highlighter-rouge">/reset-password?token=XYZ</code> - Establecer nueva contraseña</li>
+</ul>
+
+<p><strong>Rutas protegidas</strong> (require token):</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">/web</code> - Dashboard principal</li>
+  <li><code class="language-plaintext highlighter-rouge">/web/employee</code> - Panel de empleado</li>
+  <li><code class="language-plaintext highlighter-rouge">/web/expenses</code> - Gestión de gastos</li>
+  <li><code class="language-plaintext highlighter-rouge">/web/appraisal*</code> - Módulos de aprobación (3 niveles)</li>
+  <li><code class="language-plaintext highlighter-rouge">/web/admin</code> - Panel de administración</li>
+  <li><code class="language-plaintext highlighter-rouge">/web/settings</code> - Configuración de usuario</li>
+</ul>
+
+<p><strong>Protección:</strong> Middleware futuro verificará presencia de token en cookies antes de acceder a <code class="language-plaintext highlighter-rouge">/web/*</code></p>
+
+<hr />
+
+<h3 id="22-inicio-de-sesión">2.2 Inicio de Sesión</h3>
+
+<p><strong>Ubicación:</strong> <code class="language-plaintext highlighter-rouge">src/app/login/page.tsx</code> + <code class="language-plaintext highlighter-rouge">src/components/login-form.tsx</code></p>
+
+<p><strong>Funcionamiento:</strong></p>
+
+<ol>
+  <li>Usuario accede a <code class="language-plaintext highlighter-rouge">/login</code></li>
+  <li>Completa formulario: username + password</li>
+  <li>Validación cliente con Zod:
+    <ul>
+      <li>Username: 3-20 caracteres</li>
+      <li>Password: mínimo 6 caracteres</li>
+    </ul>
+  </li>
+  <li>Submit → POST a <code class="language-plaintext highlighter-rouge">/auth/login/</code> (FormData)</li>
+  <li>Backend valida credenciales contra BD</li>
+  <li>Respuesta: <code class="language-plaintext highlighter-rouge">{token, user, redirectTo}</code></li>
+  <li>Frontend guarda token en <code class="language-plaintext highlighter-rouge">localStorage</code> bajo clave <code class="language-plaintext highlighter-rouge">"token"</code></li>
+  <li>Zustand store actualiza estado de usuario</li>
+  <li>Router redirige a <code class="language-plaintext highlighter-rouge">/web</code></li>
+</ol>
+
+<p><strong>Interceptor Axios Request:</strong></p>
+
+<ul>
+  <li>Lee token de localStorage</li>
+  <li>Agrega header: <code class="language-plaintext highlighter-rouge">Authorization: Token {token}</code></li>
+  <li>Incluye idioma actual en header <code class="language-plaintext highlighter-rouge">Accept-Language</code></li>
+</ul>
+
+<p><strong>Interceptor Axios Response:</strong></p>
+
+<ul>
+  <li>Status 401 → Limpia token, redirige a <code class="language-plaintext highlighter-rouge">/login</code></li>
+  <li>Status 500+ → Log y error genérico</li>
+  <li>Maneja respuesta JSend: <code class="language-plaintext highlighter-rouge">{status, data, message}</code></li>
+</ul>
+
+<p><strong>Validaciones:</strong></p>
+
+<ul>
+  <li>Email/Username no pueden estar vacíos</li>
+  <li>Mostrar errores por campo en rojo</li>
+  <li>Botón deshabilitado mientras se envía</li>
+</ul>
+
+<p><strong>Estados:</strong></p>
+
+<ul>
+  <li>IDLE: Formulario listo</li>
+  <li>SUBMITTING: Petición en curso, botón deshabilitado</li>
+  <li>ERROR: Mostrar mensaje, mantener botón activo</li>
+  <li>SUCCESS: Redirección automática</li>
+</ul>
+
+<hr />
+
+<h3 id="23-registro-sign-up">2.3 Registro (Sign Up)</h3>
+
+<p><strong>Ubicación:</strong> <code class="language-plaintext highlighter-rouge">src/app/signup/page.tsx</code> + <code class="language-plaintext highlighter-rouge">src/components/signup-form.tsx</code></p>
+
+<p><strong>Funcionamiento:</strong></p>
+
+<ol>
+  <li>Usuario accede a <code class="language-plaintext highlighter-rouge">/signup</code></li>
+  <li>Completa: email, username, password (2 veces)</li>
+  <li>Validaciones Zod:
+    <ul>
+      <li>Email válido y único</li>
+      <li>Username: 3-20 caracteres, alpanumérico + underscore</li>
+      <li>Password: mínimo 8, mayúscula, número, símbolo especial</li>
+      <li>Las dos contraseñas coinciden</li>
+    </ul>
+  </li>
+  <li>Indicador de fortaleza en tiempo real (Débil → Muy Fuerte)</li>
+  <li>Submit → POST <code class="language-plaintext highlighter-rouge">/auth/register/</code></li>
+  <li>Backend crea usuario, genera token, responde</li>
+  <li>Frontend auto-login y redirige a <code class="language-plaintext highlighter-rouge">/web/settings</code> (completar perfil)</li>
+</ol>
+
+<p><strong>Validación Password:</strong></p>
+
+<ul>
+  <li>Mínimo 8 caracteres</li>
+  <li>Al menos 1 mayúscula</li>
+  <li>Al menos 1 número</li>
+  <li>Al menos 1 símbolo: <code class="language-plaintext highlighter-rouge">!@#$%^&amp;*</code></li>
+</ul>
+
+<p><strong>Errores posibles:</strong></p>
+
+<ul>
+  <li>Email ya registrado</li>
+  <li>Username ya existe</li>
+  <li>Contraseña muy débil</li>
+  <li>Validación del servidor</li>
+</ul>
+
+<hr />
+
+<h3 id="24-recuperar-contraseña">2.4 Recuperar Contraseña</h3>
+
+<p><strong>Ubicación:</strong> <code class="language-plaintext highlighter-rouge">src/components/forgot-password-form.tsx</code></p>
+
+<p><strong>Flujo:</strong></p>
+
+<ol>
+  <li>Usuario olvida contraseña → Click “¿Olvidaste tu contraseña?”</li>
+  <li>Accede a <code class="language-plaintext highlighter-rouge">/forgot-password</code></li>
+  <li>Ingresa email</li>
+  <li>Validación: formato email válido</li>
+  <li>Submit → POST <code class="language-plaintext highlighter-rouge">/auth/forgot-password/</code> con email</li>
+  <li>Backend busca usuario, genera token temporal, envía email</li>
+  <li>Frontend muestra: “Revisa tu email en los próximos 24 horas”</li>
+  <li>Usuario recibe email con link: <code class="language-plaintext highlighter-rouge">/reset-password?token=abc123xyz</code></li>
+  <li>Accede al link (token validado cliente)</li>
+  <li>Ingresa nueva password 2 veces</li>
+  <li>Submit → POST <code class="language-plaintext highlighter-rouge">/auth/reset-password/</code> con <code class="language-plaintext highlighter-rouge">{token, password}</code></li>
+  <li>Backend valida token (expiración, match), actualiza contraseña</li>
+  <li>Redirige a <code class="language-plaintext highlighter-rouge">/login</code> con mensaje de éxito</li>
+</ol>
+
+<p><strong>Validaciones:</strong></p>
+
+<ul>
+  <li>Email debe existir en BD</li>
+  <li>Token debe ser válido y no expirado (24h)</li>
+  <li>New password debe cumplir requisitos</li>
+</ul>
+
+<hr />
+
+<h3 id="25-cierre-de-sesión">2.5 Cierre de Sesión</h3>
+
+<p><strong>Ubicación:</strong> <code class="language-plaintext highlighter-rouge">src/components/nav-user.tsx</code></p>
+
+<p><strong>Funcionamiento:</strong></p>
+
+<ol>
+  <li>Usuario hizo click en Avatar/Menú → Logout</li>
+  <li>Confirmación: “¿Estás seguro?”</li>
+  <li>Si confirma → POST <code class="language-plaintext highlighter-rouge">/auth/logout/</code> (opcional, con token)</li>
+  <li>Backend elimina token de BD (si implementa blacklist)</li>
+  <li>Frontend:
+    <ul>
+      <li>Elimina token de localStorage</li>
+      <li>Limpia Zustand store (user = null)</li>
+      <li>Limpia estado de aplicación</li>
+      <li>Redirige a <code class="language-plaintext highlighter-rouge">/login</code></li>
+    </ul>
+  </li>
+</ol>
+
+<p><strong>Sincronización entre pestañas:</strong></p>
+
+<ul>
+  <li>Evento <code class="language-plaintext highlighter-rouge">storage</code> detecta cambios en otras pestañas</li>
+  <li>Si <code class="language-plaintext highlighter-rouge">localStorage.token</code> se elimina en tab A → tab B se da cuenta y redirige</li>
+</ul>
+
+<p><strong>Confirmación visual:</strong></p>
+
+<ul>
+  <li>Dialog/Modal antes de logout</li>
+  <li>No hacer logout silenciosamente</li>
+</ul>
+
+<hr />
+
+<h2 id="resumen---punto-2">Resumen - Punto 2</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Item</th>
+      <th>Detalles</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>URL Base</strong></td>
+      <td>localhost:3000 (dev), vercel.app (prod)</td>
+    </tr>
+    <tr>
+      <td><strong>Login</strong></td>
+      <td>/login → FormData → Token → localStorage</td>
+    </tr>
+    <tr>
+      <td><strong>Signup</strong></td>
+      <td>/signup → Validar → Crear usuario → Auto-login</td>
+    </tr>
+    <tr>
+      <td><strong>Forgot</strong></td>
+      <td>/forgot-password → Email → Link token 24h</td>
+    </tr>
+    <tr>
+      <td><strong>Reset</strong></td>
+      <td>/reset-password?token → New password → /login</td>
+    </tr>
+    <tr>
+      <td><strong>Logout</strong></td>
+      <td>Perfil → Logout → Confirmar → Limpiar → /login</td>
+    </tr>
+    <tr>
+      <td><strong>Token Storage</strong></td>
+      <td>localStorage clave “token”</td>
+    </tr>
+    <tr>
+      <td><strong>Token Header</strong></td>
+      <td><code class="language-plaintext highlighter-rouge">Authorization: Token {valor}</code></td>
+    </tr>
+    <tr>
+      <td><strong>Auto-redirect</strong></td>
+      <td>401 → /login, /web/* sin token → /login</td>
+    </tr>
+    <tr>
+      <td><strong>Validación</strong></td>
+      <td>Zod cliente + servidor</td>
+    </tr>
+    <tr>
+      <td><strong>Sincronización</strong></td>
+      <td>Storage events entre pestañas</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<hr />
+
+<h2 id="3-interfaz-general">3. Interfaz General</h2>
+
+<h3 id="31-diseño-general-de-la-pantalla-principal-protegida">3.1 Diseño General de la Pantalla Principal Protegida</h3>
+
+<p><strong>Ubicación:</strong> <code class="language-plaintext highlighter-rouge">src/components/layout/main-layout.tsx</code></p>
+
+<p><strong>Estructura de Layout:</strong></p>
+
+<p>La pantalla protegida (<code class="language-plaintext highlighter-rouge">/web/*</code>) tiene 3 componentes principales:</p>
+
+<ol>
+  <li><strong>AppSidebar</strong> (izquierda): Navegación colapsible</li>
+  <li><strong>SiteHeader</strong> (arriba): Barra superior con título y acciones</li>
+  <li><strong>Main Content</strong> (centro): Área con padding responsive</li>
+</ol>
+
+<p><strong>Responsive Design:</strong></p>
+
+<ul>
+  <li>Mobile: Sidebar colapsado por defecto, trigger en header</li>
+  <li>Tablet (md): Sidebar visible, width ajustable</li>
+  <li>Desktop: Sidebar full visible</li>
+</ul>
+
+<p><strong>Contenedor Principal:</strong></p>
+
+<ul>
+  <li>Padding: 16px (móvil), 24px (tablet), 32px (desktop)</li>
+  <li>Gap entre elementos: 16px</li>
+  <li>Max width: Sin límite (full width container)</li>
+  <li>Background: White (light), Dark gray (dark mode)</li>
+</ul>
+
+<hr />
+
+<h3 id="32-barra-superior-top-header">3.2 Barra Superior (Top Header)</h3>
+
+<p><strong>Ubicación:</strong> <code class="language-plaintext highlighter-rouge">src/components/site-header.tsx</code></p>
+
+<p><strong>Componentes de la Barra:</strong></p>
+
+<ol>
+  <li>
+    <p><strong>Trigger Sidebar</strong> (izquierda)</p>
+
+    <ul>
+      <li>Botón para toggle sidebar en móvil</li>
+      <li>Solo visible cuando sidebar está colapsado</li>
+      <li>Icon: Menu (lucide-react)</li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Separador</strong> vertical</p>
+  </li>
+  <li>
+    <p><strong>Título de Página</strong> (izquierda)</p>
+
+    <ul>
+      <li>Nombre dinámico según ruta actual</li>
+      <li>Traducible con i18n</li>
+      <li>Generado automáticamente desde pathname</li>
+      <li>Se oculta en móvil si hay poco espacio</li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Botones de Acción</strong> (derecha)</p>
+    <ul>
+      <li><strong>Primary Button:</strong> “Subir Gasto” - Abre modal CreateExpense</li>
+      <li><strong>Secondary Button:</strong> “Dashboard de Aprobador” (solo si rol includes APPROVER)</li>
+      <li>Acceso rápido a funciones principales</li>
+    </ul>
+  </li>
+</ol>
+
+<p><strong>Altura:</strong> 48px (h-12)
+<strong>Border:</strong> Bottom border subtle
+<strong>Z-index:</strong> Mantiene sticky/fixed position</p>
+
+<hr />
+
+<h3 id="33-barra-lateral--menú-de-navegación">3.3 Barra Lateral / Menú de Navegación</h3>
+
+<p><strong>Ubicación:</strong> <code class="language-plaintext highlighter-rouge">src/components/app-sidebar.tsx</code></p>
+
+<p><strong>Estructura Jerárquica:</strong></p>
+
+<p>El menú cambia según rol del usuario:</p>
+
+<p><strong>Para USER (Reporter):</strong></p>
+
+<ul>
+  <li>Dashboard (con subitems: Estadísticas, Documentos Cargados, Situación de Pago)</li>
+  <li>Mis Gastos</li>
+  <li>Reportes</li>
+  <li>Configuración</li>
+</ul>
+
+<p><strong>Para APPROVER (Nivel 1):</strong></p>
+
+<ul>
+  <li>Dashboard (cambios según nivel)</li>
+  <li>Aprobaciones Pendientes</li>
+  <li>Historial de Aprobaciones</li>
+  <li>Reportes</li>
+  <li>Configuración</li>
+</ul>
+
+<p><strong>Para COMPANY_APPROVER (Nivel 3):</strong></p>
+
+<ul>
+  <li>Dashboard</li>
+  <li>Aprobaciones por Empresa</li>
+  <li>Reportes Ejecutivos</li>
+  <li>Gestión de Usuarios</li>
+  <li>Configuración</li>
+</ul>
+
+<p><strong>Componentes UI:</strong></p>
+
+<ul>
+  <li>SidebarMenu: Lista principal</li>
+  <li>Collapsible: Menú desplegable con subitems</li>
+  <li>SidebarMenuButton: Items de menú</li>
+  <li>NavUser: Footer con avatar y logout</li>
+</ul>
+
+<p><strong>Icono de Cada Item:</strong></p>
+
+<ul>
+  <li>Dashboard: LayoutDashboard</li>
+  <li>Gastos: BookPlus</li>
+  <li>Reportes: FileText</li>
+  <li>Aprobaciones: Waypoints</li>
+  <li>Usuarios: Users</li>
+  <li>Configuración: Settings2</li>
+  <li>Y más según contexto</li>
+</ul>
+
+<p><strong>Estados:</strong></p>
+
+<ul>
+  <li>ACTIVE: Highlightado (bg-teal-500, text white)</li>
+  <li>HOVER: Subtle background change</li>
+  <li>COLLAPSED: Solo iconos visibles</li>
+</ul>
+
+<hr />
+
+<h3 id="34-tablas-y-componentes-repetitivos">3.4 Tablas y Componentes Repetitivos</h3>
+
+<p><strong>Componente Base:</strong> <code class="language-plaintext highlighter-rouge">src/components/defaultDataGridTable.tsx</code></p>
+
+<p><strong>Funcionalidades:</strong></p>
+
+<ol>
+  <li>
+    <p><strong>Columnas Dinámicas</strong></p>
+
+    <ul>
+      <li>Array de objetos: <code class="language-plaintext highlighter-rouge">{field, headerName, width/flex, renderCell, sortable, type}</code></li>
+      <li><code class="language-plaintext highlighter-rouge">field</code>: Clave del objeto de datos</li>
+      <li><code class="language-plaintext highlighter-rouge">renderCell</code>: Custom render (ej: badges, botones)</li>
+      <li><code class="language-plaintext highlighter-rouge">type</code>: boolean, string, number (render automático)</li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Paginación</strong></p>
+
+    <ul>
+      <li>Seleccionable: 5, 10, 20, etc (configurable)</li>
+      <li>Botones: Previous, Next</li>
+      <li>Mostrar: “Página X de Y”</li>
+      <li>Opción de deshabilitar</li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Checkboxes</strong></p>
+
+    <ul>
+      <li>Select/Deselect individual</li>
+      <li>Select/Deselect todos en página</li>
+      <li>Array de rowIds seleccionados</li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Click en Fila</strong></p>
+
+    <ul>
+      <li>Callback <code class="language-plaintext highlighter-rouge">onRowClick(row)</code></li>
+      <li>Usado para abrir detalles o editar</li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Renderizado Custom</strong></p>
+    <ul>
+      <li>Boolean: CheckCircle (verde) / XCircle (rojo)</li>
+      <li>Badge: Status colors (pending, approved, rejected, etc)</li>
+      <li>Botones: Acciones inline</li>
+    </ul>
+  </li>
+</ol>
+
+<p><strong>Props Configuration:</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">columns: Column[]</code></li>
+  <li><code class="language-plaintext highlighter-rouge">rows: any[]</code></li>
+  <li><code class="language-plaintext highlighter-rouge">pageSizeOptions?: [5, 10]</code></li>
+  <li><code class="language-plaintext highlighter-rouge">checkboxSelection?: boolean</code></li>
+  <li><code class="language-plaintext highlighter-rouge">onRowClick?: (row) =&gt; void</code></li>
+  <li><code class="language-plaintext highlighter-rouge">disablePagination?: boolean</code></li>
+</ul>
+
+<hr />
+
+<h3 id="35-filtros-buscadores-y-búsqueda">3.5 Filtros, Buscadores y Búsqueda</h3>
+
+<p><strong>Componentes Utilizados:</strong></p>
+
+<ol>
+  <li>
+    <p><strong>Input Search</strong> (<code class="language-plaintext highlighter-rouge">src/components/defaultInput.tsx</code>)</p>
+
+    <ul>
+      <li>Placeholder traducible</li>
+      <li>OnChange handler debounceado (500ms)</li>
+      <li>Limpiar con X button</li>
+      <li>Busca en múltiples campos</li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>State Filter</strong> (<code class="language-plaintext highlighter-rouge">src/components/state-filter.tsx</code>)</p>
+
+    <ul>
+      <li>Dropdown multi-select</li>
+      <li>Opciones: PENDING, APPROVED, REJECTED, SAVED</li>
+      <li>Checkbox para cada estado</li>
+      <li>Mostrar count de items por estado</li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Select Filter</strong> (<code class="language-plaintext highlighter-rouge">src/components/defaultSelect.tsx</code>)</p>
+
+    <ul>
+      <li>Dropdown single-select</li>
+      <li>Por categoría, empresa, centro de costo, etc</li>
+      <li>Mostrar placeholder “Todas”</li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Date Range Filter</strong></p>
+    <ul>
+      <li>Input type date o date picker</li>
+      <li>Rango: From - To</li>
+      <li>Clear button</li>
+    </ul>
+  </li>
+</ol>
+
+<p><strong>Uso en Dashboard:</strong></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[Search Input] [State Filter] [Other Filters] [Export Button]
+[DataGridTable con datos filtrados]
+</code></pre></div></div>
+
+<p><strong>Lógica de Filtrado:</strong></p>
+
+<ol>
+  <li>Usuario ingresa criterio en input/select</li>
+  <li>onChange dispara handler</li>
+  <li>Handler actualiza state local</li>
+  <li>Estado se aplica a <code class="language-plaintext highlighter-rouge">Array.filter()</code> para reducir rows</li>
+  <li>Tabla se re-renderiza con datos filtrados</li>
+  <li>Paginación se resetea a página 1</li>
+</ol>
+
+<p><strong>Debounce Search:</strong></p>
+
+<ul>
+  <li>Evita requests por cada keystroke</li>
+  <li>Wait 500ms después de último keystroke</li>
+  <li>Luego ejecuta búsqueda</li>
+</ul>
+
+<hr />
+
+<h3 id="36-modal-y-dialogs">3.6 Modal y Dialogs</h3>
+
+<p><strong>Framework:</strong> Radix UI Dialog + Shadcn/ui Modal</p>
+
+<p><strong>Tipos de Modales:</strong></p>
+
+<ol>
+  <li>
+    <p><strong>CreateExpense</strong> - Crear nuevo gasto</p>
+
+    <ul>
+      <li>Abierto desde: Botón en header o sidebar</li>
+      <li>Contiene: Form para ingresar datos</li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>ApprovalConfirmation</strong> - Confirmar aprobación/rechazo</p>
+
+    <ul>
+      <li>Abierto desde: Click en botón “Aprobar/Rechazar”</li>
+      <li>Contiene: Textarea para comentarios, botones Confirmar/Cancelar</li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>DeleteConfirmation</strong> - Confirmar eliminación</p>
+
+    <ul>
+      <li>Abierto desde: Botón eliminar</li>
+      <li>Contiene: Mensaje advertencia, botones Si/No</li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Details</strong> - Ver detalles de documento</p>
+    <ul>
+      <li>Abierto desde: Click en fila de tabla</li>
+      <li>Contiene: Información completa, adjuntos, historial</li>
+    </ul>
+  </li>
+</ol>
+
+<p><strong>Patrón Estándar:</strong></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>open (boolean): Controla visibilidad
+setOpen (function): Update estado
+Header: Título
+Content: Formulario o información
+Footer: Botones de acción (Cancel, Save/Submit)
+</code></pre></div></div>
+
+<p><strong>Cierre:</strong></p>
+
+<ul>
+  <li>Click en X (close button)</li>
+  <li>Click en Cancel</li>
+  <li>Click fuera del modal (backdrop)</li>
+  <li>Submit exitoso</li>
+</ul>
+
+<hr />
+
+<h3 id="37-indicadores-y-badges">3.7 Indicadores y Badges</h3>
+
+<p><strong>Badge States</strong> (<code class="language-plaintext highlighter-rouge">src/components/status-badge.tsx</code>):</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Estado</th>
+      <th>Color</th>
+      <th>Uso</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>PENDING</td>
+      <td>Amarillo</td>
+      <td>Esperando acción</td>
+    </tr>
+    <tr>
+      <td>APPROVED</td>
+      <td>Verde</td>
+      <td>Aprobado exitosamente</td>
+    </tr>
+    <tr>
+      <td>REJECTED</td>
+      <td>Rojo</td>
+      <td>Rechazado/Denegado</td>
+    </tr>
+    <tr>
+      <td>SAVED</td>
+      <td>Gris</td>
+      <td>Borrador/Sin enviar</td>
+    </tr>
+    <tr>
+      <td>PAID</td>
+      <td>Verde oscuro</td>
+      <td>Pagado</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>Badge Usage:</strong></p>
+
+<ul>
+  <li>Mostrar estado de documento en tabla</li>
+  <li>Mostrar categoría/tipo</li>
+  <li>Mostrar etiqueta</li>
+</ul>
+
+<hr />
+
+<h2 id="resumen---punto-3">Resumen - Punto 3</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Componente</th>
+      <th>Ubicación</th>
+      <th>Función</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>MainLayout</strong></td>
+      <td>layout/main-layout.tsx</td>
+      <td>Container principal con sidebar + header</td>
+    </tr>
+    <tr>
+      <td><strong>SiteHeader</strong></td>
+      <td>site-header.tsx</td>
+      <td>Barra superior con título y botones</td>
+    </tr>
+    <tr>
+      <td><strong>AppSidebar</strong></td>
+      <td>app-sidebar.tsx</td>
+      <td>Menú lateral jerárquico por rol</td>
+    </tr>
+    <tr>
+      <td><strong>DefaultDataGridTable</strong></td>
+      <td>defaultDataGridTable.tsx</td>
+      <td>Tabla reutilizable con paginación</td>
+    </tr>
+    <tr>
+      <td><strong>Input Search</strong></td>
+      <td>defaultInput.tsx</td>
+      <td>Búsqueda en tiempo real</td>
+    </tr>
+    <tr>
+      <td><strong>State Filter</strong></td>
+      <td>state-filter.tsx</td>
+      <td>Multi-select de estados</td>
+    </tr>
+    <tr>
+      <td><strong>Modal Dialog</strong></td>
+      <td>Radix UI</td>
+      <td>Pop-ups para acciones</td>
+    </tr>
+    <tr>
+      <td><strong>StatusBadge</strong></td>
+      <td>status-badge.tsx</td>
+      <td>Indicadores de estado coloreados</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h2 id="4-dashboard--pantalla-de-inicio">4. Dashboard / Pantalla de Inicio</h2>
+
+<h3 id="41-indicadores-principales">4.1 Indicadores Principales</h3>
+
+<p><strong>Ubicación:</strong> <code class="language-plaintext highlighter-rouge">src/app/web/page.tsx</code></p>
+
+<p><strong>Componentes KPI (Key Performance Indicators):</strong></p>
+
+<p>El dashboard muestra tarjetas con métricas resumidas:</p>
+
+<ol>
+  <li>
+    <p><strong>Gastos por Categoría</strong></p>
+
+    <ul>
+      <li>Gráfico de barras (ChartBarMixed)</li>
+      <li>Eje X: Categorías (Viajes, Dietas, Comidas, etc)</li>
+      <li>Eje Y: Monto en USD</li>
+      <li>Período: Mes actual</li>
+      <li>Mostrar total y promedio</li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Gastos Totales - Viajes</strong></p>
+
+    <ul>
+      <li>Monto: $XXX.XX</li>
+      <li>Trending: +15% vs mes anterior (con icono up/down)</li>
+      <li>Card responsive</li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Gastos Totales - Per Diem</strong></p>
+
+    <ul>
+      <li>Monto: $XXX.XX</li>
+      <li>Trending: +8% vs mes anterior</li>
+      <li>Card responsive</li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Distribución de Emisiones (Pie Chart)</strong></p>
+
+    <ul>
+      <li>ChartPie reutilizable</li>
+      <li>Mostrar porcentajes por categoría</li>
+      <li>Colores distintos por segmento</li>
+      <li>Período: Mes actual</li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Estadísticas Generales</strong></p>
+    <ul>
+      <li>Total de documentos</li>
+      <li>Documentos pendientes de aprobación</li>
+      <li>Documentos aprobados</li>
+      <li>Documentos rechazados</li>
+    </ul>
+  </li>
+</ol>
+
+<p><strong>Hook:</strong> <code class="language-plaintext highlighter-rouge">useDashboard()</code></p>
+
+<ul>
+  <li>Fetch data desde API <code class="language-plaintext highlighter-rouge">/dashboard/</code></li>
+  <li>Caché los datos</li>
+  <li>Proporciona estado: loading, error, dashboardData</li>
+  <li>Incluye métodos para refrescar datos</li>
+</ul>
+
+<hr />
+
+<h3 id="42-secciones-destacadas">4.2 Secciones Destacadas</h3>
+
+<p><strong>Tabla 1: Gastos Cargados</strong></p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Columna</th>
+      <th>Tipo</th>
+      <th>Función</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Fecha</td>
+      <td>Date</td>
+      <td>Cuándo se creó</td>
+    </tr>
+    <tr>
+      <td>Descripción</td>
+      <td>String</td>
+      <td>Nombre/título del gasto</td>
+    </tr>
+    <tr>
+      <td>Categoría</td>
+      <td>Badge</td>
+      <td>Viajes, Dietas, etc (color)</td>
+    </tr>
+    <tr>
+      <td>Monto</td>
+      <td>Number</td>
+      <td>USD con 2 decimales</td>
+    </tr>
+    <tr>
+      <td>Estado</td>
+      <td>Badge</td>
+      <td>PENDING, APPROVED, REJECTED, SAVED</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>Funcionalidades:</strong></p>
+
+<ul>
+  <li>Click en fila → Abre modal de detalles</li>
+  <li>Paginación: 5 ó 10 filas por página</li>
+  <li>Búsqueda: Filtrar por descripción/fecha</li>
+  <li>Estado Filter: Seleccionar múltiples estados</li>
+  <li>Mostrar “No data” si vacío</li>
+</ul>
+
+<p><strong>Tabla 2: Situación de Pago</strong></p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Columna</th>
+      <th>Tipo</th>
+      <th>Función</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Fecha</td>
+      <td>Date</td>
+      <td>Cuándo se procesó</td>
+    </tr>
+    <tr>
+      <td>Descripción</td>
+      <td>String</td>
+      <td>Nombre/título</td>
+    </tr>
+    <tr>
+      <td>Categoría</td>
+      <td>Badge</td>
+      <td>Clasificación</td>
+    </tr>
+    <tr>
+      <td>Monto</td>
+      <td>Number</td>
+      <td>USD con 2 decimales</td>
+    </tr>
+    <tr>
+      <td>Situación Pago</td>
+      <td>Badge</td>
+      <td>Paid (verde), Pending (gris)</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>Funcionalidades:</strong></p>
+
+<ul>
+  <li>Similar a tabla de gastos</li>
+  <li>Filtrar por: Pagado/Pendiente</li>
+  <li>Click para ver detalles de transferencia</li>
+</ul>
+
+<hr />
+
+<h3 id="43-accesos-rápidos">4.3 Accesos Rápidos</h3>
+
+<p><strong>Ubicación:</strong> Top header + Sidebar</p>
+
+<p><strong>Botón Principal: “Subir Gasto”</strong></p>
+
+<ul>
+  <li>Ubicación: Top-right del header</li>
+  <li>Color: Primary (Teal)</li>
+  <li>Función: Abre modal CreateExpense</li>
+  <li>Siempre visible</li>
+</ul>
+
+<p><strong>Botón Secundario: “Dashboard de Aprobador”</strong></p>
+
+<ul>
+  <li>Ubicación: Top-right del header (si rol es APPROVER)</li>
+  <li>Color: Secondary</li>
+  <li>Función: Navega a <code class="language-plaintext highlighter-rouge">/web/appraisal</code></li>
+  <li>Solo visible para roles APPROVER/COMPANY_APPROVER</li>
+</ul>
+
+<p><strong>Sidebar Navigation:</strong></p>
+
+<ul>
+  <li>Dashboard → Link a <code class="language-plaintext highlighter-rouge">/web</code></li>
+  <li>Mis Gastos → Link a <code class="language-plaintext highlighter-rouge">/web/expenses</code></li>
+  <li>Reportes → Link a <code class="language-plaintext highlighter-rouge">/web/expenses/reports</code></li>
+  <li>Configuración → Link a <code class="language-plaintext highlighter-rouge">/web/settings</code></li>
+</ul>
+
+<hr />
+
+<h3 id="44-carga-de-datos">4.4 Carga de Datos</h3>
+
+<p><strong>Hook Principal:</strong> <code class="language-plaintext highlighter-rouge">useDashboard()</code></p>
+
+<p><strong>Flujo:</strong></p>
+
+<ol>
+  <li>Component mount → useEffect dispara fetchDashboardData()</li>
+  <li>setLoading(true)</li>
+  <li>DashboardRepository.getDashboardData()
+    <ul>
+      <li>GET <code class="language-plaintext highlighter-rouge">/api/dashboard/</code></li>
+      <li>Incluye token en header</li>
+    </ul>
+  </li>
+  <li>Backend retorna: <code class="language-plaintext highlighter-rouge">{barChartData, pieChartData, expenseData, paymentData, stats}</code></li>
+  <li>Procesar datos:
+    <ul>
+      <li>Agregar colores a gráficos (CHART_COLORS array)</li>
+      <li>Generar config para Recharts</li>
+      <li>Transformar datos a formato tabla</li>
+    </ul>
+  </li>
+  <li>setDashboardData(enhancedData)</li>
+  <li>setLoading(false)</li>
+</ol>
+
+<p><strong>Manejo de Errores:</strong></p>
+
+<ul>
+  <li>Si fetch falla: setError(message)</li>
+  <li>Mostrar: Icon ban + mensaje de error</li>
+  <li>Botón retry para refrescar</li>
+</ul>
+
+<p><strong>Optimizaciones:</strong></p>
+
+<ul>
+  <li>useMemo para DashboardRepository (instancia única)</li>
+  <li>useCallback para fetchDashboardData (evita recreación)</li>
+  <li>Caché de datos en estado (evita refetch innecesarios)</li>
+  <li>Debounce en filtros</li>
+</ul>
+
+<hr />
+
+<h3 id="45-filtrado-y-búsqueda-en-dashboard">4.5 Filtrado y Búsqueda en Dashboard</h3>
+
+<p><strong>Search Term (Debounceado):</strong></p>
+
+<ul>
+  <li>Input busca en todos los campos del expense</li>
+  <li>Delay: 500ms</li>
+  <li>Reset paginación a página 1</li>
+</ul>
+
+<p><strong>State Filter:</strong></p>
+
+<ul>
+  <li>Multi-select checkboxes</li>
+  <li>Opciones: SAVED, PENDING, APPROVED, REJECTED</li>
+  <li>Por defecto: todos checked</li>
+  <li>Mostrar count de items por estado</li>
+</ul>
+
+<p><strong>Aplicación de Filtros:</strong></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>filteredData = allData
+  .filter(item =&gt; selectedStates.includes(item.status))
+  .filter(item =&gt; item.description.includes(searchTerm))
+</code></pre></div></div>
+
+<hr />
+
+<h3 id="46-gráficos-y-visualización">4.6 Gráficos y Visualización</h3>
+
+<p><strong>ChartBarMixed</strong> (<code class="language-plaintext highlighter-rouge">src/components/chart-bar-stacked.tsx</code>)</p>
+
+<ul>
+  <li>Gráfico de barras apiladas</li>
+  <li>Múltiples series (si hay subcategorías)</li>
+  <li>Tooltip al hover</li>
+  <li>Responsive a ancho del contenedor</li>
+</ul>
+
+<p><strong>ChartPie</strong> (<code class="language-plaintext highlighter-rouge">src/components/chart-pie-interactive.tsx</code>)</p>
+
+<ul>
+  <li>Pie chart con leyenda</li>
+  <li>Colores CSS variables (–chart-1 a –chart-5)</li>
+  <li>Mostrar porcentaje</li>
+  <li>Click legend para toggle series</li>
+</ul>
+
+<p><strong>Recharts Configuration:</strong></p>
+
+<ul>
+  <li>Ejes con labels</li>
+  <li>Grid background</li>
+  <li>Tooltip con formato</li>
+  <li>Legend con iconos</li>
+</ul>
+
+<hr />
+
+<h3 id="47-estados-de-carga">4.7 Estados de Carga</h3>
+
+<p><strong>Loading:</strong></p>
+
+<ul>
+  <li>Mostrar: CircularProgress (Material-UI)</li>
+  <li>Centrado en la página</li>
+  <li>No bloquea header/sidebar</li>
+</ul>
+
+<p><strong>Error:</strong></p>
+
+<ul>
+  <li>Mostrar: Ban icon + mensaje de error</li>
+  <li>Mensaje i18n traducido</li>
+  <li>Botón “Reintentar”</li>
+</ul>
+
+<p><strong>Empty State:</strong></p>
+
+<ul>
+  <li>“No hay datos disponibles”</li>
+  <li>Mostrar en tablas vacías</li>
+  <li>Sugerir: “Carga tu primer gasto”</li>
+</ul>
+
+<p><strong>Success:</strong></p>
+
+<ul>
+  <li>Datos mostrados normalmente</li>
+  <li>Sin mensajes visibles</li>
+</ul>
+
+<hr />
+
+<h3 id="48-responsividad">4.8 Responsividad</h3>
+
+<p><strong>Mobile (&lt; 640px):</strong></p>
+
+<ul>
+  <li>Gráficos: 100% width</li>
+  <li>Tablas: Scroll horizontal</li>
+  <li>KPI cards: Stack vertical</li>
+  <li>Header: Collapse title si es long</li>
+</ul>
+
+<p><strong>Tablet (640px - 1024px):</strong></p>
+
+<ul>
+  <li>2 columnas de gráficos/cards</li>
+  <li>Tablas: 5 filas por página</li>
+</ul>
+
+<p><strong>Desktop (&gt; 1024px):</strong></p>
+
+<ul>
+  <li>3 columnas layout posible</li>
+  <li>Tablas: 10 filas por página</li>
+  <li>Sidebar: Siempre visible</li>
+</ul>
+
+<hr />
+
+<h2 id="resumen---punto-4">Resumen - Punto 4</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Elemento</th>
+      <th>Detalles</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>KPIs</strong></td>
+      <td>4 métricas: Viajes, Per Diem, Total, Trending</td>
+    </tr>
+    <tr>
+      <td><strong>Gráficos</strong></td>
+      <td>Bar chart + Pie chart</td>
+    </tr>
+    <tr>
+      <td><strong>Tabla Gastos</strong></td>
+      <td>5 columnas, paginación, búsqueda, filtro estado</td>
+    </tr>
+    <tr>
+      <td><strong>Tabla Pagos</strong></td>
+      <td>5 columnas, paginación, filtro estado</td>
+    </tr>
+    <tr>
+      <td><strong>Hook</strong></td>
+      <td>useDashboard() con fetch, caché, error handling</td>
+    </tr>
+    <tr>
+      <td><strong>Botones</strong></td>
+      <td>“Subir Gasto” + “Dashboard Aprobador” (condicional)</td>
+    </tr>
+    <tr>
+      <td><strong>Carga</strong></td>
+      <td>Loading spinner, Error message, Empty state</td>
+    </tr>
+    <tr>
+      <td><strong>Responsive</strong></td>
+      <td>Mobile-first, adapta a todos los breakpoints</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h2 id="5-módulo-principal-documentos--gastos">5. Módulo Principal (Documentos / Gastos)</h2>
+
+<h3 id="51-crear-nuevo-documento">5.1 Crear Nuevo Documento</h3>
+
+<p><strong>Ubicación:</strong> Modal <code class="language-plaintext highlighter-rouge">src/components/modals/create-expense.tsx</code></p>
+
+<p><strong>Activación:</strong></p>
+
+<ul>
+  <li>Click botón “Subir Gasto” (header)</li>
+  <li>Click botón “Nuevo Documento” (sidebar)</li>
+  <li>Abre Dialog/Modal</li>
+</ul>
+
+<p><strong>Opciones en Modal:</strong></p>
+
+<ol>
+  <li>
+    <p><strong>Crear Nuevo Reporte</strong></p>
+
+    <ul>
+      <li>Input: Título del reporte</li>
+      <li>Descripción traducible</li>
+      <li>Submit → Navega a <code class="language-plaintext highlighter-rouge">/web/expenses/reports/new</code></li>
+      <li>Crea documento draft</li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Agregar a Reporte Existente</strong></p>
+    <ul>
+      <li>Dropdown: Seleccionar reporte anterior</li>
+      <li>Submit → Navega al reporte y agrega item</li>
+    </ul>
+  </li>
+</ol>
+
+<p><strong>Flujo:</strong></p>
+
+<ol>
+  <li>Usuario selecciona opción</li>
+  <li>Completa título (si es nuevo)</li>
+  <li>Click “Crear” → setReportTitle(title) en Zustand</li>
+  <li>Redirige a página de edición</li>
+  <li>Página prefllena con el título</li>
+</ol>
+
+<hr />
+
+<h3 id="52-ver-listado-de-documentos">5.2 Ver Listado de Documentos</h3>
+
+<p><strong>Ubicación:</strong> <code class="language-plaintext highlighter-rouge">src/app/web/expenses/page.tsx</code></p>
+
+<p><strong>Estructura:</strong></p>
+
+<p>El listado muestra documentos agrupados por tipo:</p>
+
+<ol>
+  <li>
+    <p><strong>Gastos (Expenses)</strong></p>
+
+    <ul>
+      <li>Fecha del gasto</li>
+      <li>Descripción</li>
+      <li>Monto (USD)</li>
+      <li>Estado</li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Viajes (Travels)</strong></p>
+
+    <ul>
+      <li>Origen/Destino</li>
+      <li>Fecha inicio/fin</li>
+      <li>Monto total</li>
+      <li>Estado</li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Per Diem (Dietas)</strong></p>
+    <ul>
+      <li>Período</li>
+      <li>Cantidad de días</li>
+      <li>Monto por día</li>
+      <li>Estado</li>
+    </ul>
+  </li>
+</ol>
+
+<p><strong>Visualización por Tipo:</strong></p>
+
+<p>Cada tipo tiene color de fondo y borde distintivo:</p>
+
+<ul>
+  <li>Gastos: Fondo gris claro, borde gris</li>
+  <li>Viajes: Fondo azul claro, borde azul</li>
+  <li>Per Diem: Fondo verde claro, borde verde</li>
+</ul>
+
+<p><strong>Ícono por Tipo:</strong></p>
+
+<ul>
+  <li>Gastos: FileStack</li>
+  <li>Viajes: Plane</li>
+  <li>Per Diem: Wallet</li>
+</ul>
+
+<hr />
+
+<h3 id="53-filtrar-documentos">5.3 Filtrar Documentos</h3>
+
+<p><strong>Ubicación:</strong> Top de <code class="language-plaintext highlighter-rouge">expenses/page.tsx</code></p>
+
+<p><strong>Filtros Disponibles:</strong></p>
+
+<ol>
+  <li>
+    <p><strong>Por Estado</strong></p>
+
+    <ul>
+      <li>Componente: StateFilterBackend</li>
+      <li>Opciones: SAVED, PENDING, APPROVED, REJECTED</li>
+      <li>Multi-select con checkboxes</li>
+      <li>Mostrar count de items</li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Por Tipo</strong></p>
+
+    <ul>
+      <li>Dropdown: Expenses, Travels, Per Diem</li>
+      <li>Select único</li>
+      <li>“Todos los tipos” por defecto</li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Búsqueda</strong></p>
+
+    <ul>
+      <li>Input text</li>
+      <li>Busca en descripción/título</li>
+      <li>Debounceado 500ms</li>
+      <li>Limpiador X</li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Por Rango de Fecha</strong></p>
+    <ul>
+      <li>Date picker: From - To</li>
+      <li>Opcional</li>
+      <li>Reset button</li>
+    </ul>
+  </li>
+</ol>
+
+<p><strong>Hook:</strong> <code class="language-plaintext highlighter-rouge">useItems()</code></p>
+
+<ul>
+  <li>Fetch todas los documentos del usuario</li>
+  <li>Aplica filtros</li>
+  <li>Retorna: filteredItems, loading, error</li>
+  <li>Caché en Zustand</li>
+</ul>
+
+<hr />
+
+<h3 id="54-ver-detalle">5.4 Ver Detalle</h3>
+
+<p><strong>Ubicación:</strong> Modal <code class="language-plaintext highlighter-rouge">src/components/modals/details-approver.tsx</code> o drawer</p>
+
+<p><strong>Activación:</strong></p>
+
+<ul>
+  <li>Click en documento/item</li>
+  <li>Abre Drawer o Modal con detalles completos</li>
+</ul>
+
+<p><strong>Información Mostrada:</strong></p>
+
+<p><strong>Encabezado:</strong></p>
+
+<ul>
+  <li>Tipo de documento (Gasto/Viaje/Per Diem)</li>
+  <li>ID del documento</li>
+  <li>Estado (badge coloreado)</li>
+</ul>
+
+<p><strong>Contenido:</strong></p>
+
+<p>Para <strong>Gastos:</strong></p>
+
+<ul>
+  <li>Fecha del gasto</li>
+  <li>Descripción detallada</li>
+  <li>Categoría</li>
+  <li>Monto USD</li>
+  <li>Moneda original (si aplica)</li>
+  <li>Impuesto/IVA</li>
+  <li>Total</li>
+  <li>Centro de costo</li>
+  <li>Adjuntos (PDFs, imágenes)</li>
+</ul>
+
+<p>Para <strong>Viajes:</strong></p>
+
+<ul>
+  <li>Origen/Destino</li>
+  <li>Fecha inicio/fin</li>
+  <li>Propósito</li>
+  <li>Transporte (Aéreo, Auto, etc)</li>
+  <li>Monto total</li>
+  <li>Km recorridos (si aplica)</li>
+  <li>Adjuntos (boletos, facturas)</li>
+</ul>
+
+<p>Para <strong>Per Diem:</strong></p>
+
+<ul>
+  <li>Período (fechas)</li>
+  <li>Cantidad de días</li>
+  <li>Monto por día</li>
+  <li>Total</li>
+  <li>Justificación</li>
+  <li>Adjuntos</li>
+</ul>
+
+<p><strong>Footer:</strong></p>
+
+<ul>
+  <li>Historial de cambios/comentarios (si aplica)</li>
+  <li>Botones: Editar, Descargar, Cerrar</li>
+</ul>
+
+<hr />
+
+<h3 id="55-editar-documento">5.5 Editar Documento</h3>
+
+<p><strong>Ubicación:</strong> <code class="language-plaintext highlighter-rouge">/web/expenses/reports/[id]/edit</code> o modal</p>
+
+<p><strong>Estados Permitidos:</strong></p>
+
+<ul>
+  <li>SAVED: Siempre editable</li>
+  <li>PENDING/APPROVED/REJECTED: No editable, solo lectura</li>
+  <li>(Solo propietario puede editar)</li>
+</ul>
+
+<p><strong>Formulario Edición:</strong></p>
+
+<p><strong>Para Gastos:</strong></p>
+
+<ul>
+  <li>Fecha (date input)</li>
+  <li>Descripción (text input)</li>
+  <li>Categoría (select dropdown)</li>
+  <li>Monto (number input)</li>
+  <li>Moneda (select)</li>
+  <li>Impuesto % (number)</li>
+  <li>Centro de costo (select)</li>
+  <li>Adjuntos (drag-drop file upload)</li>
+</ul>
+
+<p><strong>Para Viajes:</strong></p>
+
+<ul>
+  <li>Origen (input/autocomplete)</li>
+  <li>Destino (input/autocomplete)</li>
+  <li>Fecha inicio (date)</li>
+  <li>Fecha fin (date)</li>
+  <li>Propósito (textarea)</li>
+  <li>Transporte (select)</li>
+  <li>Monto (number)</li>
+  <li>Adjuntos (file upload)</li>
+</ul>
+
+<p><strong>Para Per Diem:</strong></p>
+
+<ul>
+  <li>Fecha inicio (date)</li>
+  <li>Fecha fin (date)</li>
+  <li>Monto por día (number)</li>
+  <li>Justificación (textarea)</li>
+  <li>Adjuntos (file upload)</li>
+</ul>
+
+<p><strong>Validaciones:</strong></p>
+
+<ul>
+  <li>Campos requeridos validados antes de submit</li>
+  <li>Monto positivo</li>
+  <li>Fechas válidas</li>
+  <li>Al menos 1 adjunto para ciertos tipos</li>
+</ul>
+
+<p><strong>Botones:</strong></p>
+
+<ul>
+  <li>Guardar (Guardar como SAVED)</li>
+  <li>Enviar a Aprobación (cambiar a PENDING)</li>
+  <li>Cancelar (discard changes)</li>
+</ul>
+
+<hr />
+
+<h3 id="56-eliminar-o-archivar">5.6 Eliminar o Archivar</h3>
+
+<p><strong>Ubicación:</strong> Botón en detalles/listado</p>
+
+<p><strong>Eliminar:</strong></p>
+
+<ul>
+  <li>Solo permite si estado es SAVED</li>
+  <li>Abre confirmación: “¿Seguro que deseas eliminar?”</li>
+  <li>DELETE <code class="language-plaintext highlighter-rouge">/expenses/{id}/</code></li>
+  <li>Remueve de lista</li>
+</ul>
+
+<p><strong>Archivar:</strong></p>
+
+<ul>
+  <li>Disponible en APPROVED/REJECTED</li>
+  <li>PATCH <code class="language-plaintext highlighter-rouge">/expenses/{id}/</code> con <code class="language-plaintext highlighter-rouge">archived=true</code></li>
+  <li>Mueve a sección archivada</li>
+  <li>No se muestra en listado principal por defecto</li>
+</ul>
+
+<hr />
+
+<h3 id="57-subir-archivos-pdf-imágenes">5.7 Subir Archivos (PDF, Imágenes)</h3>
+
+<p><strong>Componente:</strong> Drag-drop zone o input file</p>
+
+<p><strong>Soportados:</strong></p>
+
+<ul>
+  <li>PDF</li>
+  <li>JPG/JPEG</li>
+  <li>PNG</li>
+  <li>Máximo 5MB por archivo</li>
+  <li>Máximo 10 archivos por documento</li>
+</ul>
+
+<p><strong>Upload Process:</strong></p>
+
+<ol>
+  <li>Usuario arrastra o selecciona archivos</li>
+  <li>Validación cliente:
+    <ul>
+      <li>Tipo MIME correcto</li>
+      <li>Tamaño &lt; 5MB</li>
+      <li>Mostrar errores en rojo</li>
+    </ul>
+  </li>
+  <li>Preview de archivos antes de submit</li>
+  <li>Botón “Eliminar” por cada archivo</li>
+  <li>Submit formulario → POST multipart/form-data</li>
+  <li>Backend guarda en S3</li>
+  <li>Mostrar progress bar</li>
+  <li>Éxito → Mostrar URL o thumbnail</li>
+</ol>
+
+<p><strong>Errores Posibles:</strong></p>
+
+<ul>
+  <li>Archivo muy grande</li>
+  <li>Formato no soportado</li>
+  <li>Upload interrumpido (retry)</li>
+  <li>Network error</li>
+</ul>
+
+<p><strong>Visualización:</strong></p>
+
+<ul>
+  <li>Lista de archivos cargados</li>
+  <li>Icono por tipo (PDF, image)</li>
+  <li>Nombre y tamaño</li>
+  <li>Link para descargar</li>
+  <li>Botón X para eliminar</li>
+</ul>
+
+<hr />
+
+<h3 id="58-estados-del-documento">5.8 Estados del Documento</h3>
+
+<p><strong>Máquina de Estados:</strong></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>SAVED (Borrador)
+  ↓ (Click "Enviar a Aprobación")
+PENDING (Esperando aprobación L1)
+  ↓ (Aprobador L1 aprueba)
+PENDING_L2 (Esperando aprobación L2)
+  ↓ (Aprobador L2 aprueba)
+PENDING_L3 (Esperando aprobación L3)
+  ↓ (Aprobador L3 aprueba)
+APPROVED (Aprobado completamente)
+  ↓ (Opcional: Pagar)
+PAID (Pagado)
+
+REJECTED (En cualquier nivel)
+  ↓ (Usuario puede editar y reenviarlo)
+  PENDING (Resend to approval)
+</code></pre></div></div>
+
+<p><strong>Badges por Estado:</strong></p>
+
+<ul>
+  <li>SAVED: Gris (Borrador)</li>
+  <li>PENDING: Amarillo (En proceso)</li>
+  <li>APPROVED: Verde (Aprobado)</li>
+  <li>REJECTED: Rojo (Rechazado)</li>
+  <li>PAID: Verde oscuro (Pagado)</li>
+</ul>
+
+<hr />
+
+<h2 id="resumen---punto-5">Resumen - Punto 5</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Función</th>
+      <th>Detalles</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Crear</strong></td>
+      <td>Modal con opción: Nuevo o Agregar a existente</td>
+    </tr>
+    <tr>
+      <td><strong>Listar</strong></td>
+      <td>Grouped por tipo, con colores y iconos</td>
+    </tr>
+    <tr>
+      <td><strong>Filtrar</strong></td>
+      <td>Estado, Tipo, Búsqueda, Rango de fecha</td>
+    </tr>
+    <tr>
+      <td><strong>Ver Detalle</strong></td>
+      <td>Drawer/Modal con info completa y historial</td>
+    </tr>
+    <tr>
+      <td><strong>Editar</strong></td>
+      <td>Formulario con validaciones, solo si SAVED</td>
+    </tr>
+    <tr>
+      <td><strong>Eliminar</strong></td>
+      <td>Confirmación, solo si SAVED</td>
+    </tr>
+    <tr>
+      <td><strong>Archivar</strong></td>
+      <td>Soft delete, para APPROVED/REJECTED</td>
+    </tr>
+    <tr>
+      <td><strong>Archivos</strong></td>
+      <td>Drag-drop, 5MB, soporta PDF/JPG/PNG</td>
+    </tr>
+    <tr>
+      <td><strong>Estados</strong></td>
+      <td>6 estados principales con transiciones</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h2 id="6-módulo-de-aprobaciones">6. Módulo de Aprobaciones</h2>
+
+<h3 id="61-ver-documentos-pendientes-de-aprobación">6.1 Ver Documentos Pendientes de Aprobación</h3>
+
+<p><strong>Ubicación:</strong> <code class="language-plaintext highlighter-rouge">src/app/web/appraisal/pending/page.tsx</code></p>
+
+<p><strong>Acceso:</strong></p>
+
+<ul>
+  <li>Rutas según rol:
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">/web/appraisal-user</code> - Level 1 approvals</li>
+      <li><code class="language-plaintext highlighter-rouge">/web/appraisal-ceco</code> - Level 2 approvals (Cost Center)</li>
+      <li><code class="language-plaintext highlighter-rouge">/web/appraisal-company</code> - Level 3 approvals (Company)</li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>Visualización:</strong></p>
+
+<p>El listado agrupa documentos por usuario/empleado:</p>
+
+<ol>
+  <li>
+    <p><strong>Acordeón por Usuario</strong></p>
+
+    <ul>
+      <li>Nombre del empleado</li>
+      <li>Rol/Departamento</li>
+      <li>Contador: “5 documentos pendientes”</li>
+      <li>Estado: Expandible/Colapsible</li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Items dentro de Acordeón</strong></p>
+
+    <ul>
+      <li>Por tipo: Gastos, Viajes, Per Diem</li>
+      <li>Información resumida:
+        <ul>
+          <li>Descripción</li>
+          <li>Monto</li>
+          <li>Fecha</li>
+          <li>Estado actual</li>
+        </ul>
+      </li>
+      <li>Color por tipo (gris/azul/verde)</li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Indicadores Visuales</strong></p>
+    <ul>
+      <li>Ícono por tipo: FileStack, Plane, Wallet</li>
+      <li>Badge de estado: PENDING, IN_REVIEW, etc</li>
+      <li>Botones: Ver, Aprobar, Rechazar</li>
+    </ul>
+  </li>
+</ol>
+
+<p><strong>Hook:</strong> <code class="language-plaintext highlighter-rouge">useAppraisalPendingDocuments()</code></p>
+
+<ul>
+  <li>Fetch <code class="language-plaintext highlighter-rouge">/api/appraisals/pending/</code></li>
+  <li>Filtro automático por nivel del usuario</li>
+  <li>Retorna: documents, loading, error, count</li>
+  <li>Cachea en Zustand</li>
+  <li>Método refetch: <code class="language-plaintext highlighter-rouge">fetchDocuments()</code></li>
+</ul>
+
+<p><strong>Funcionalidades:</strong></p>
+
+<ul>
+  <li>Paginación (10-20 items por página)</li>
+  <li>Búsqueda por nombre de empleado</li>
+  <li>Filtro por tipo de documento</li>
+  <li>Ordenar por fecha/monto</li>
+</ul>
+
+<hr />
+
+<h3 id="62-aprobar-o-rechazar">6.2 Aprobar o Rechazar</h3>
+
+<p><strong>Ubicación:</strong> Modal <code class="language-plaintext highlighter-rouge">src/components/modals/state-modal.tsx</code></p>
+
+<p><strong>Flujo Básico:</strong></p>
+
+<ol>
+  <li>Usuario hace click en “Aprobar” o “Rechazar”</li>
+  <li>Abre Dialog/Modal de confirmación</li>
+  <li>
+    <p>Mostrar:</p>
+
+    <ul>
+      <li>Información del documento</li>
+      <li>Monto a autorizar</li>
+      <li>Datos del empleado</li>
+      <li>Nivel de aprobación actual</li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Si Aprueba:</strong></p>
+
+    <ul>
+      <li>PATCH <code class="language-plaintext highlighter-rouge">/api/appraisals/{document_id}/approve/</code></li>
+      <li>Body: <code class="language-plaintext highlighter-rouge">{level, comments}</code></li>
+      <li>Estado pasa a siguiente nivel o APPROVED si es último</li>
+    </ul>
+  </li>
+  <li><strong>Si Rechaza:</strong>
+    <ul>
+      <li>PATCH <code class="language-plaintext highlighter-rouge">/api/appraisals/{document_id}/reject/</code></li>
+      <li>Body: <code class="language-plaintext highlighter-rouge">{level, reason}</code></li>
+      <li>Estado cambia a REJECTED</li>
+      <li>Notifica al usuario original</li>
+    </ul>
+  </li>
+</ol>
+
+<p><strong>Validaciones:</strong></p>
+
+<ul>
+  <li>Aprobador debe tener permiso para ese nivel</li>
+  <li>No puede aprobar documento ya aprobado</li>
+  <li>Motivo de rechazo es obligatorio</li>
+</ul>
+
+<p><strong>Estados Modal:</strong></p>
+
+<ul>
+  <li>IDLE: Esperando acción</li>
+  <li>SUBMITTING: Petición en curso</li>
+  <li>SUCCESS: Mostrando mensaje de éxito</li>
+  <li>ERROR: Mostrando error</li>
+</ul>
+
+<hr />
+
+<h3 id="63-añadir-comentarios">6.3 Añadir Comentarios</h3>
+
+<p><strong>Ubicación:</strong> Textarea en modal de aprobación</p>
+
+<p><strong>Funcionalidad:</strong></p>
+
+<ol>
+  <li>Campo textarea opcional al aprobar</li>
+  <li>Comentarios se guardan con la transacción de aprobación</li>
+  <li>Caracteres máximo: 500</li>
+  <li>Contador: “X/500 caracteres”</li>
+</ol>
+
+<p><strong>Flujo:</strong></p>
+
+<ol>
+  <li>Usuario ingresa comentario (opcional)</li>
+  <li>Submit aprobación</li>
+  <li>Backend guarda comment + approval en ApprovalHistory</li>
+  <li>Usuario original ve comentario en detalles</li>
+</ol>
+
+<p><strong>Contexto de Comentarios:</strong></p>
+
+<ul>
+  <li>Quién comentó (approver name)</li>
+  <li>Cuándo (timestamp)</li>
+  <li>Qué comentó (texto)</li>
+  <li>Acción asociada (approved, rejected)</li>
+</ul>
+
+<hr />
+
+<h3 id="64-ver-historial-de-aprobaciones">6.4 Ver Historial de Aprobaciones</h3>
+
+<p><strong>Ubicación:</strong> Drawer/Modal al ver detalles de documento</p>
+
+<p><strong>Información Mostrada:</strong></p>
+
+<p>Por cada nivel de aprobación:</p>
+
+<ol>
+  <li>
+    <p><strong>Nivel 1 (User Approver)</strong></p>
+
+    <ul>
+      <li>Aprobador: Nombre + Email</li>
+      <li>Fecha/Hora de aprobación</li>
+      <li>Estado: Aprobado ✓ / Rechazado ✗ / Pendiente ⏳</li>
+      <li>Comentarios (si hay)</li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Nivel 2 (Cost Center Approver)</strong></p>
+
+    <ul>
+      <li>Aprobador: Nombre + Email</li>
+      <li>Fecha/Hora</li>
+      <li>Estado</li>
+      <li>Comentarios</li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Nivel 3 (Company Approver)</strong></p>
+    <ul>
+      <li>Aprobador: Nombre + Email</li>
+      <li>Fecha/Hora</li>
+      <li>Estado</li>
+      <li>Comentarios</li>
+    </ul>
+  </li>
+</ol>
+
+<p><strong>Timeline Visual:</strong></p>
+
+<ul>
+  <li>Línea vertical conectando niveles</li>
+  <li>Ícono verde (✓) para aprobado</li>
+  <li>Ícono rojo (✗) para rechazado</li>
+  <li>Ícono gris (⏳) para pendiente</li>
+</ul>
+
+<hr />
+
+<h3 id="65-restricciones-por-rol">6.5 Restricciones por Rol</h3>
+
+<p><strong>Permisos por Nivel:</strong></p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Acción</th>
+      <th>User Approver</th>
+      <th>Cost Center</th>
+      <th>Company Approver</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Ver pendientes L1</td>
+      <td>✅</td>
+      <td>✅</td>
+      <td>✅</td>
+    </tr>
+    <tr>
+      <td>Ver pendientes L2</td>
+      <td>❌</td>
+      <td>✅</td>
+      <td>✅</td>
+    </tr>
+    <tr>
+      <td>Ver pendientes L3</td>
+      <td>❌</td>
+      <td>❌</td>
+      <td>✅</td>
+    </tr>
+    <tr>
+      <td>Aprobar L1</td>
+      <td>✅</td>
+      <td>❌</td>
+      <td>❌</td>
+    </tr>
+    <tr>
+      <td>Aprobar L2</td>
+      <td>❌</td>
+      <td>✅</td>
+      <td>❌</td>
+    </tr>
+    <tr>
+      <td>Aprobar L3</td>
+      <td>❌</td>
+      <td>❌</td>
+      <td>✅</td>
+    </tr>
+    <tr>
+      <td>Rechazar</td>
+      <td>✅ (L1)</td>
+      <td>✅ (L2)</td>
+      <td>✅ (L3)</td>
+    </tr>
+    <tr>
+      <td>Ver historial</td>
+      <td>✅</td>
+      <td>✅</td>
+      <td>✅</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>Validación Backend:</strong></p>
+
+<ul>
+  <li>Se verifica rol del usuario en cada request</li>
+  <li>No permite saltar niveles</li>
+  <li>Tokens inválidos → 401 Unauthorized</li>
+</ul>
+
+<p><strong>En Frontend:</strong></p>
+
+<ul>
+  <li>Botón “Aprobar” deshabilitado si no tiene permiso</li>
+  <li>Ocultar secciones no permitidas</li>
+  <li>Mostrar mensaje “No tienes permiso para aprobar este nivel”</li>
+</ul>
+
+<hr />
+
+<h3 id="66-estados-visuales-del-documento">6.6 Estados Visuales del Documento</h3>
+
+<p><strong>Badges por Estado en Listado:</strong></p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Estado</th>
+      <th>Color</th>
+      <th>Ícono</th>
+      <th>Significado</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>PENDING_L1</td>
+      <td>Amarillo</td>
+      <td>⏳</td>
+      <td>Esperando Nivel 1</td>
+    </tr>
+    <tr>
+      <td>PENDING_L2</td>
+      <td>Naranja</td>
+      <td>⏳</td>
+      <td>Esperando Nivel 2</td>
+    </tr>
+    <tr>
+      <td>PENDING_L3</td>
+      <td>Rojo claro</td>
+      <td>⏳</td>
+      <td>Esperando Nivel 3</td>
+    </tr>
+    <tr>
+      <td>APPROVED</td>
+      <td>Verde</td>
+      <td>✓</td>
+      <td>Completamente aprobado</td>
+    </tr>
+    <tr>
+      <td>REJECTED</td>
+      <td>Rojo</td>
+      <td>✗</td>
+      <td>Rechazado</td>
+    </tr>
+    <tr>
+      <td>IN_REVIEW</td>
+      <td>Azul</td>
+      <td>👁️</td>
+      <td>Bajo revisión</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>Información Adicional:</strong></p>
+
+<ul>
+  <li>Mostrar en qué nivel está actualmente</li>
+  <li>Mostrar quién aprobó anteriormente</li>
+  <li>Mostrar fecha de la última acción</li>
+</ul>
+
+<hr />
+
+<h3 id="67-dashboard-de-aprobador">6.7 Dashboard de Aprobador</h3>
+
+<p><strong>Ubicación:</strong> <code class="language-plaintext highlighter-rouge">/web/appraisal/reports</code> o <code class="language-plaintext highlighter-rouge">/web/appraisal-*/dashboard</code></p>
+
+<p><strong>Métricas KPI:</strong></p>
+
+<ol>
+  <li>
+    <p><strong>Pendientes de Aprobar</strong></p>
+
+    <ul>
+      <li>Contador total</li>
+      <li>Desglose por tipo (Gastos, Viajes, Per Diem)</li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Aprobado Este Mes</strong></p>
+
+    <ul>
+      <li>Cantidad de documentos</li>
+      <li>Monto total</li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Rechazado Este Mes</strong></p>
+
+    <ul>
+      <li>Cantidad de documentos</li>
+      <li>Motivos frecuentes</li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Tiempo Promedio de Aprobación</strong></p>
+    <ul>
+      <li>En horas</li>
+      <li>Comparar vs promedio</li>
+    </ul>
+  </li>
+</ol>
+
+<p><strong>Gráficos:</strong></p>
+
+<ol>
+  <li>
+    <p><strong>Documentos Pendientes por Empleado</strong></p>
+
+    <ul>
+      <li>Gráfico de barras horizontal</li>
+      <li>Top 5 empleados con más pendientes</li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Aprobaciones por Día</strong></p>
+
+    <ul>
+      <li>Gráfico de líneas (últimos 30 días)</li>
+      <li>Mostrar tendencia</li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Motivos de Rechazo</strong></p>
+    <ul>
+      <li>Pie chart con razones frecuentes</li>
+      <li>Top 3: Justificación insuficiente, Excede presupuesto, Documentación incompleta</li>
+    </ul>
+  </li>
+</ol>
+
+<hr />
+
+<h3 id="68-acciones-en-lote-bulk">6.8 Acciones en Lote (Bulk)</h3>
+
+<p><strong>Ubicación:</strong> Si hay múltiples documentos seleccionados</p>
+
+<p><strong>Funcionalidades Futuras:</strong></p>
+
+<ul class="task-list">
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" />Seleccionar múltiples documentos</li>
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" />Checkbox para “Select all on page”</li>
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" />Botón “Aprobar Seleccionados”</li>
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" />Botón “Rechazar Seleccionados”</li>
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" />Modal de confirmación en lote</li>
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" />Procesar en background (async)</li>
+</ul>
+
+<hr />
+
+<h2 id="resumen---punto-6">Resumen - Punto 6</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Función</th>
+      <th>Detalles</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Ver Pendientes</strong></td>
+      <td>Acordeón por usuario, items agrupados por tipo</td>
+    </tr>
+    <tr>
+      <td><strong>Aprobar</strong></td>
+      <td>Modal con confirmación, actualiza estado</td>
+    </tr>
+    <tr>
+      <td><strong>Rechazar</strong></td>
+      <td>Modal con razón obligatoria</td>
+    </tr>
+    <tr>
+      <td><strong>Comentarios</strong></td>
+      <td>Textarea opcional, máx 500 caracteres</td>
+    </tr>
+    <tr>
+      <td><strong>Historial</strong></td>
+      <td>Timeline visual con todos los niveles</td>
+    </tr>
+    <tr>
+      <td><strong>Restricciones</strong></td>
+      <td>Por rol: L1, L2, L3 con permisos específicos</td>
+    </tr>
+    <tr>
+      <td><strong>Estados</strong></td>
+      <td>PENDING_L1/L2/L3, APPROVED, REJECTED, IN_REVIEW</td>
+    </tr>
+    <tr>
+      <td><strong>Dashboard</strong></td>
+      <td>KPIs + Gráficos de aprobaciones</td>
+    </tr>
+    <tr>
+      <td><strong>Bulk Actions</strong></td>
+      <td>Futuro: aprobar/rechazar múltiples</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h2 id="7-notificaciones">7. Notificaciones</h2>
+
+<h3 id="71-sistema-de-notificaciones-toast">7.1 Sistema de Notificaciones (Toast)</h3>
+
+<p><strong>Librería:</strong> Sonner 0.10.3</p>
+
+<p><strong>Ubicación del Toaster:</strong></p>
+
+<ul>
+  <li>Componente: <code class="language-plaintext highlighter-rouge">src/components/ui/sonner.tsx</code></li>
+  <li>Integración: <code class="language-plaintext highlighter-rouge">src/app/layout.tsx</code> (importa Toaster)</li>
+</ul>
+
+<p><strong>Configuración:</strong></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>- Posición: Esquina inferior derecha (default)
+- Tema: Sincronizado con Light/Dark mode (next-themes)
+- Duración: 4 segundos (default)
+- Estilo: Tailwind + Radix UI colors
+</code></pre></div></div>
+
+<hr />
+
+<h3 id="72-tipos-de-notificaciones">7.2 Tipos de Notificaciones</h3>
+
+<p><strong>1. Success Toast</strong></p>
+
+<p>Usado para: Crear, actualizar, eliminar, aprobar, guardar</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>toast.success("Documento guardado exitosamente")
+toast.success("Aprobación completada")
+</code></pre></div></div>
+
+<p>Características:</p>
+
+<ul>
+  <li>Ícono: Checkmark verde</li>
+  <li>Color de fondo: Verde claro</li>
+  <li>Desaparece automáticamente en 4s</li>
+</ul>
+
+<p><strong>2. Error Toast</strong></p>
+
+<p>Usado para: Fallos en API, validación, permisos</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>toast.error("Error: No se pudo guardar el documento")
+toast.error("Acceso denegado")
+</code></pre></div></div>
+
+<p>Características:</p>
+
+<ul>
+  <li>Ícono: X roja</li>
+  <li>Color de fondo: Rojo claro</li>
+  <li>Puede contener detalles del error</li>
+  <li>Desaparece en 5s (más tiempo que success)</li>
+</ul>
+
+<p><strong>3. Loading Toast</strong></p>
+
+<p>Usado para: Operaciones asíncronas en progreso</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>toast.loading("Guardando documento...")
+toast.loading("Procesando aprobación...")
+</code></pre></div></div>
+
+<p>Características:</p>
+
+<ul>
+  <li>Ícono: Spinner animado</li>
+  <li>No desaparece automáticamente</li>
+  <li>Se reemplaza cuando termina la operación</li>
+</ul>
+
+<p><strong>4. Promise Toast</strong></p>
+
+<p>Usado para: Operaciones que pueden tener resultado success/error</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>toast.promise(
+  fetchData(),
+  {
+    loading: "Cargando...",
+    success: "Datos cargados",
+    error: "Error al cargar"
+  }
+)
+</code></pre></div></div>
+
+<p>Características:</p>
+
+<ul>
+  <li>Muestra estado loading → success/error automáticamente</li>
+  <li>Ideal para promesas</li>
+  <li>Usado en Data Table para guardar cambios</li>
+</ul>
+
+<p><strong>5. Info Toast</strong></p>
+
+<p>Usado para: Mensajes informativos, alertas no críticas</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>toast.info("Documento expirado, por favor recargue")
+</code></pre></div></div>
+
+<hr />
+
+<h3 id="73-implementación-en-componentes">7.3 Implementación en Componentes</h3>
+
+<p><strong>En Servicios (API calls):</strong></p>
+
+<div class="language-tsx highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">toast</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">sonner</span><span class="dl">"</span><span class="p">;</span>
+
+<span class="k">export</span> <span class="kd">const</span> <span class="nx">saveDocument</span> <span class="o">=</span> <span class="k">async</span> <span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="k">try</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">response</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">apiClient</span><span class="p">.</span><span class="nx">post</span><span class="p">(</span><span class="dl">"</span><span class="s2">/documents</span><span class="dl">"</span><span class="p">,</span> <span class="nx">data</span><span class="p">);</span>
+    <span class="nx">toast</span><span class="p">.</span><span class="nx">success</span><span class="p">(</span><span class="dl">"</span><span class="s2">Documento guardado</span><span class="dl">"</span><span class="p">);</span>
+    <span class="k">return</span> <span class="nx">response</span><span class="p">.</span><span class="nx">data</span><span class="p">;</span>
+  <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">toast</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="s2">`Error: </span><span class="p">${</span><span class="nx">error</span><span class="p">.</span><span class="nx">message</span><span class="p">}</span><span class="s2">`</span><span class="p">);</span>
+    <span class="k">throw</span> <span class="nx">error</span><span class="p">;</span>
+  <span class="p">}</span>
+<span class="p">};</span>
+</code></pre></div></div>
+
+<p><strong>En Componentes (Acciones de usuario):</strong></p>
+
+<div class="language-tsx highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">handleApprove</span> <span class="o">=</span> <span class="k">async</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="k">try</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">result</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">approveDocument</span><span class="p">(</span><span class="nx">docId</span><span class="p">);</span>
+    <span class="nx">toast</span><span class="p">.</span><span class="nx">success</span><span class="p">(</span><span class="dl">"</span><span class="s2">Documento aprobado</span><span class="dl">"</span><span class="p">);</span>
+    <span class="nx">refetch</span><span class="p">();</span>
+  <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">toast</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="dl">"</span><span class="s2">No se pudo aprobar el documento</span><span class="dl">"</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">};</span>
+</code></pre></div></div>
+
+<p><strong>En Data Tables (Operaciones inline):</strong></p>
+
+<ul>
+  <li>Click en “Guardar” en tabla</li>
+  <li>Muestra: <code class="language-plaintext highlighter-rouge">toast.loading("Saving...")</code></li>
+  <li>Si éxito: <code class="language-plaintext highlighter-rouge">toast.success("Done")</code></li>
+  <li>Si error: <code class="language-plaintext highlighter-rouge">toast.error("Error")</code></li>
+</ul>
+
+<hr />
+
+<h3 id="74-mensajes-i18n">7.4 Mensajes i18n</h3>
+
+<p><strong>Ubicación:</strong> <code class="language-plaintext highlighter-rouge">src/locales/es.json</code> (y otros idiomas)</p>
+
+<p><strong>Claves comunes:</strong></p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"saved"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Guardado exitosamente"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"error"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Error"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"errorSaving"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Error al guardar"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"loading"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Cargando..."</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"noPermission"</span><span class="p">:</span><span class="w"> </span><span class="s2">"No tienes permiso para realizar esta acción"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"documentDeleted"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Documento eliminado"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"documentApproved"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Documento aprobado"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"documentRejected"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Documento rechazado"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"invalidData"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Los datos ingresados son inválidos"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<p><strong>Uso en toasts:</strong></p>
+
+<div class="language-tsx highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">useTranslation</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">react-i18next</span><span class="dl">"</span><span class="p">;</span>
+
+<span class="kd">const</span> <span class="p">{</span> <span class="nx">t</span> <span class="p">}</span> <span class="o">=</span> <span class="nx">useTranslation</span><span class="p">();</span>
+
+<span class="nx">toast</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="nx">t</span><span class="p">(</span><span class="dl">"</span><span class="s2">errorSaving</span><span class="dl">"</span><span class="p">));</span>
+<span class="nx">toast</span><span class="p">.</span><span class="nx">success</span><span class="p">(</span><span class="nx">t</span><span class="p">(</span><span class="dl">"</span><span class="s2">saved</span><span class="dl">"</span><span class="p">));</span>
+</code></pre></div></div>
+
+<hr />
+
+<h3 id="75-estilo-y-personalización">7.5 Estilo y Personalización</h3>
+
+<p><strong>Clases Tailwind aplicadas (sonner.tsx):</strong></p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Elemento</th>
+      <th>Clases</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Toast base</td>
+      <td><code class="language-plaintext highlighter-rouge">group toast group-[.toaster]:bg-background ...</code></td>
+    </tr>
+    <tr>
+      <td>Descripción</td>
+      <td><code class="language-plaintext highlighter-rouge">group-[.toast]:text-muted-foreground</code></td>
+    </tr>
+    <tr>
+      <td>Action button</td>
+      <td><code class="language-plaintext highlighter-rouge">group-[.toast]:bg-primary group-[.toast]:text-primary-foreground</code></td>
+    </tr>
+    <tr>
+      <td>Cancel button</td>
+      <td><code class="language-plaintext highlighter-rouge">group-[.toast]:bg-muted group-[.toast]:text-muted-foreground</code></td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>Colores por tipo (auto-aplicados):</strong></p>
+
+<ul>
+  <li>Success: Verde (primary)</li>
+  <li>Error: Rojo (destructive)</li>
+  <li>Info: Azul (info)</li>
+  <li>Warning: Naranja (warning)</li>
+  <li>Loading: Gris (muted)</li>
+</ul>
+
+<hr />
+
+<h3 id="76-casos-de-uso-reales">7.6 Casos de Uso Reales</h3>
+
+<p><strong>1. Crear Documento</strong></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Usuario click "Crear" → Modal form → Submit
+Toast: "loading: Guardando documento..."
+Response success → toast.success("Documento guardado")
+Response error → toast.error("Error: " + error.message)
+</code></pre></div></div>
+
+<p><strong>2. Aprobar Documento</strong></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Usuario click "Aprobar" → Modal confirmación → Submit
+Toast.loading("Procesando aprobación...")
+Response success → toast.success("Aprobado")
+Response error → toast.error("No autorizado")
+</code></pre></div></div>
+
+<p><strong>3. Cambiar Filtros</strong></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Usuario selecciona filtro → fetch new data
+Toast.loading("Filtrando...")
+Response → toast.success("Aplicado")
+</code></pre></div></div>
+
+<p><strong>4. Error de Autenticación</strong></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>API returns 401 Unauthorized
+Toast.error("Sesión expirada")
+Redirect a /login
+</code></pre></div></div>
+
+<p><strong>5. Validación de Formulario</strong></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Usuario submit sin llenar campos obligatorios
+Toast.error("Completa todos los campos requeridos")
+NO se envía al servidor
+</code></pre></div></div>
+
+<hr />
+
+<h3 id="77-duraciones-y-comportamiento">7.7 Duraciones y Comportamiento</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Tipo</th>
+      <th>Duración</th>
+      <th>Desaparece Auto</th>
+      <th>Sonido</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Success</td>
+      <td>4s</td>
+      <td>✅ Sí</td>
+      <td>No</td>
+    </tr>
+    <tr>
+      <td>Error</td>
+      <td>5s</td>
+      <td>✅ Sí</td>
+      <td>No</td>
+    </tr>
+    <tr>
+      <td>Info</td>
+      <td>4s</td>
+      <td>✅ Sí</td>
+      <td>No</td>
+    </tr>
+    <tr>
+      <td>Loading</td>
+      <td>∞</td>
+      <td>❌ No (manual)</td>
+      <td>No</td>
+    </tr>
+    <tr>
+      <td>Promise</td>
+      <td>Auto</td>
+      <td>✅ (cuando termina)</td>
+      <td>No</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>Comportamiento especial:</strong></p>
+
+<ul>
+  <li>Múltiples toasts se apilan verticalmente</li>
+  <li>Click en toast lo cierra inmediatamente</li>
+  <li>Action button (si existe) ejecuta callback</li>
+  <li>Keyboard: ESC cierra todos los toasts</li>
+</ul>
+
+<hr />
+
+<h2 id="resumen---punto-7">Resumen - Punto 7</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Función</th>
+      <th>Tipo</th>
+      <th>Uso</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Success</strong></td>
+      <td>Sonner</td>
+      <td>Operaciones completadas (crear, guardar, aprobar)</td>
+    </tr>
+    <tr>
+      <td><strong>Error</strong></td>
+      <td>Sonner</td>
+      <td>Fallos en API, validación, permisos</td>
+    </tr>
+    <tr>
+      <td><strong>Loading</strong></td>
+      <td>Sonner</td>
+      <td>Operaciones en progreso (largo tiempo)</td>
+    </tr>
+    <tr>
+      <td><strong>Promise</strong></td>
+      <td>Sonner</td>
+      <td>Async con resultado auto (success/error)</td>
+    </tr>
+    <tr>
+      <td><strong>Info</strong></td>
+      <td>Sonner</td>
+      <td>Alertas no críticas, mensajes informativos</td>
+    </tr>
+    <tr>
+      <td><strong>i18n</strong></td>
+      <td>i18next</td>
+      <td>Mensajes traducibles en 4 idiomas</td>
+    </tr>
+    <tr>
+      <td><strong>Dark Mode</strong></td>
+      <td>next-themes</td>
+      <td>Automático Light/Dark sincronizado</td>
+    </tr>
+    <tr>
+      <td><strong>Posición</strong></td>
+      <td>Bottom-right</td>
+      <td>Esquina inferior derecha (default)</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h2 id="8-perfil-y-configuración">8. Perfil y Configuración</h2>
+
+<h3 id="81-acceso-a-perfil">8.1 Acceso a Perfil</h3>
+
+<p><strong>Ubicación:</strong> <code class="language-plaintext highlighter-rouge">/web/settings</code></p>
+
+<p><strong>Cómo acceder:</strong></p>
+
+<ol>
+  <li>Click en Avatar (esquina inferior izquierda en Sidebar)</li>
+  <li>Click en “Account” / “Cuenta” (icono UserCircle)</li>
+  <li>Redirecciona a <code class="language-plaintext highlighter-rouge">/web/settings</code></li>
+</ol>
+
+<p><strong>Componentes:</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">src/app/web/settings/page.tsx</code> - Página principal</li>
+  <li><code class="language-plaintext highlighter-rouge">src/components/form/profile.tsx</code> - Formulario de edición</li>
+  <li><code class="language-plaintext highlighter-rouge">src/components/nav-user.tsx</code> - Menú desplegable del usuario</li>
+</ul>
+
+<hr />
+
+<h3 id="82-información-de-perfil">8.2 Información de Perfil</h3>
+
+<p><strong>Datos Mostrados (Read-only):</strong></p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Campo</th>
+      <th>Tipo</th>
+      <th>Descripción</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Avatar</strong></td>
+      <td>Imagen</td>
+      <td>Foto de perfil (grayscale en sidebar)</td>
+    </tr>
+    <tr>
+      <td><strong>Username</strong></td>
+      <td>Texto</td>
+      <td>Nombre de usuario único</td>
+    </tr>
+    <tr>
+      <td><strong>Email</strong></td>
+      <td>Correo</td>
+      <td>Email de cuenta</td>
+    </tr>
+    <tr>
+      <td><strong>Empresa</strong></td>
+      <td>Texto</td>
+      <td>Nombre de la empresa</td>
+    </tr>
+    <tr>
+      <td><strong>RUT</strong></td>
+      <td>Documento</td>
+      <td>Identificación fiscal (Chile)</td>
+    </tr>
+    <tr>
+      <td><strong>Último Actualizado</strong></td>
+      <td>Fecha</td>
+      <td>Cuándo se actualizó el perfil</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>Endpoint:</strong></p>
+
+<ul>
+  <li>GET <code class="language-plaintext highlighter-rouge">/app/users/me/</code> - Obtener datos del usuario actual</li>
+  <li>Hook: <code class="language-plaintext highlighter-rouge">useUser()</code> - Custom hook para fetch automático</li>
+  <li>Store: UserContext (React Context API)</li>
+</ul>
+
+<hr />
+
+<h3 id="83-editar-perfil">8.3 Editar Perfil</h3>
+
+<p><strong>Formulario Editable:</strong></p>
+
+<ol>
+  <li>
+    <p><strong>Nombre (First Name)</strong></p>
+
+    <ul>
+      <li>Requerido</li>
+      <li>Máximo 50 caracteres</li>
+      <li>Validación: No vacío</li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Apellido (Last Name)</strong></p>
+
+    <ul>
+      <li>Requerido</li>
+      <li>Máximo 50 caracteres</li>
+      <li>Validación: No vacío</li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Email</strong></p>
+
+    <ul>
+      <li>Requerido</li>
+      <li>Formato email válido</li>
+      <li>Validación Zod</li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Teléfono (Phone)</strong></p>
+    <ul>
+      <li>Opcional</li>
+      <li>Formato: +[1-9] con 0-15 dígitos</li>
+      <li>Validación regex internacional</li>
+    </ul>
+  </li>
+</ol>
+
+<p><strong>Validación (Zod Schema):</strong></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>- first_name: min 1, max 50 chars
+- last_name: min 1, max 50 chars
+- email: valid email format
+- phone: optional, international format
+</code></pre></div></div>
+
+<p><strong>Guardado:</strong></p>
+
+<ol>
+  <li>Submit form → <code class="language-plaintext highlighter-rouge">onSubmit()</code></li>
+  <li>Button estado: “Guardando…” (spinner)</li>
+  <li>Endpoint: PUT <code class="language-plaintext highlighter-rouge">/app/users/me/profile/</code></li>
+  <li>Body: <code class="language-plaintext highlighter-rouge">{first_name, last_name, email, phone}</code></li>
+  <li>Response: User actualizado</li>
+  <li>Toast: “Perfil actualizado exitosamente”</li>
+  <li>UI actualiza con nuevos datos</li>
+</ol>
+
+<hr />
+
+<h3 id="84-cambiar-contraseña">8.4 Cambiar Contraseña</h3>
+
+<p><strong>Ubicación:</strong> Sección “Seguridad &amp; Privacidad” en settings</p>
+
+<p><strong>Campos:</strong></p>
+
+<ol>
+  <li>
+    <p><strong>Contraseña Actual</strong></p>
+
+    <ul>
+      <li>Type: password</li>
+      <li>Requerido para verificación</li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Nueva Contraseña</strong></p>
+
+    <ul>
+      <li>Type: password</li>
+      <li>Mínimo 8 caracteres</li>
+      <li>Debe incluir mayúscula, minúscula, número</li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Confirmar Contraseña</strong></p>
+    <ul>
+      <li>Type: password</li>
+      <li>Debe coincidir con nueva contraseña</li>
+    </ul>
+  </li>
+</ol>
+
+<p><strong>Flujo:</strong></p>
+
+<ol>
+  <li>Usuario ingresa 3 contraseñas</li>
+  <li>Submit → Validación Zod</li>
+  <li>POST <code class="language-plaintext highlighter-rouge">/app/users/me/change-password/</code></li>
+  <li>Body: <code class="language-plaintext highlighter-rouge">{current_password, new_password, confirm_password}</code></li>
+  <li>Si success: Toast.success(“Contraseña actualizada”)</li>
+  <li>Si error: Toast.error(“Contraseña actual incorrecta”)</li>
+</ol>
+
+<p><strong>Restricciones:</strong></p>
+
+<ul>
+  <li>No puede ser igual a contraseña anterior (backend)</li>
+  <li>Token se mantiene (no logout automático)</li>
+</ul>
+
+<hr />
+
+<h3 id="85-configuración-de-notificaciones">8.5 Configuración de Notificaciones</h3>
+
+<p><strong>Ubicación:</strong> Sección “Notificaciones” en settings</p>
+
+<p><strong>Opciones (Switches):</strong></p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Tipo</th>
+      <th>Estado</th>
+      <th>Descripción</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Email Notifications</strong></td>
+      <td>ON/OFF</td>
+      <td>Recibir alertas por correo</td>
+    </tr>
+    <tr>
+      <td><strong>Push Notifications</strong></td>
+      <td>ON/OFF</td>
+      <td>Notificaciones desktop/móvil</td>
+    </tr>
+    <tr>
+      <td><strong>SMS Notifications</strong></td>
+      <td>ON/OFF</td>
+      <td>Alertas por SMS</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>Tipos de notificaciones disponibles:</strong></p>
+
+<ol>
+  <li>
+    <p><strong>Documentos pendientes de aprobación</strong></p>
+
+    <ul>
+      <li>Cuando: Nuevo documento llega para aprobación</li>
+      <li>Si ON: Email + Push</li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Documento aprobado</strong></p>
+
+    <ul>
+      <li>Cuando: Tu documento fue aprobado</li>
+      <li>Si ON: Email + Push</li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Documento rechazado</strong></p>
+
+    <ul>
+      <li>Cuando: Tu documento fue rechazado</li>
+      <li>Si ON: Email + Push + SMS</li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Comentarios nuevos</strong></p>
+    <ul>
+      <li>Cuando: Agredan comentario a tu documento</li>
+      <li>Si ON: Email + Push</li>
+    </ul>
+  </li>
+</ol>
+
+<p><strong>Guardado:</strong></p>
+
+<ul>
+  <li>PATCH <code class="language-plaintext highlighter-rouge">/app/users/me/notifications/</code></li>
+  <li>Body: <code class="language-plaintext highlighter-rouge">{email: bool, push: bool, sms: bool}</code></li>
+  <li>Actualización inmediata (sin necesidad de refresh)</li>
+</ul>
+
+<hr />
+
+<h3 id="86-apariencia--tema">8.6 Apariencia &amp; Tema</h3>
+
+<p><strong>Ubicación:</strong> Sección “Apariencia” en settings</p>
+
+<p><strong>Opciones de Tema:</strong></p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Opción</th>
+      <th>Valor</th>
+      <th>Descripción</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Light</strong></td>
+      <td>light</td>
+      <td>Modo claro (blanco)</td>
+    </tr>
+    <tr>
+      <td><strong>Dark</strong></td>
+      <td>dark</td>
+      <td>Modo oscuro (negro/gris)</td>
+    </tr>
+    <tr>
+      <td><strong>System</strong></td>
+      <td>system</td>
+      <td>Sigue preferencia del SO</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>Implementación:</strong></p>
+
+<ul>
+  <li>Hook: <code class="language-plaintext highlighter-rouge">useTheme()</code> (next-themes)</li>
+  <li>Almacenamiento: localStorage</li>
+  <li>Aplicación: Inmediata (sin reload)</li>
+  <li>CSS: Tailwind dark: prefix</li>
+</ul>
+
+<p><strong>Sincronización:</strong></p>
+
+<ul>
+  <li>Al cambiar tema → Sonner toasts se actualizan</li>
+  <li>Sidebar, Header, Content → Todos responden</li>
+  <li>Charts (Recharts) → Colores adaptan automáticamente</li>
+</ul>
+
+<hr />
+
+<h3 id="87-idioma--región">8.7 Idioma &amp; Región</h3>
+
+<p><strong>Ubicación:</strong> Sección “Idioma &amp; Región” en settings</p>
+
+<p><strong>Idiomas Disponibles:</strong></p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Código</th>
+      <th>Idioma</th>
+      <th>Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>en</td>
+      <td>English</td>
+      <td>✅</td>
+    </tr>
+    <tr>
+      <td>es</td>
+      <td>Español</td>
+      <td>✅</td>
+    </tr>
+    <tr>
+      <td>fr</td>
+      <td>Français</td>
+      <td>✅</td>
+    </tr>
+    <tr>
+      <td>de</td>
+      <td>Deutsch</td>
+      <td>✅</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>Timezone:</strong></p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Valor</th>
+      <th>Descripción</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>UTC</td>
+      <td>Coordinated Universal Time</td>
+    </tr>
+    <tr>
+      <td>EST</td>
+      <td>Eastern Standard Time</td>
+    </tr>
+    <tr>
+      <td>PST</td>
+      <td>Pacific Standard Time</td>
+    </tr>
+    <tr>
+      <td>CET</td>
+      <td>Central European Time</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>Implementación:</strong></p>
+
+<ul>
+  <li>Hook: <code class="language-plaintext highlighter-rouge">useTranslation()</code> (i18next)</li>
+  <li>Método: <code class="language-plaintext highlighter-rouge">i18n.changeLanguage(lang)</code></li>
+  <li>Almacenamiento: localStorage + sessionStorage</li>
+  <li>Aplicación: Inmediata, todos los componentes se re-renderizan</li>
+  <li>Rutas: Mantienen estado actual</li>
+</ul>
+
+<p><strong>Impacto de Cambio de Idioma:</strong></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Usuario selecciona FR
+→ setLanguage("fr")
+→ i18n.changeLanguage("fr")
+→ Todas las claves t("key") se actualizan
+→ LocalStorage: i18nextLng = "fr"
+→ Persistente en reload
+</code></pre></div></div>
+
+<hr />
+
+<h3 id="88-privacidad--datos">8.8 Privacidad &amp; Datos</h3>
+
+<p><strong>Ubicación:</strong> Sección “Datos &amp; Almacenamiento” en settings</p>
+
+<p><strong>Opciones:</strong></p>
+
+<ol>
+  <li>
+    <p><strong>Analytics &amp; Usage Data</strong></p>
+
+    <ul>
+      <li>Switch: ON/OFF</li>
+      <li>Si ON: Enviar datos de uso anónimos</li>
+      <li>Uso: Mejorar UX</li>
+      <li>Datos enviados:
+        <ul>
+          <li>Pantallas visitadas</li>
+          <li>Acciones principales</li>
+          <li>Tiempo en cada página</li>
+          <li>No: Datos personales, documentos, montos</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Exportar Datos</strong></p>
+
+    <ul>
+      <li>Botón: “Export Data”</li>
+      <li>Descarga: JSON con todos tus datos</li>
+      <li>Incluye:
+        <ul>
+          <li>Perfil</li>
+          <li>Documentos</li>
+          <li>Historial de aprobaciones</li>
+          <li>Comentarios</li>
+        </ul>
+      </li>
+      <li>Formato: YYYY-MM-DD_HH-MM-SS_export.json</li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Desactivar Cuenta</strong></p>
+    <ul>
+      <li>Botón: “Deactivate Account” (rojo destructivo)</li>
+      <li>Confirmación: Modal requiere contraseña</li>
+      <li>Efecto:
+        <ul>
+          <li>Cuenta inactiva (no se elimina)</li>
+          <li>No puedes login</li>
+          <li>Admin puede reactivar</li>
+          <li>Datos permanecen en sistema</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ol>
+
+<hr />
+
+<h3 id="89-seguridad-avanzada">8.9 Seguridad Avanzada</h3>
+
+<p><strong>Ubicación:</strong> Sección “Seguridad &amp; Privacidad” en settings</p>
+
+<p><strong>Opciones:</strong></p>
+
+<ol>
+  <li>
+    <p><strong>Two-Factor Authentication (2FA)</strong></p>
+
+    <ul>
+      <li>Switch: ON/OFF</li>
+      <li>Si activa:
+        <ul>
+          <li>Login requiere código OTP</li>
+          <li>Codes se envían por email</li>
+          <li>Backup codes: 10 códigos guardables</li>
+        </ul>
+      </li>
+      <li>Configuración:
+        <ul>
+          <li>Email: Código 6 dígitos (válido 5 min)</li>
+          <li>Authenticator App (futuro): TOTP</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Sesiones Activas</strong></p>
+
+    <ul>
+      <li>Listar todas las sesiones</li>
+      <li>Mostrar: Dispositivo, Ubicación, Última actividad</li>
+      <li>Botón: “Logout from device”</li>
+      <li>Efecto: Invalida token en ese dispositivo</li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Registro de Actividad</strong></p>
+    <ul>
+      <li>Timeline de logins</li>
+      <li>Mostrar: Fecha, Hora, IP, Dispositivo</li>
+      <li>Detectar accesos sospechosos</li>
+    </ul>
+  </li>
+</ol>
+
+<hr />
+
+<h3 id="810-estados-y-errores">8.10 Estados y Errores</h3>
+
+<p><strong>Estados Posibles:</strong></p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Estado</th>
+      <th>Indicador</th>
+      <th>Duración</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Idle</strong></td>
+      <td>Campo habilitado</td>
+      <td>Esperando</td>
+    </tr>
+    <tr>
+      <td><strong>Saving</strong></td>
+      <td>Spinner</td>
+      <td>Mientras POST/PATCH</td>
+    </tr>
+    <tr>
+      <td><strong>Success</strong></td>
+      <td>Toast verde</td>
+      <td>4s auto-close</td>
+    </tr>
+    <tr>
+      <td><strong>Error</strong></td>
+      <td>Toast rojo</td>
+      <td>5s auto-close</td>
+    </tr>
+    <tr>
+      <td><strong>Loading</strong></td>
+      <td>Skeleton/Spinner</td>
+      <td>Mientras fetch</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>Errores Comunes:</strong></p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Error</th>
+      <th>Causa</th>
+      <th>Solución</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Email ya existe</strong></td>
+      <td>Email duplicado</td>
+      <td>Ingresar otro email</td>
+    </tr>
+    <tr>
+      <td><strong>Contraseña incorrecta</strong></td>
+      <td>Password actual mal</td>
+      <td>Verificar CAPS LOCK</td>
+    </tr>
+    <tr>
+      <td><strong>Token expirado</strong></td>
+      <td>Sesión expiró</td>
+      <td>Auto-redirect a login</td>
+    </tr>
+    <tr>
+      <td><strong>Network error</strong></td>
+      <td>Sin conexión</td>
+      <td>Verificar internet</td>
+    </tr>
+    <tr>
+      <td><strong>Validation error</strong></td>
+      <td>Datos inválidos</td>
+      <td>Revisar formato</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h2 id="resumen---punto-8">Resumen - Punto 8</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Sección</th>
+      <th>Función</th>
+      <th>Endpoint</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Perfil</strong></td>
+      <td>Ver/Editar datos personales</td>
+      <td>PUT <code class="language-plaintext highlighter-rouge">/app/users/me/profile/</code></td>
+    </tr>
+    <tr>
+      <td><strong>Contraseña</strong></td>
+      <td>Cambiar password</td>
+      <td>POST <code class="language-plaintext highlighter-rouge">/app/users/me/change-password/</code></td>
+    </tr>
+    <tr>
+      <td><strong>Notificaciones</strong></td>
+      <td>Email, Push, SMS</td>
+      <td>PATCH <code class="language-plaintext highlighter-rouge">/app/users/me/notifications/</code></td>
+    </tr>
+    <tr>
+      <td><strong>Apariencia</strong></td>
+      <td>Light/Dark/System</td>
+      <td>next-themes localStorage</td>
+    </tr>
+    <tr>
+      <td><strong>Idioma</strong></td>
+      <td>EN, ES, FR, DE</td>
+      <td>i18next changeLanguage</td>
+    </tr>
+    <tr>
+      <td><strong>Datos</strong></td>
+      <td>Exportar, Analítica</td>
+      <td>GET <code class="language-plaintext highlighter-rouge">/api/export/</code>, PATCH <code class="language-plaintext highlighter-rouge">/analytics/</code></td>
+    </tr>
+    <tr>
+      <td><strong>Seguridad</strong></td>
+      <td>2FA, Sesiones</td>
+      <td>POST <code class="language-plaintext highlighter-rouge">/2fa/enable/</code>, GET <code class="language-plaintext highlighter-rouge">/sessions/</code></td>
+    </tr>
+    <tr>
+      <td><strong>Desactivar</strong></td>
+      <td>Inactivar cuenta</td>
+      <td>POST <code class="language-plaintext highlighter-rouge">/users/me/deactivate/</code></td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h2 id="9-sección-de-administración">9. Sección de Administración</h2>
+
+<h3 id="91-acceso-a-admin">9.1 Acceso a Admin</h3>
+
+<p><strong>Ubicación:</strong> <code class="language-plaintext highlighter-rouge">/web/admin</code></p>
+
+<p><strong>Requisito:</strong> Rol <code class="language-plaintext highlighter-rouge">COMPANY_ADMIN</code> o superior</p>
+
+<p><strong>Cómo acceder:</strong></p>
+
+<ol>
+  <li>Logueado como admin</li>
+  <li>Sidebar → Buscar “Admin” (solo visible si rol permite)</li>
+  <li>Menú principal con opciones de administración</li>
+</ol>
+
+<p><strong>Submódulos Admin:</strong></p>
+
+<ul>
+  <li>Usuarios (Users)</li>
+  <li>Empresas (Companies)</li>
+  <li>Proveedores (Suppliers)</li>
+  <li>Áreas (Areas)</li>
+  <li>Cost Centers (CECO)</li>
+  <li>Conceptos de Gasto (Expense Concepts)</li>
+  <li>Clases de Documento (Document Classes)</li>
+  <li>Impuestos (Taxes)</li>
+  <li>Rutas (Routes)</li>
+  <li>Perdiems</li>
+  <li>Aprobadores Nivel 1 (User Approvers)</li>
+  <li>Aprobadores CECO (Cost Center Approvers)</li>
+  <li>Aprobadores Empresa (Company Approvers)</li>
+  <li>Contabilidad (Accounting)</li>
+</ul>
+
+<hr />
+
+<h3 id="92-gestión-de-usuarios">9.2 Gestión de Usuarios</h3>
+
+<p><strong>Ubicación:</strong> <code class="language-plaintext highlighter-rouge">/web/admin/users</code></p>
+
+<p><strong>Funcionalidad:</strong></p>
+
+<ol>
+  <li>
+    <p><strong>Listar Usuarios</strong></p>
+
+    <ul>
+      <li>Tabla con DataGrid (MUI)</li>
+      <li>Columnas: ID, Username, Nombre, Email, RUT, Activo, Teléfono, Empresa, Rol, Área</li>
+      <li>Pagination: 10, 20 items por página</li>
+      <li>Ordenable por todas las columnas</li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Búsqueda Global</strong></p>
+
+    <ul>
+      <li>Input search</li>
+      <li>Busca en: Username, Nombre, Email, RUT, Teléfono, Empresa, Rol, Área</li>
+      <li>Real-time filtering (sin delay)</li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Filtros Dinámicos</strong></p>
+
+    <ul>
+      <li><strong>Estado:</strong> Activo / Inactivo (ambos por default)</li>
+      <li><strong>Rol:</strong> Extraído dinámicamente de usuarios</li>
+      <li><strong>Empresa:</strong> Extraído dinámicamente de usuarios</li>
+      <li><strong>Área:</strong> Extraído dinámicamente de usuarios</li>
+      <li>Múltiples selecciones permitidas</li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Crear Usuario</strong></p>
+
+    <ul>
+      <li>Botón: “Create New User”</li>
+      <li>Abre Modal: UserDetailsModal</li>
+      <li>Formulario con campos:
+        <ul>
+          <li>Username (unique, required)</li>
+          <li>Email (valid, required)</li>
+          <li>Password (required, min 8 chars)</li>
+          <li>First Name, Last Name</li>
+          <li>Phone (optional)</li>
+          <li>RUT (Chile)</li>
+          <li>Empresa (dropdown)</li>
+          <li>Rol (dropdown, options dinámicos)</li>
+          <li>Área (dropdown)</li>
+          <li>Activo (switch)</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Editar Usuario</strong></p>
+
+    <ul>
+      <li>Click en fila → Abre modal con datos pre-llenados</li>
+      <li>Password: Opcional en edición (si vacío, no se actualiza)</li>
+      <li>Cambios: PUT <code class="language-plaintext highlighter-rouge">/api/admin/users/{id}/</code></li>
+      <li>Response: Usuario actualizado</li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Eliminar Usuario</strong></p>
+    <ul>
+      <li>Disponible en modal de edición</li>
+      <li>Confirmación requerida</li>
+      <li>DELETE <code class="language-plaintext highlighter-rouge">/api/admin/users/{id}/</code></li>
+    </ul>
+  </li>
+</ol>
+
+<p><strong>Endpoints:</strong></p>
+
+<ul>
+  <li>GET <code class="language-plaintext highlighter-rouge">/api/admin/users/</code> - Listar todos</li>
+  <li>POST <code class="language-plaintext highlighter-rouge">/api/admin/users/</code> - Crear</li>
+  <li>PUT <code class="language-plaintext highlighter-rouge">/api/admin/users/{id}/</code> - Actualizar</li>
+  <li>DELETE <code class="language-plaintext highlighter-rouge">/api/admin/users/{id}/</code> - Eliminar</li>
+  <li>GET <code class="language-plaintext highlighter-rouge">/api/admin/users/options/</code> - Roles, Empresas, Áreas disponibles</li>
+</ul>
+
+<hr />
+
+<h3 id="93-gestión-de-empresas">9.3 Gestión de Empresas</h3>
+
+<p><strong>Ubicación:</strong> <code class="language-plaintext highlighter-rouge">/web/admin/companies</code></p>
+
+<p><strong>Funcionalidad:</strong></p>
+
+<ol>
+  <li>
+    <p><strong>Listar Empresas</strong></p>
+
+    <ul>
+      <li>Tabla con DataGrid</li>
+      <li>Columnas: ID, Nombre, Email, Teléfono, Dirección, Divisa Base</li>
+      <li>Filtrable por divisa</li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Búsqueda</strong></p>
+
+    <ul>
+      <li>Por nombre, email, teléfono, dirección</li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Crear/Editar Empresa</strong></p>
+
+    <ul>
+      <li>Modal: CompanyDetailsModal</li>
+      <li>Campos:
+        <ul>
+          <li>Nombre (required)</li>
+          <li>Email (required, valid)</li>
+          <li>Teléfono (optional)</li>
+          <li>Dirección (required)</li>
+          <li>Código (unique identifier)</li>
+          <li>Divisa Base (dropdown, dinámico)</li>
+          <li>Divisas Permitidas (multi-select)</li>
+          <li>Logo (upload image)</li>
+          <li>Contacto Primario (contact person)</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Configuración de Divisas</strong></p>
+    <ul>
+      <li>Seleccionar divisa base (USD, EUR, CLP, etc)</li>
+      <li>Seleccionar divisas permitidas para la empresa</li>
+      <li>Tasas de cambio: Automat llenadas o manuales</li>
+    </ul>
+  </li>
+</ol>
+
+<p><strong>Endpoints:</strong></p>
+
+<ul>
+  <li>GET <code class="language-plaintext highlighter-rouge">/api/admin/companies/</code> - Listar</li>
+  <li>POST <code class="language-plaintext highlighter-rouge">/api/admin/companies/</code> - Crear</li>
+  <li>PUT <code class="language-plaintext highlighter-rouge">/api/admin/companies/{id}/</code> - Actualizar</li>
+  <li>GET <code class="language-plaintext highlighter-rouge">/api/admin/companies/options/</code> - Divisas disponibles</li>
+</ul>
+
+<hr />
+
+<h3 id="94-gestión-de-proveedores">9.4 Gestión de Proveedores</h3>
+
+<p><strong>Ubicación:</strong> <code class="language-plaintext highlighter-rouge">/web/admin/suppliers</code></p>
+
+<p><strong>Funcionalidad:</strong></p>
+
+<ol>
+  <li>
+    <p><strong>Listar Proveedores</strong></p>
+
+    <ul>
+      <li>Tabla con DataGrid</li>
+      <li>Columnas: ID, Nombre, Email, Teléfono, RUT, Empresa, País, Ciudad</li>
+      <li>Filtrable por empresa</li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Búsqueda</strong></p>
+
+    <ul>
+      <li>Por nombre, email, RUT, teléfono</li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Crear/Editar Proveedor</strong></p>
+
+    <ul>
+      <li>Modal: SupplierDetailsModal</li>
+      <li>Campos:
+        <ul>
+          <li>Nombre (required)</li>
+          <li>Email (required, valid)</li>
+          <li>Teléfono (optional)</li>
+          <li>RUT/NIF (required, país-específico)</li>
+          <li>Empresa (dropdown, required)</li>
+          <li>Dirección (required)</li>
+          <li>Ciudad (required)</li>
+          <li>País (dropdown)</li>
+          <li>Tipo Proveedor (dropdown: General, Viajes, Comida, etc)</li>
+          <li>Contacto (nombre contacto)</li>
+          <li>Notas</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Validaciones</strong></p>
+    <ul>
+      <li>RUT/NIF único por empresa</li>
+      <li>Email válido</li>
+      <li>Teléfono formato internacional (opcional)</li>
+    </ul>
+  </li>
+</ol>
+
+<p><strong>Endpoints:</strong></p>
+
+<ul>
+  <li>GET <code class="language-plaintext highlighter-rouge">/api/admin/suppliers/</code> - Listar</li>
+  <li>POST <code class="language-plaintext highlighter-rouge">/api/admin/suppliers/</code> - Crear</li>
+  <li>PUT <code class="language-plaintext highlighter-rouge">/api/admin/suppliers/{id}/</code> - Actualizar</li>
+  <li>DELETE <code class="language-plaintext highlighter-rouge">/api/admin/suppliers/{id}/</code> - Eliminar</li>
+</ul>
+
+<hr />
+
+<h3 id="95-gestión-de-conceptos-de-gasto">9.5 Gestión de Conceptos de Gasto</h3>
+
+<p><strong>Ubicación:</strong> <code class="language-plaintext highlighter-rouge">/web/admin/econcepts</code></p>
+
+<p><strong>Funcionalidad:</strong></p>
+
+<ol>
+  <li>
+    <p><strong>Listar Conceptos</strong></p>
+
+    <ul>
+      <li>Tabla: ID, Nombre, Código, Descripción, Activo</li>
+      <li>Ejemplo: “Comida”, “Transporte”, “Hotel”, “Misc”</li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Crear/Editar Concepto</strong></p>
+
+    <ul>
+      <li>Modal: EConceptDetailsModal</li>
+      <li>Campos:
+        <ul>
+          <li>Nombre (required)</li>
+          <li>Código (required, unique)</li>
+          <li>Descripción (optional)</li>
+          <li>Activo (switch)</li>
+          <li>Permite adjuntos (switch)</li>
+          <li>Requiere justificación (switch)</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Filtros</strong></p>
+    <ul>
+      <li>Activo/Inactivo</li>
+    </ul>
+  </li>
+</ol>
+
+<p><strong>Endpoints:</strong></p>
+
+<ul>
+  <li>GET <code class="language-plaintext highlighter-rouge">/api/admin/econcepts/</code> - Listar</li>
+  <li>POST <code class="language-plaintext highlighter-rouge">/api/admin/econcepts/</code> - Crear</li>
+  <li>PUT <code class="language-plaintext highlighter-rouge">/api/admin/econcepts/{id}/</code> - Actualizar</li>
+</ul>
+
+<hr />
+
+<h3 id="96-gestión-de-cost-centers-ceco">9.6 Gestión de Cost Centers (CECO)</h3>
+
+<p><strong>Ubicación:</strong> <code class="language-plaintext highlighter-rouge">/web/admin/ceco</code></p>
+
+<p><strong>Funcionalidad:</strong></p>
+
+<ol>
+  <li>
+    <p><strong>Listar Cost Centers</strong></p>
+
+    <ul>
+      <li>Tabla: ID, Código, Nombre, Empresa, Presupuesto, Usado</li>
+      <li>Barra de progreso: Usado vs Total</li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Crear/Editar CECO</strong></p>
+
+    <ul>
+      <li>Modal: CecoDetailsModal</li>
+      <li>Campos:
+        <ul>
+          <li>Código CECO (required, unique)</li>
+          <li>Nombre (required)</li>
+          <li>Empresa (dropdown)</li>
+          <li>Presupuesto Anual (número)</li>
+          <li>Responsable (usuario dropdown)</li>
+          <li>Descripción (optional)</li>
+          <li>Activo (switch)</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Visualización de Presupuesto</strong></p>
+    <ul>
+      <li>Total presupuesto vs gastado</li>
+      <li>% utilizado con color (rojo si &gt;90%)</li>
+      <li>Proyección a fin de año</li>
+    </ul>
+  </li>
+</ol>
+
+<p><strong>Endpoints:</strong></p>
+
+<ul>
+  <li>GET <code class="language-plaintext highlighter-rouge">/api/admin/ceco/</code> - Listar</li>
+  <li>POST <code class="language-plaintext highlighter-rouge">/api/admin/ceco/</code> - Crear</li>
+  <li>PUT <code class="language-plaintext highlighter-rouge">/api/admin/ceco/{id}/</code> - Actualizar</li>
+</ul>
+
+<hr />
+
+<h3 id="97-gestión-de-áreas">9.7 Gestión de Áreas</h3>
+
+<p><strong>Ubicación:</strong> <code class="language-plaintext highlighter-rouge">/web/admin/area</code></p>
+
+<p><strong>Funcionalidad:</strong></p>
+
+<ol>
+  <li>
+    <p><strong>Listar Áreas</strong></p>
+
+    <ul>
+      <li>Tabla: ID, Nombre, Código, Empresa, Descripción</li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Crear/Editar Área</strong></p>
+    <ul>
+      <li>Modal: AreaDetailsModal</li>
+      <li>Campos:
+        <ul>
+          <li>Nombre (required)</li>
+          <li>Código (required, unique)</li>
+          <li>Empresa (dropdown)</li>
+          <li>Manager (usuario dropdown)</li>
+          <li>Descripción (optional)</li>
+          <li>Activa (switch)</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ol>
+
+<p><strong>Endpoints:</strong></p>
+
+<ul>
+  <li>GET <code class="language-plaintext highlighter-rouge">/api/admin/area/</code> - Listar</li>
+  <li>POST <code class="language-plaintext highlighter-rouge">/api/admin/area/</code> - Crear</li>
+  <li>PUT <code class="language-plaintext highlighter-rouge">/api/admin/area/{id}/</code> - Actualizar</li>
+</ul>
+
+<hr />
+
+<h3 id="98-gestión-de-aprobadores">9.8 Gestión de Aprobadores</h3>
+
+<p><strong>Ubicación:</strong></p>
+
+<ul>
+  <li>Level 1: <code class="language-plaintext highlighter-rouge">/web/admin/uapprover</code></li>
+  <li>Level 2: <code class="language-plaintext highlighter-rouge">/web/admin/ceco-approver</code></li>
+  <li>Level 3: <code class="language-plaintext highlighter-rouge">/web/admin/company-approver</code></li>
+</ul>
+
+<p><strong>Funcionalidad (Similar en los 3 niveles):</strong></p>
+
+<ol>
+  <li>
+    <p><strong>Listar Aprobadores</strong></p>
+
+    <ul>
+      <li>Tabla: ID, Usuario, Nombre, Email, Nivel, Activo</li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Asignar Aprobador</strong></p>
+
+    <ul>
+      <li>Click “Assign” → Modal</li>
+      <li>Selector de usuario (dropdown, lista de empleados)</li>
+      <li>Confirmar: Asigna usuario como aprobador en ese nivel</li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Remover Aprobador</strong></p>
+
+    <ul>
+      <li>Botón “Remove” en fila</li>
+      <li>Confirmación</li>
+      <li>DELETE <code class="language-plaintext highlighter-rouge">/api/admin/approvers/{level}/{id}/</code></li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Restricciones</strong></p>
+    <ul>
+      <li>Usuario solo puede ser aprobador en 1 nivel</li>
+      <li>No puede aprobar sus propios documentos</li>
+    </ul>
+  </li>
+</ol>
+
+<p><strong>Endpoints (por nivel):</strong></p>
+
+<ul>
+  <li>GET <code class="language-plaintext highlighter-rouge">/api/admin/approvers/level-1/</code> - Listar L1</li>
+  <li>POST <code class="language-plaintext highlighter-rouge">/api/admin/approvers/level-1/</code> - Crear L1</li>
+  <li>DELETE <code class="language-plaintext highlighter-rouge">/api/admin/approvers/level-1/{id}/</code> - Eliminar L1</li>
+  <li>Similar para L2 y L3</li>
+</ul>
+
+<hr />
+
+<h3 id="99-filtros-y-búsqueda-en-admin">9.9 Filtros y Búsqueda en Admin</h3>
+
+<p><strong>Patrón General:</strong></p>
+
+<ol>
+  <li>
+    <p><strong>Search Input</strong></p>
+
+    <ul>
+      <li>Busca en múltiples campos simultáneamente</li>
+      <li>Real-time (sin botón “Buscar”)</li>
+      <li>Case-insensitive</li>
+      <li>Trimming automático</li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Filtros StateFilter</strong></p>
+
+    <ul>
+      <li>Componente: <code class="language-plaintext highlighter-rouge">&lt;StateFilter&gt;</code></li>
+      <li>Dropdown con checkboxes</li>
+      <li>Múltiple selección</li>
+      <li>Si todas descheckeadas → sin filtro</li>
+      <li>Si una checkeada → solo esa</li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Combinación de Filtros</strong></p>
+    <ul>
+      <li>AND lógico: Debe cumplir search Y todos los filtros</li>
+      <li>Actualización instantánea en tabla</li>
+    </ul>
+  </li>
+</ol>
+
+<hr />
+
+<h3 id="910-modales-de-detalle">9.10 Modales de Detalle</h3>
+
+<p><strong>Patrón General:</strong></p>
+
+<ol>
+  <li>
+    <p><strong>Dialog/Modal</strong></p>
+
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">&lt;UserDetailsModal&gt;</code>, <code class="language-plaintext highlighter-rouge">&lt;CompanyDetailsModal&gt;</code>, etc</li>
+      <li>Abre en modo “Create” o “Edit”</li>
+      <li>Form con Zod validation</li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Acciones Comunes</strong></p>
+
+    <ul>
+      <li><strong>Save:</strong> POST (new) o PUT (edit)</li>
+      <li><strong>Cancel:</strong> Cierra modal sin cambios</li>
+      <li><strong>Delete:</strong> Abre confirmación, luego DELETE</li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Estados</strong></p>
+    <ul>
+      <li>Idle: Formulario normal</li>
+      <li>Loading: Button deshabilitado, spinner</li>
+      <li>Success: Toast + cierra modal + refetch tabla</li>
+      <li>Error: Toast rojo con mensaje</li>
+    </ul>
+  </li>
+</ol>
+
+<hr />
+
+<h2 id="resumen---punto-9">Resumen - Punto 9</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Módulo</th>
+      <th>Tabla</th>
+      <th>Crear</th>
+      <th>Editar</th>
+      <th>Eliminar</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Usuarios</strong></td>
+      <td>✅</td>
+      <td>✅</td>
+      <td>✅</td>
+      <td>✅</td>
+    </tr>
+    <tr>
+      <td><strong>Empresas</strong></td>
+      <td>✅</td>
+      <td>✅</td>
+      <td>✅</td>
+      <td>❌</td>
+    </tr>
+    <tr>
+      <td><strong>Proveedores</strong></td>
+      <td>✅</td>
+      <td>✅</td>
+      <td>✅</td>
+      <td>✅</td>
+    </tr>
+    <tr>
+      <td><strong>Conceptos</strong></td>
+      <td>✅</td>
+      <td>✅</td>
+      <td>✅</td>
+      <td>❌</td>
+    </tr>
+    <tr>
+      <td><strong>CECOs</strong></td>
+      <td>✅</td>
+      <td>✅</td>
+      <td>✅</td>
+      <td>❌</td>
+    </tr>
+    <tr>
+      <td><strong>Áreas</strong></td>
+      <td>✅</td>
+      <td>✅</td>
+      <td>✅</td>
+      <td>❌</td>
+    </tr>
+    <tr>
+      <td><strong>Aprobadores</strong></td>
+      <td>✅</td>
+      <td>✅</td>
+      <td>❌</td>
+      <td>✅</td>
+    </tr>
+    <tr>
+      <td><strong>Rutas</strong></td>
+      <td>✅</td>
+      <td>✅</td>
+      <td>✅</td>
+      <td>✅</td>
+    </tr>
+    <tr>
+      <td><strong>Impuestos</strong></td>
+      <td>✅</td>
+      <td>✅</td>
+      <td>✅</td>
+      <td>✅</td>
+    </tr>
+    <tr>
+      <td><strong>Clases Doc</strong></td>
+      <td>✅</td>
+      <td>✅</td>
+      <td>✅</td>
+      <td>✅</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h2 id="10-exportaciones-y-reportes">10. Exportaciones y Reportes</h2>
+
+<h3 id="101-sistema-de-reportes">10.1 Sistema de Reportes</h3>
+
+<p><strong>Ubicación:</strong> <code class="language-plaintext highlighter-rouge">/web/expenses/reports</code></p>
+
+<p><strong>Tipos de Reportes:</strong></p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Tipo</th>
+      <th>Descripción</th>
+      <th>Ruta</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Gastos (Expenses)</strong></td>
+      <td>Lista de gastos individuales</td>
+      <td><code class="language-plaintext highlighter-rouge">/expenses/reports</code></td>
+    </tr>
+    <tr>
+      <td><strong>Viajes (Travel)</strong></td>
+      <td>Reportes de viajes corporativos</td>
+      <td><code class="language-plaintext highlighter-rouge">/expenses/reports</code></td>
+    </tr>
+    <tr>
+      <td><strong>Per Diem</strong></td>
+      <td>Dietas y viáticos</td>
+      <td><code class="language-plaintext highlighter-rouge">/expenses/reports</code></td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>Estructura de Reporte:</strong></p>
+
+<ol>
+  <li>
+    <p><strong>Nombre del Reporte</strong></p>
+
+    <ul>
+      <li>Campo texto (editable)</li>
+      <li>Ej: “Reporte Q4 2024”</li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Período</strong></p>
+
+    <ul>
+      <li>Fecha inicio (date picker)</li>
+      <li>Fecha fin (date picker)</li>
+      <li>Validación: Fin &gt;= Inicio</li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Items Incluidos</strong></p>
+
+    <ul>
+      <li>Múltiples selecciones (checkboxes)</li>
+      <li>Gastos, Viajes, Per Diems</li>
+      <li>Cantidad total mostrada</li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Datos del Reporte</strong></p>
+    <ul>
+      <li>Total en moneda base</li>
+      <li>Divisas alternativas (si aplica)</li>
+      <li>Monto por categoría</li>
+    </ul>
+  </li>
+</ol>
+
+<hr />
+
+<h3 id="102-crear-nuevo-reporte">10.2 Crear Nuevo Reporte</h3>
+
+<p><strong>Ubicación:</strong> <code class="language-plaintext highlighter-rouge">/web/expenses/reports/new</code></p>
+
+<p><strong>Flujo de Creación:</strong></p>
+
+<ol>
+  <li>
+    <p><strong>Step 1: Información Básica</strong></p>
+
+    <ul>
+      <li>Nombre reporte (text input)</li>
+      <li>Descripción (textarea, optional)</li>
+      <li>Período: Desde / Hasta</li>
+      <li>Empresa (auto-filled)</li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Step 2: Seleccionar Items</strong></p>
+
+    <ul>
+      <li>
+        <table>
+          <tbody>
+            <tr>
+              <td>Tabs: Gastos</td>
+              <td>Viajes</td>
+              <td>Per Diem</td>
+            </tr>
+          </tbody>
+        </table>
+      </li>
+      <li>Checkbox para cada item</li>
+      <li>Mostrar: Fecha, Descripción, Monto, Estado</li>
+      <li>Botón: “Select All” en cada tab</li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Step 3: Resumen</strong></p>
+
+    <ul>
+      <li>Total gastos: XXX</li>
+      <li>Total viajes: XXX</li>
+      <li>Total per diem: XXX</li>
+      <li><strong>Total Reporte:</strong> XXX</li>
+      <li>Botón: “Create Report”</li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Estado del Reporte</strong></p>
+    <ul>
+      <li>Nuevo reporte creado → Estado: DRAFT</li>
+      <li>Puede editarse antes de enviar</li>
+      <li>Una vez enviado → Estado: SUBMITTED</li>
+    </ul>
+  </li>
+</ol>
+
+<p><strong>Validaciones:</strong></p>
+
+<ul>
+  <li>Nombre requerido, máx 255 caracteres</li>
+  <li>Al menos 1 item debe seleccionarse</li>
+  <li>Período válido (desde &lt;= hasta)</li>
+</ul>
+
+<p><strong>Endpoint:</strong></p>
+
+<ul>
+  <li>POST <code class="language-plaintext highlighter-rouge">/reports/</code> - Crear nuevo reporte</li>
+  <li>Body: <code class="language-plaintext highlighter-rouge">{name, description, period_from, period_to, items: [{type, id}, ...]}</code></li>
+  <li>Response: Reporte creado con ID</li>
+</ul>
+
+<hr />
+
+<h3 id="103-listar-y-filtrar-reportes">10.3 Listar y Filtrar Reportes</h3>
+
+<p><strong>Ubicación:</strong> <code class="language-plaintext highlighter-rouge">/web/expenses/reports</code></p>
+
+<p><strong>Tabla de Reportes:</strong></p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Columna</th>
+      <th>Tipo</th>
+      <th>Descripción</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>ID</strong></td>
+      <td>Número</td>
+      <td>ID único del reporte</td>
+    </tr>
+    <tr>
+      <td><strong>Nombre</strong></td>
+      <td>Texto</td>
+      <td>Nombre del reporte</td>
+    </tr>
+    <tr>
+      <td><strong>Período</strong></td>
+      <td>Fecha</td>
+      <td>Desde - Hasta</td>
+    </tr>
+    <tr>
+      <td><strong>Items</strong></td>
+      <td>Número</td>
+      <td>Cantidad de items incluidos</td>
+    </tr>
+    <tr>
+      <td><strong>Total</strong></td>
+      <td>Moneda</td>
+      <td>Monto total del reporte</td>
+    </tr>
+    <tr>
+      <td><strong>Estado</strong></td>
+      <td>Badge</td>
+      <td>DRAFT, SUBMITTED, APPROVED, REJECTED</td>
+    </tr>
+    <tr>
+      <td><strong>Fecha Creación</strong></td>
+      <td>Fecha</td>
+      <td>Cuándo se creó</td>
+    </tr>
+    <tr>
+      <td><strong>Acciones</strong></td>
+      <td>Botones</td>
+      <td>Ver, Editar, Eliminar, Descargar</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>Filtros:</strong></p>
+
+<ol>
+  <li>
+    <p><strong>Búsqueda</strong></p>
+
+    <ul>
+      <li>Por nombre de reporte</li>
+      <li>Real-time filtering</li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Estado</strong></p>
+
+    <ul>
+      <li>DRAFT: En edición</li>
+      <li>SUBMITTED: Enviado para aprobación</li>
+      <li>APPROVED: Aprobado</li>
+      <li>REJECTED: Rechazado</li>
+      <li>Múltiple selección</li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Período</strong></p>
+
+    <ul>
+      <li>Desde / Hasta (date range picker)</li>
+      <li>Filtra reportes dentro del rango</li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Rango de Monto</strong></p>
+    <ul>
+      <li>Mín / Máx</li>
+      <li>Filtra por total del reporte</li>
+    </ul>
+  </li>
+</ol>
+
+<p><strong>Búsqueda Avanzada:</strong></p>
+
+<ul>
+  <li>Combinación: Nombre AND Estado AND Período AND Monto</li>
+  <li>AND lógico entre filtros</li>
+  <li>Actualización inmediata en tabla</li>
+</ul>
+
+<hr />
+
+<h3 id="104-ver-detalles-de-reporte">10.4 Ver Detalles de Reporte</h3>
+
+<p><strong>Ubicación:</strong> Modal o Drawer al hacer click en fila</p>
+
+<p><strong>Información Mostrada:</strong></p>
+
+<ol>
+  <li>
+    <p><strong>Encabezado</strong></p>
+
+    <ul>
+      <li>Nombre del reporte</li>
+      <li>ID y fecha creación</li>
+      <li>Estado con badge color</li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Período</strong></p>
+
+    <ul>
+      <li>Desde: DD/MM/YYYY</li>
+      <li>Hasta: DD/MM/YYYY</li>
+      <li>Duración: X días</li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Resumen de Items</strong></p>
+
+    <ul>
+      <li>Gastos: X items, Total XXX</li>
+      <li>Viajes: X items, Total XXX</li>
+      <li>Per Diem: X items, Total XXX</li>
+      <li><strong>Total Reporte: XXX</strong></li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Detalles Expandibles (Accordion)</strong></p>
+
+    <p><strong>Gastos:</strong></p>
+
+    <ul>
+      <li>Tabla con: Fecha, Concepto, Descripción, Monto, Empresa</li>
+      <li>Subtotal: XXX</li>
+    </ul>
+
+    <p><strong>Viajes:</strong></p>
+
+    <ul>
+      <li>Tabla con: Fecha, Origen, Destino, Distancia, Monto, Empresa</li>
+      <li>Subtotal: XXX</li>
+    </ul>
+
+    <p><strong>Per Diem:</strong></p>
+
+    <ul>
+      <li>Tabla con: Fecha, Cantidad Días, Monto Diario, Total, País</li>
+      <li>Subtotal: XXX</li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Historial de Aprobación</strong></p>
+    <ul>
+      <li>Timeline: Creado → Enviado → Aprobado/Rechazado</li>
+      <li>Quién aprobó / rechazó</li>
+      <li>Fecha y comentarios</li>
+    </ul>
+  </li>
+</ol>
+
+<hr />
+
+<h3 id="105-editar-reporte">10.5 Editar Reporte</h3>
+
+<p><strong>Disponible solo en estado DRAFT</strong></p>
+
+<p><strong>Acciones Permitidas:</strong></p>
+
+<ol>
+  <li>
+    <p><strong>Cambiar Nombre/Descripción</strong></p>
+
+    <ul>
+      <li>Editar campos de texto</li>
+      <li>Guardar cambios: PATCH <code class="language-plaintext highlighter-rouge">/reports/{id}/</code></li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Cambiar Período</strong></p>
+
+    <ul>
+      <li>Modificar fechas desde/hasta</li>
+      <li>Validación: Fin &gt;= Inicio</li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Agregar/Remover Items</strong></p>
+
+    <ul>
+      <li>Tab para cada tipo</li>
+      <li>Checkboxes con items disponibles</li>
+      <li>Guardar selección</li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Enviar Reporte</strong></p>
+
+    <ul>
+      <li>Botón: “Submit for Approval”</li>
+      <li>Validación: Al menos 1 item</li>
+      <li>Cambia estado: DRAFT → SUBMITTED</li>
+      <li>POST <code class="language-plaintext highlighter-rouge">/reports/{id}/submit/</code></li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Cancelar Reporte</strong></p>
+    <ul>
+      <li>Botón: “Cancel Report”</li>
+      <li>Confirmación requerida</li>
+      <li>DELETE <code class="language-plaintext highlighter-rouge">/reports/{id}/</code></li>
+      <li>Solo si estado DRAFT</li>
+    </ul>
+  </li>
+</ol>
+
+<hr />
+
+<h3 id="106-exportar-a-formatos">10.6 Exportar a Formatos</h3>
+
+<p><strong>Ubicación:</strong> Botón “Export” en vista de reporte</p>
+
+<p><strong>Formatos Disponibles:</strong></p>
+
+<ol>
+  <li>
+    <p><strong>CSV</strong></p>
+
+    <ul>
+      <li>Estructura: Encabezado + Datos tabulares</li>
+      <li>Separador: Coma (,)</li>
+      <li>Encoding: UTF-8</li>
+      <li>Incluye: Todos los items del reporte</li>
+      <li>Acción: GET <code class="language-plaintext highlighter-rouge">/reports/{id}/export/csv</code> → Download</li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Excel (.xlsx)</strong></p>
+
+    <ul>
+      <li>Librería: Opcional (cliente o servidor)</li>
+      <li>Hojas: Gastos, Viajes, PerDiem, Resumen</li>
+      <li>Formato: Tabla con estilos</li>
+      <li>Acción: GET <code class="language-plaintext highlighter-rouge">/reports/{id}/export/xlsx</code> → Download</li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>PDF</strong></p>
+
+    <ul>
+      <li>Librería: html2pdf o similar (cliente)</li>
+      <li>Contenido: Resumen + Tablas + Gráficos</li>
+      <li>Orientación: Vertical</li>
+      <li>Acción: GET <code class="language-plaintext highlighter-rouge">/reports/{id}/export/pdf</code> → Download</li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>JSON</strong></p>
+    <ul>
+      <li>Estructura: Objetos nested</li>
+      <li>Incluye: Metadatos + Items + Resumen</li>
+      <li>Acción: GET <code class="language-plaintext highlighter-rouge">/reports/{id}/export/json</code> → Download</li>
+    </ul>
+  </li>
+</ol>
+
+<p><strong>Filename Pattern:</strong></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>{empresa}_{tipo}_{fecha_inicio}_{fecha_fin}_{timestamp}.{ext}
+
+Ej: RinderCorp_Gastos_2024-01-01_2024-03-31_20241130_143022.csv
+</code></pre></div></div>
+
+<hr />
+
+<h3 id="107-aprobación-de-reportes">10.7 Aprobación de Reportes</h3>
+
+<p><strong>Flujo General:</strong></p>
+
+<ol>
+  <li>Usuario EMPLOYEE crea reporte</li>
+  <li>Estado: DRAFT (puede editarse)</li>
+  <li>Click “Submit for Approval”</li>
+  <li>Estado: SUBMITTED</li>
+  <li>Approver recibe notificación</li>
+  <li>Approver ve reporte en dashboard</li>
+  <li>Approver: Aprobar o Rechazar</li>
+  <li>Si Aproba → APPROVED</li>
+  <li>Si Rechaza → REJECTED (puede volver a enviarse)</li>
+</ol>
+
+<p><strong>Pantalla de Aprobación:</strong></p>
+
+<ul>
+  <li>Similar a aprobación de documentos</li>
+  <li>Mostrar: Reporte, Items, Total</li>
+  <li>Campos:
+    <ul>
+      <li>Aprobar / Rechazar (radio buttons)</li>
+      <li>Comentarios (textarea)</li>
+      <li>Botón: “Submit”</li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>Estados:</strong></p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Estado</th>
+      <th>Quién lo ve</th>
+      <th>Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>DRAFT</td>
+      <td>Creator</td>
+      <td>Editar, Eliminar, Submit</td>
+    </tr>
+    <tr>
+      <td>SUBMITTED</td>
+      <td>Approver</td>
+      <td>Aprobar, Rechazar, Ver detalles</td>
+    </tr>
+    <tr>
+      <td>APPROVED</td>
+      <td>Ambos</td>
+      <td>Ver, Descargar, Archivar</td>
+    </tr>
+    <tr>
+      <td>REJECTED</td>
+      <td>Creator</td>
+      <td>Ver razón, Editar, Re-enviar</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h3 id="108-dashboards-de-reportes">10.8 Dashboards de Reportes</h3>
+
+<p><strong>Para Employee:</strong></p>
+
+<ul>
+  <li>KPIs: Reportes creados, Pendientes, Aprobados</li>
+  <li>Gráfico: Estado de reportes (pie chart)</li>
+  <li>Gráfico: Montos por período (line chart)</li>
+  <li>Tabla: Reportes recientes</li>
+</ul>
+
+<p><strong>Para Approver:</strong></p>
+
+<ul>
+  <li>KPIs: Pendientes, Aprobados mes, Rechazados</li>
+  <li>Gráfico: Reportes por estado</li>
+  <li>Gráfico: Tiempo promedio aprobación</li>
+  <li>Tabla: Reportes pendientes (ordenados por antigüedad)</li>
+</ul>
+
+<p><strong>Para Admin:</strong></p>
+
+<ul>
+  <li>KPIs: Total reportes, Total moneda, Promedio monto</li>
+  <li>Gráfico: Reportes por empresa</li>
+  <li>Gráfico: Reportes por período</li>
+  <li>Tabla: Todos los reportes con filtros avanzados</li>
+</ul>
+
+<hr />
+
+<h3 id="109-exportación-de-datos-personales">10.9 Exportación de Datos Personales</h3>
+
+<p><strong>Ubicación:</strong> Settings → Privacidad → “Export My Data”</p>
+
+<p><strong>Contenido del Export:</strong></p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"user"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">123</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"username"</span><span class="p">:</span><span class="w"> </span><span class="s2">"jdoe"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"john@example.com"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"first_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"John"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"last_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Doe"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="nl">"documents"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">456</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"EXPENSE"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"APPROVED"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"total"</span><span class="p">:</span><span class="w"> </span><span class="mi">500</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"date"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2024-01-15"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">],</span><span class="w">
+  </span><span class="nl">"reports"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">789</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Q4 Report"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"total"</span><span class="p">:</span><span class="w"> </span><span class="mi">5000</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"state"</span><span class="p">:</span><span class="w"> </span><span class="s2">"APPROVED"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">],</span><span class="w">
+  </span><span class="nl">"approvals"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">101112</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"document_id"</span><span class="p">:</span><span class="w"> </span><span class="mi">456</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"approver"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Manager Name"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"APPROVED"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"date"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2024-01-20"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">],</span><span class="w">
+  </span><span class="nl">"export_date"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2024-11-30"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"export_format"</span><span class="p">:</span><span class="w"> </span><span class="s2">"JSON"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<p><strong>Formato:</strong></p>
+
+<ul>
+  <li>JSON comprimido en ZIP</li>
+  <li>Archivo: <code class="language-plaintext highlighter-rouge">user_data_export_{timestamp}.zip</code></li>
+  <li>Incluye: Perfil, Documentos, Reportes, Historial</li>
+</ul>
+
+<p><strong>Endpoint:</strong></p>
+
+<ul>
+  <li>GET <code class="language-plaintext highlighter-rouge">/api/users/me/export/data/</code> - Genera y descarga JSON</li>
+</ul>
+
+<hr />
+
+<h3 id="1010-auditoría-y-historial">10.10 Auditoría y Historial</h3>
+
+<p><strong>Ubicación:</strong> Admin → Auditoría (futuro)</p>
+
+<p><strong>Registro de Acciones:</strong></p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Acción</th>
+      <th>Usuario</th>
+      <th>Timestamp</th>
+      <th>Detalles</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Crear reporte</td>
+      <td>john@ex</td>
+      <td>2024-01-15 10:30</td>
+      <td>Reporte ID 789</td>
+    </tr>
+    <tr>
+      <td>Editar reporte</td>
+      <td>john@ex</td>
+      <td>2024-01-15 10:45</td>
+      <td>Cambió nombre</td>
+    </tr>
+    <tr>
+      <td>Enviar reporte</td>
+      <td>john@ex</td>
+      <td>2024-01-15 14:00</td>
+      <td>Enviado para aprobación</td>
+    </tr>
+    <tr>
+      <td>Aprobar reporte</td>
+      <td>manager@ex</td>
+      <td>2024-01-16 09:00</td>
+      <td>Aprobado</td>
+    </tr>
+    <tr>
+      <td>Descargar reporte</td>
+      <td>john@ex</td>
+      <td>2024-01-16 11:30</td>
+      <td>Descargó CSV</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>Disponibilidad:</strong></p>
+
+<ul class="task-list">
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" />Auditoría de reportes (futuro)</li>
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" />Auditoría de aprobaciones (futuro)</li>
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" />Auditoría de descargas (futuro)</li>
+</ul>
+
+<hr />
+
+<h2 id="resumen---punto-10">Resumen - Punto 10</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Funcionalidad</th>
+      <th>Status</th>
+      <th>Descripción</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Crear Reporte</strong></td>
+      <td>✅</td>
+      <td>Step-by-step wizard</td>
+    </tr>
+    <tr>
+      <td><strong>Listar Reportes</strong></td>
+      <td>✅</td>
+      <td>Con búsqueda y filtros</td>
+    </tr>
+    <tr>
+      <td><strong>Ver Detalles</strong></td>
+      <td>✅</td>
+      <td>Modal/Drawer con items</td>
+    </tr>
+    <tr>
+      <td><strong>Editar (DRAFT)</strong></td>
+      <td>✅</td>
+      <td>Cambiar nombre, período, items</td>
+    </tr>
+    <tr>
+      <td><strong>Enviar Aprobación</strong></td>
+      <td>✅</td>
+      <td>Cambiar a SUBMITTED</td>
+    </tr>
+    <tr>
+      <td><strong>Aprobar Reporte</strong></td>
+      <td>✅</td>
+      <td>Solo approvers</td>
+    </tr>
+    <tr>
+      <td><strong>Rechazar Reporte</strong></td>
+      <td>✅</td>
+      <td>Con comentarios</td>
+    </tr>
+    <tr>
+      <td><strong>Exportar CSV</strong></td>
+      <td>✅</td>
+      <td>Descarga directa</td>
+    </tr>
+    <tr>
+      <td><strong>Exportar Excel</strong></td>
+      <td>❓</td>
+      <td>Opcional</td>
+    </tr>
+    <tr>
+      <td><strong>Exportar PDF</strong></td>
+      <td>❓</td>
+      <td>Opcional</td>
+    </tr>
+    <tr>
+      <td><strong>Exportar JSON</strong></td>
+      <td>✅</td>
+      <td>Datos personales</td>
+    </tr>
+    <tr>
+      <td><strong>Dashboard</strong></td>
+      <td>✅</td>
+      <td>KPIs + Gráficos</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h2 id="11-errores-comunes">11. Errores Comunes</h2>
+
+<h3 id="111-errores-de-autenticación">11.1 Errores de Autenticación</h3>
+
+<h4 id="error-token-expired-o-401-unauthorized">Error: “Token Expired” o “401 Unauthorized”</h4>
+
+<p><strong>Síntoma:</strong></p>
+
+<ul>
+  <li>Toast rojo: “Session expired”</li>
+  <li>Auto-redirect a <code class="language-plaintext highlighter-rouge">/login</code></li>
+  <li>No puedes acceder a rutas protegidas</li>
+</ul>
+
+<p><strong>Causas:</strong></p>
+
+<ol>
+  <li>Token expiró (después de X horas)</li>
+  <li>Token inválido o corrupto</li>
+  <li>Logout desde otra pestaña del mismo navegador</li>
+</ol>
+
+<p><strong>Solución:</strong></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>1. Ingresa nuevamente con usuario y contraseña
+2. Token se regenera y almacena en localStorage
+3. Refresh automático lleva a ruta anterior
+</code></pre></div></div>
+
+<p><strong>Técnico:</strong></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">apiClient.ts</code> → interceptor captura 401</li>
+  <li>Limpia localStorage</li>
+  <li>Redirige a <code class="language-plaintext highlighter-rouge">/login</code> con next/navigation</li>
+  <li>No mostraré token en console.log (seguridad)</li>
+</ul>
+
+<hr />
+
+<h4 id="error-invalid-credentials">Error: “Invalid Credentials”</h4>
+
+<p><strong>Síntoma:</strong></p>
+
+<ul>
+  <li>Login fallido</li>
+  <li>Toast: “Invalid email or password”</li>
+</ul>
+
+<p><strong>Causas:</strong></p>
+
+<ol>
+  <li>Usuario/email no existe</li>
+  <li>Contraseña incorrecta</li>
+  <li>CAPS LOCK activado</li>
+  <li>Email con espacios accidentales</li>
+</ol>
+
+<p><strong>Solución:</strong></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>1. Verifica que el email esté correcto
+2. Asegúrate de ingresar contraseña correcta
+3. Prueba SHIFT+CAPS para desactivar CAPS LOCK
+4. Copia/pega credenciales (sin espacios)
+5. Si olvidas contraseña → "Forgot Password"
+</code></pre></div></div>
+
+<hr />
+
+<h4 id="error-email-already-registered">Error: “Email Already Registered”</h4>
+
+<p><strong>Síntoma:</strong></p>
+
+<ul>
+  <li>Al signup: “This email is already registered”</li>
+</ul>
+
+<p><strong>Causas:</strong></p>
+
+<ol>
+  <li>Ya exists una cuenta con ese email</li>
+  <li>Signup intenta registrar email duplicado</li>
+</ol>
+
+<p><strong>Solución:</strong></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>1. Login si ya tienes cuenta
+2. Usa diferente email
+3. Si olvidaste contraseña → "Forgot Password"
+</code></pre></div></div>
+
+<hr />
+
+<h3 id="112-errores-de-validación-de-formularios">11.2 Errores de Validación de Formularios</h3>
+
+<h4 id="error-required-field">Error: “Required Field”</h4>
+
+<p><strong>Síntoma:</strong></p>
+
+<ul>
+  <li>Campo con borde rojo</li>
+  <li>Mensaje debajo: “This field is required”</li>
+  <li>Submit bloqueado</li>
+</ul>
+
+<p><strong>Causas:</strong></p>
+
+<ul>
+  <li>Campo obligatorio está vacío</li>
+</ul>
+
+<p><strong>Solución:</strong></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>1. Completa el campo con datos válidos
+2. Presiona TAB para pasar al siguiente
+3. Submit se activa cuando todos requeridos llenos
+</code></pre></div></div>
+
+<hr />
+
+<h4 id="error-invalid-email-format">Error: “Invalid Email Format”</h4>
+
+<p><strong>Síntoma:</strong></p>
+
+<ul>
+  <li>Email input con borde rojo</li>
+  <li>Mensaje: “Enter a valid email”</li>
+</ul>
+
+<p><strong>Causas:</strong></p>
+
+<ul>
+  <li>Email sin formato valido</li>
+  <li>Ej: “john@” o “john.com” (sin @)</li>
+</ul>
+
+<p><strong>Solución:</strong></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Formato válido: usuario@dominio.com
+Ejemplos:
+✅ john.doe@company.com
+✅ maria+tag@example.org
+❌ john@         (falta dominio)
+❌ john.com      (falta @)
+❌ @example.com  (falta usuario)
+</code></pre></div></div>
+
+<hr />
+
+<h4 id="error-phone-number-invalid">Error: “Phone Number Invalid”</h4>
+
+<p><strong>Síntoma:</strong></p>
+
+<ul>
+  <li>Phone input con borde rojo</li>
+  <li>Mensaje: “Enter a valid international phone”</li>
+</ul>
+
+<p><strong>Causas:</strong></p>
+
+<ul>
+  <li>Formato no reconocido</li>
+  <li>Menos dígitos de lo esperado</li>
+  <li>Caracteres inválidos</li>
+</ul>
+
+<p><strong>Solución:</strong></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Formato: +[1-9] seguido de 0-15 dígitos
+Ejemplos:
+✅ +56912345678 (Chile)
+✅ +34912345678 (España)
+✅ +33912345678 (Francia)
+✅ +491234567890 (Alemania)
+❌ 912345678    (sin +)
+❌ +0912345678  (comienza con 0)
+</code></pre></div></div>
+
+<hr />
+
+<h3 id="113-errores-de-carga-de-datos">11.3 Errores de Carga de Datos</h3>
+
+<h4 id="error-network-error-o-failed-to-fetch">Error: “Network Error” o “Failed to Fetch”</h4>
+
+<p><strong>Síntoma:</strong></p>
+
+<ul>
+  <li>Toast: “Network error”</li>
+  <li>Spinner indefinido</li>
+  <li>Tabla no muestra datos</li>
+</ul>
+
+<p><strong>Causas:</strong></p>
+
+<ol>
+  <li>Sin conexión a internet</li>
+  <li>Servidor offline</li>
+  <li>CORS error (mismatched origins)</li>
+  <li>Timeout en request</li>
+</ol>
+
+<p><strong>Solución:</strong></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>1. Verifica conexión internet (WiFi/Datos)
+2. Recarga página: F5 o Ctrl+R
+3. Espera 10 segundos y reintenta
+4. Verifica que backend esté online
+5. Limpia cache: Ctrl+Shift+Delete
+</code></pre></div></div>
+
+<hr />
+
+<h4 id="error-data-not-found-o-404-not-found">Error: “Data Not Found” o “404 Not Found”</h4>
+
+<p><strong>Síntoma:</strong></p>
+
+<ul>
+  <li>Toast: “Document not found”</li>
+  <li>Vista vacía o lista sin datos</li>
+</ul>
+
+<p><strong>Causas:</strong></p>
+
+<ol>
+  <li>Documento/registro fue eliminado</li>
+  <li>URL con ID inválido</li>
+  <li>Permiso insuficiente para ver recurso</li>
+  <li>Backend retorna 404</li>
+</ol>
+
+<p><strong>Solución:</strong></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>1. Verifica que documento siga existiendo
+2. Recarga lista para ver cambios
+3. Si es URL manual, corrige el ID
+4. Pide acceso a admin si es permiso
+</code></pre></div></div>
+
+<hr />
+
+<h4 id="error-timeout-o-request-took-too-long">Error: “Timeout” o “Request Took Too Long”</h4>
+
+<p><strong>Síntoma:</strong></p>
+
+<ul>
+  <li>Spinner muy tiempo</li>
+  <li>“Request timeout” después de ~30s</li>
+  <li>Operación no completada</li>
+</ul>
+
+<p><strong>Causas:</strong></p>
+
+<ol>
+  <li>Servidor muy lento</li>
+  <li>Conexión muy lenta</li>
+  <li>Payload muy grande</li>
+  <li>Operación pesada en backend</li>
+</ol>
+
+<p><strong>Solución:</strong></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>1. Reintenta la operación
+2. Recarga página y vuelve a intentar
+3. Si es upload de archivo grande:
+   - Comprime archivos
+   - Divide en múltiples uploads
+4. Contacta admin si persiste
+</code></pre></div></div>
+
+<hr />
+
+<h3 id="114-errores-de-archivo">11.4 Errores de Archivo</h3>
+
+<h4 id="error-file-upload-failed">Error: “File Upload Failed”</h4>
+
+<p><strong>Síntoma:</strong></p>
+
+<ul>
+  <li>Toast: “Failed to upload file”</li>
+  <li>Archivo no se adjunta</li>
+</ul>
+
+<p><strong>Causas:</strong></p>
+
+<ol>
+  <li>Archivo muy grande (&gt;50MB)</li>
+  <li>Tipo de archivo no permitido (ej: .exe)</li>
+  <li>Sin espacio en servidor</li>
+  <li>Conexión interrumpida</li>
+</ol>
+
+<p><strong>Solución:</strong></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>1. Verifica tamaño: máx 50MB
+2. Formatos permitidos: PDF, JPG, PNG, XLSX, DOC
+3. Reintenta conexión WiFi/Datos
+4. Intenta con archivo más pequeño
+5. Si persiste, contacta soporte
+</code></pre></div></div>
+
+<hr />
+
+<h4 id="error-file-not-found-al-descargar">Error: “File Not Found” al Descargar</h4>
+
+<p><strong>Síntoma:</strong></p>
+
+<ul>
+  <li>Click en “Download” no descarga</li>
+  <li>Toast: “File not found”</li>
+</ul>
+
+<p><strong>Causas:</strong></p>
+
+<ol>
+  <li>Archivo fue eliminado del servidor</li>
+  <li>Link expiró</li>
+  <li>Permiso insuficiente</li>
+  <li>Servidor error</li>
+</ol>
+
+<p><strong>Solución:</strong></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>1. Verifica que archivo siga existiendo
+2. Recarga página
+3. Reintenta descargar
+4. Si no funciona, contacta admin
+</code></pre></div></div>
+
+<hr />
+
+<h3 id="115-errores-de-permisos">11.5 Errores de Permisos</h3>
+
+<h4 id="error-access-denied-o-you-dont-have-permission">Error: “Access Denied” o “You Don’t Have Permission”</h4>
+
+<p><strong>Síntoma:</strong></p>
+
+<ul>
+  <li>Toast: “Access denied”</li>
+  <li>Botón gris/deshabilitado</li>
+  <li>Ruta redirige a home</li>
+</ul>
+
+<p><strong>Causas:</strong></p>
+
+<ol>
+  <li>Tu rol no permite esa acción</li>
+  <li>No eres approver para ese documento</li>
+  <li>Documento no es tuyo</li>
+  <li>Nivel de aprobación insuficiente</li>
+</ol>
+
+<p><strong>Solución:</strong></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>1. Verifica tu rol en Settings → Perfil
+2. Solicita al admin elevar permisos
+3. Solo creator o approver pueden ver
+4. Solo approver L3 puede aprobar L3
+5. Contacta a tu manager
+</code></pre></div></div>
+
+<hr />
+
+<h4 id="error-role-not-assigned">Error: “Role Not Assigned”</h4>
+
+<p><strong>Síntoma:</strong></p>
+
+<ul>
+  <li>No ves opciones de approver</li>
+  <li>Admin/Reports no aparecen en sidebar</li>
+</ul>
+
+<p><strong>Causas:</strong></p>
+
+<ul>
+  <li>Tu usuario no tiene ese rol asignado</li>
+</ul>
+
+<p><strong>Solución:</strong></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>1. Contacta admin
+2. Admin asigna rol desde: Admin → Users
+3. Recarga página para ver cambios
+4. Verificar con: Settings → Perfil
+</code></pre></div></div>
+
+<hr />
+
+<h3 id="116-errores-de-estado-y-flujo">11.6 Errores de Estado y Flujo</h3>
+
+<h4 id="error-cannot-approve-already-approved-document">Error: “Cannot Approve Already Approved Document”</h4>
+
+<p><strong>Síntoma:</strong></p>
+
+<ul>
+  <li>Modal de aprobación bloqueado</li>
+  <li>Botón “Approve” gris</li>
+</ul>
+
+<p><strong>Causas:</strong></p>
+
+<ol>
+  <li>Documento ya fue aprobado</li>
+  <li>Ya está en siguiente nivel</li>
+  <li>Alguien más lo aprobó primero</li>
+</ol>
+
+<p><strong>Solución:</strong></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>1. Recarga página
+2. Ver en "Historial" quién aprobó
+3. Si es error, contacta admin
+</code></pre></div></div>
+
+<hr />
+
+<h4 id="error-cannot-edit-submitted-document">Error: “Cannot Edit Submitted Document”</h4>
+
+<p><strong>Síntoma:</strong></p>
+
+<ul>
+  <li>Formulario campos deshabilitados</li>
+  <li>“This document is locked”</li>
+</ul>
+
+<p><strong>Causas:</strong></p>
+
+<ul>
+  <li>Documento fue enviado para aprobación</li>
+  <li>Estado cambió a SUBMITTED/APPROVED</li>
+</ul>
+
+<p><strong>Solución:</strong></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>1. Solo puedes editar documentos DRAFT
+2. Si necesitas cambiar:
+   - Rechaza documento (si eres approver)
+   - Creator puede editar nuevo draft
+3. Opción: Crear nuevo documento
+</code></pre></div></div>
+
+<hr />
+
+<h4 id="error-item-already-in-report">Error: “Item Already in Report”</h4>
+
+<p><strong>Síntoma:</strong></p>
+
+<ul>
+  <li>No puedes agregar item a reporte</li>
+  <li>Mensaje: “This item is already included”</li>
+</ul>
+
+<p><strong>Causas:</strong></p>
+
+<ul>
+  <li>Mismo item ya está en otro reporte</li>
+  <li>Un gasto no puede estar en 2 reportes</li>
+</ul>
+
+<p><strong>Solución:</strong></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>1. Revisa reportes existentes
+2. Elimina de reporte anterior si quieres mover
+3. O crea nuevo reporte con diferentes items
+</code></pre></div></div>
+
+<hr />
+
+<h3 id="117-errores-de-interfaz">11.7 Errores de Interfaz</h3>
+
+<h4 id="error-chart-not-rendering-o-blank-chart">Error: “Chart Not Rendering” o “Blank Chart”</h4>
+
+<p><strong>Síntoma:</strong></p>
+
+<ul>
+  <li>Gráfico en blanco</li>
+  <li>No muestra datos</li>
+</ul>
+
+<p><strong>Causas:</strong></p>
+
+<ol>
+  <li>Datos vacíos/inválidos</li>
+  <li>Error en configuración de Recharts</li>
+  <li>Resolución muy pequeña</li>
+</ol>
+
+<p><strong>Solución:</strong></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>1. Verifica que haya datos en período
+2. Zoom out si en mobile
+3. Recarga página
+4. Prueba con rango diferente
+</code></pre></div></div>
+
+<hr />
+
+<h4 id="error-table-columns-not-showing">Error: “Table Columns Not Showing”</h4>
+
+<p><strong>Síntoma:</strong></p>
+
+<ul>
+  <li>Tabla vacía o columnas ocultas</li>
+  <li>Datos no se ven</li>
+</ul>
+
+<p><strong>Causas:</strong></p>
+
+<ol>
+  <li>Resolución muy pequeña</li>
+  <li>Columnas ocultadas accidentalmente</li>
+  <li>Filtro muy restrictivo</li>
+</ol>
+
+<p><strong>Solución:</strong></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>1. En desktop: Zoom out (Ctrl+Minus)
+2. En mobile: Scroll horizontal
+3. Limpia filtros: Reset filters
+4. Recarga página
+</code></pre></div></div>
+
+<hr />
+
+<h4 id="error-modal-not-opening">Error: “Modal Not Opening”</h4>
+
+<p><strong>Síntoma:</strong></p>
+
+<ul>
+  <li>Click en botón pero no abre modal</li>
+  <li>Nada sucede</li>
+</ul>
+
+<p><strong>Causas:</strong></p>
+
+<ol>
+  <li>JavaScript error</li>
+  <li>Componente mal renderizado</li>
+  <li>Estado corrupto</li>
+</ol>
+
+<p><strong>Solución:</strong></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>1. Recarga página: F5
+2. Limpia cache: Ctrl+Shift+Delete
+3. Intenta en navegador diferente
+4. Contacta soporte con screenshot
+</code></pre></div></div>
+
+<hr />
+
+<h3 id="118-errores-de-temaidioma">11.8 Errores de Tema/Idioma</h3>
+
+<h4 id="error-language-not-changing">Error: “Language Not Changing”</h4>
+
+<p><strong>Síntoma:</strong></p>
+
+<ul>
+  <li>Cambias idioma en settings</li>
+  <li>Interfaz permanece en anterior</li>
+</ul>
+
+<p><strong>Causas:</strong></p>
+
+<ol>
+  <li>i18next no refresca</li>
+  <li>Componentes no suscritos a cambio</li>
+  <li>localStorage corrompida</li>
+</ol>
+
+<p><strong>Solución:</strong></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>1. Recarga página: F5
+2. Limpia localStorage: Ctrl+Shift+Delete
+3. Intenta nuevamente
+4. Si persiste: Hard refresh Ctrl+Shift+R
+</code></pre></div></div>
+
+<hr />
+
+<h4 id="error-dark-mode-not-working">Error: “Dark Mode Not Working”</h4>
+
+<p><strong>Síntoma:</strong></p>
+
+<ul>
+  <li>Cambias tema a dark</li>
+  <li>Interfaz permanece light</li>
+</ul>
+
+<p><strong>Causas:</strong></p>
+
+<ol>
+  <li>next-themes no initialized</li>
+  <li>Sistema operativo fuerza tema</li>
+  <li>CSS no aplicado</li>
+</ol>
+
+<p><strong>Solución:</strong></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>1. Recarga página
+2. Verifica en: Settings → Appearance
+3. Selecciona "dark" explícitamente
+4. Si sigue: Limpia cache del navegador
+</code></pre></div></div>
+
+<hr />
+
+<h3 id="119-debugging-tips">11.9 Debugging Tips</h3>
+
+<p><strong>Herramientas Disponibles:</strong></p>
+
+<ol>
+  <li>
+    <p><strong>DevTools del Navegador</strong></p>
+
+    <ul>
+      <li>F12 → Console</li>
+      <li>Ver errores y logs</li>
+      <li>Inspeccionar elementos</li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Network Tab</strong></p>
+
+    <ul>
+      <li>F12 → Network</li>
+      <li>Ver requests/responses</li>
+      <li>Verificar status codes (200, 401, 404, 500)</li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Application/Storage</strong></p>
+
+    <ul>
+      <li>F12 → Application</li>
+      <li>Ver localStorage (token, idioma)</li>
+      <li>Limpiar datos de prueba</li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>React DevTools</strong></p>
+    <ul>
+      <li>Extension: React Developer Tools</li>
+      <li>Inspeccionar componentes</li>
+      <li>Ver props y state</li>
+    </ul>
+  </li>
+</ol>
+
+<p><strong>Pasos para Reportar Error:</strong></p>
+
+<ol>
+  <li>Reproducir paso a paso</li>
+  <li>Anotar mensaje exacto de error</li>
+  <li>Screenshot o video corto</li>
+  <li>Verificar console (F12)</li>
+  <li>Notar navegador y SO</li>
+  <li>Enviar a soporte con detalles</li>
+</ol>
+
+<hr />
+
+<h2 id="resumen---punto-11">Resumen - Punto 11</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Categoría</th>
+      <th>Error</th>
+      <th>Solución Rápida</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Auth</strong></td>
+      <td>401 Unauthorized</td>
+      <td>Login nuevamente</td>
+    </tr>
+    <tr>
+      <td><strong>Auth</strong></td>
+      <td>Invalid Credentials</td>
+      <td>Verifica email/password</td>
+    </tr>
+    <tr>
+      <td><strong>Validación</strong></td>
+      <td>Required Field</td>
+      <td>Completa campo vacío</td>
+    </tr>
+    <tr>
+      <td><strong>Validación</strong></td>
+      <td>Invalid Email</td>
+      <td>Formato: user@domain.com</td>
+    </tr>
+    <tr>
+      <td><strong>Red</strong></td>
+      <td>Network Error</td>
+      <td>Recarga página</td>
+    </tr>
+    <tr>
+      <td><strong>Red</strong></td>
+      <td>Timeout</td>
+      <td>Reintenta después</td>
+    </tr>
+    <tr>
+      <td><strong>Archivo</strong></td>
+      <td>Upload Failed</td>
+      <td>Verifica tamaño (&lt;50MB)</td>
+    </tr>
+    <tr>
+      <td><strong>Permisos</strong></td>
+      <td>Access Denied</td>
+      <td>Pide role a admin</td>
+    </tr>
+    <tr>
+      <td><strong>Estado</strong></td>
+      <td>Cannot Edit</td>
+      <td>Solo DRAFT editable</td>
+    </tr>
+    <tr>
+      <td><strong>UI</strong></td>
+      <td>Blank Chart</td>
+      <td>Recarga página</td>
+    </tr>
+    <tr>
+      <td><strong>Idioma</strong></td>
+      <td>Not Changing</td>
+      <td>Hard refresh (Ctrl+Shift+R)</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h2 id="conclusión">Conclusión</h2>
+
+<p><strong>Documentación Completada:</strong></p>
+
+<p>✅ Puntos 1-11 documentados en profundidad</p>
+
+<p><strong>Cobertura:</strong></p>
+
+<ul>
+  <li>✅ Stack tecnológico y estructura</li>
+  <li>✅ Autenticación y acceso</li>
+  <li>✅ Interfaz general y componentes</li>
+  <li>✅ Dashboard y KPIs</li>
+  <li>✅ Gestión de documentos (CRUD)</li>
+  <li>✅ Sistema de aprobaciones (3 niveles)</li>
+  <li>✅ Notificaciones (Sonner)</li>
+  <li>✅ Perfil y configuración</li>
+  <li>✅ Panel administrativo (14 módulos)</li>
+  <li>✅ Reportes y exportaciones</li>
+  <li>✅ Errores comunes y soluciones</li>
+</ul>
+
+<p><strong>Próximos Pasos (Futuros):</strong></p>
+
+<ul class="task-list">
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" />Auditoría de acciones</li>
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" />Two-Factor Authentication (2FA)</li>
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" />API Documentation (backend)</li>
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" />Performance optimization guide</li>
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" />Security hardening guide</li>
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" />Deployment guide (Vercel)</li>
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" />Testing strategy</li>
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" />Troubleshooting advanced topics</li>
+</ul>
+
+<p><strong>Fecha de Última Actualización:</strong> 30 de Noviembre 2025</p>
+
+<hr />
+
+<p><em>Fin de la Documentación Técnica Frontend - Rinderline v2.0</em></p>
+
+
+      
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/anchor-js/4.1.0/anchor.min.js" integrity="sha256-lZaRhKri35AyJSypXXs4o6OPFTbTmUoltBbDCbdzegg=" crossorigin="anonymous"></script>
+    <script>anchors.add();</script>
+  </body>
+</html>

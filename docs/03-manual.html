@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Manual de Usuario | Rinderline Documentation</title>
+<meta name="generator" content="Jekyll v3.10.0" />
+<meta property="og:title" content="Manual de Usuario" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Guía completa de usuario para la aplicación Rinderline" />
+<meta property="og:description" content="Guía completa de usuario para la aplicación Rinderline" />
+<link rel="canonical" href="https://eddy3o.github.io/rinderline/rinderline/docs/03-manual.html" />
+<meta property="og:url" content="https://eddy3o.github.io/rinderline/rinderline/docs/03-manual.html" />
+<meta property="og:site_name" content="Rinderline Documentation" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Manual de Usuario" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","description":"Guía completa de usuario para la aplicación Rinderline","headline":"Manual de Usuario","url":"https://eddy3o.github.io/rinderline/rinderline/docs/03-manual.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <link rel="stylesheet" href="/rinderline/assets/css/style.css?v=7e3c2e3e7989c3f30e183bd44d8e4bade0766ea3">
+    <!-- start custom head snippets, customize with your own _includes/head-custom.html file -->
+
+<!-- Setup Google Analytics -->
+
+
+
+<!-- You can set your favicon here -->
+<!-- link rel="shortcut icon" type="image/x-icon" href="/rinderline/favicon.ico" -->
+
+<!-- end custom head snippets -->
+
+  </head>
+  <body>
+    <div class="container-lg px-3 my-5 markdown-body">
+      
+      <h1><a href="https://eddy3o.github.io/rinderline/rinderline/">Rinderline Documentation</a></h1>
+      
+
+      <h1 id="manual-de-usuario--rinderline">Manual de Usuario — Rinderline</h1>
+
+<p><strong>Versión:</strong> 1.0<br />
+<strong>Fecha:</strong> Noviembre 2025<br />
+<strong>Aplicación:</strong> Rinderline - Gestión de Gastos Empresariales<br />
+<strong>Público:</strong> Empleados, Aprobadores, Administradores<br />
+<strong>Idioma:</strong> Español (disponible también en EN, FR, DE)</p>
+
+<hr />
+
+<h2 id="índice">ÍNDICE</h2>
+
+<ol>
+  <li><a href="#1-introducción">Introducción</a></li>
+  <li><a href="#2-acceso-a-la-aplicación">Acceso a la Aplicación</a></li>
+  <li><a href="#3-roles-y-permisos">Roles y Permisos</a></li>
+  <li><a href="#4-interfaz-principal-frontend">Interfaz Principal</a></li>
+  <li><a href="#5-gestión-de-usuarios-si-aplica">Gestión de Usuarios</a></li>
+  <li><a href="#6-módulo-principal-de-la-aplicación--documentos-y-gastos">Módulo de Documentos y Gastos</a></li>
+  <li><a href="#7-módulo-de-aprobaciones">Módulo de Aprobaciones</a></li>
+  <li><a href="#8-dashboard-y-reportes">Dashboard y Reportes</a></li>
+  <li><a href="#9-perfil-y-configuración">Perfil y Configuración</a></li>
+  <li><a href="#10-preguntas-frecuentes-faq">Preguntas Frecuentes (FAQ)</a></li>
+  <li><a href="#11-errores-y-soluciones">Errores y Soluciones</a></li>
+</ol>
+
+<hr />
+
+<h2 id="resumen-ejecutivo">RESUMEN EJECUTIVO</h2>
+
+<p><strong>Rinderline</strong> es una plataforma web centralizada para la gestión integral de gastos corporativos, que permite a los empleados registrar, documentar y enviar comprobantes de gastos para su aprobación en múltiples niveles jerárquicos.</p>
+
+<h3 id="para-empleados">Para Empleados:</h3>
+
+<ul>
+  <li>✅ Crear documentos de gasto (gastos, viajes, viáticos)</li>
+  <li>✅ Adjuntar comprobantes (PDF, imágenes)</li>
+  <li>✅ Enviar para aprobación</li>
+  <li>✅ Rastrear estado y comentarios</li>
+</ul>
+
+<h3 id="para-aprobadores">Para Aprobadores:</h3>
+
+<ul>
+  <li>✅ Revisar documentos pendientes</li>
+  <li>✅ Aprobar o rechazar con comentarios</li>
+  <li>✅ Visualizar dashboard con pendientes por nivel</li>
+  <li>✅ Filtrar y buscar documentos asignados</li>
+</ul>
+
+<h3 id="para-administradores">Para Administradores:</h3>
+
+<ul>
+  <li>✅ Gestionar usuarios (crear, editar, desactivar)</li>
+  <li>✅ Configurar catálogos (centros de costo, conceptos de gasto, impuestos)</li>
+  <li>✅ Definir estructura de aprobación (niveles y aprobadores)</li>
+  <li>✅ Monitorear actividad y auditoría</li>
+</ul>
+
+<h3 id="características-principales">Características Principales:</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Feature</th>
+      <th>Descripción</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Multi-nivel de Aprobación</strong></td>
+      <td>Flujo de aprobación con hasta 4 niveles jerárquicos</td>
+    </tr>
+    <tr>
+      <td><strong>Multi-moneda</strong></td>
+      <td>Soporte para múltiples monedas con conversión automática</td>
+    </tr>
+    <tr>
+      <td><strong>Adjuntos de Comprobantes</strong></td>
+      <td>Subida de PDF e imágenes con validación y almacenamiento en AWS S3</td>
+    </tr>
+    <tr>
+      <td><strong>Soft Delete / Auditoría</strong></td>
+      <td>Registro completo de cambios sin eliminación física</td>
+    </tr>
+    <tr>
+      <td><strong>Reportes Visuales</strong></td>
+      <td>Dashboards con gráficos, filtros y exportación a Excel/PDF</td>
+    </tr>
+    <tr>
+      <td><strong>Internacionalización</strong></td>
+      <td>Disponible en 4 idiomas (ES, EN, FR, DE)</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h2 id="1-introducción">1. Introducción</h2>
+
+<h3 id="11-propósito-del-manual">1.1 Propósito del manual</h3>
+
+<p>Este manual explica de forma práctica y dirigida cómo usar la aplicación Rinderline: desde el acceso, flujos básicos, roles y permisos, hasta la gestión de documentos. Está pensado para entregar instrucciones claras a <strong>usuarios comunes</strong>, <strong>aprobadores</strong> y <strong>administradores</strong>, combinando explicación paso a paso con recomendaciones y restricciones.</p>
+
+<h3 id="12-qué-es-la-aplicación-y-para-qué-sirve">1.2 ¿Qué es la aplicación y para qué sirve?</h3>
+
+<p>Rinderline es una aplicación web para la gestión de documentos y gastos corporativos: crear reportes, subir comprobantes (PDF/imagenes), enviar documentos a aprobación en varios niveles y, finalmente, integrarlos con sistemas externos (p. ej. SAP) o procesarlos para pago.</p>
+
+<h3 id="13-público-objetivo">1.3 Público objetivo</h3>
+
+<ul>
+  <li><strong>Usuario (Employee / Reporter):</strong> Crea documentos y items (gastos, viajes, per diems), envía para aprobación, revisa historial.</li>
+  <li><strong>Aprobador (Approver):</strong> Revisa, aprueba o rechaza documentos asignados según su nivel (L1–L3). Tiene dashboard con pendientes y herramientas de filtrado.</li>
+  <li><strong>Administrador (Admin):</strong> Gestiona catálogos, usuarios, permisos y configuración global del sistema.</li>
+</ul>
+
+<h3 id="14-requisitos-mínimos">1.4 Requisitos mínimos</h3>
+
+<ul>
+  <li>Navegadores soportados: versiones modernas de Chrome, Edge, Firefox y Safari; se recomienda la última versión estable.</li>
+  <li>Conexión: 1 Mbps estable mínimo para subida de archivos; recomendable conexión más rápida para cargas de múltiples PDFs.</li>
+  <li>Dispositivos: Desktop y tablet (la app es responsive; en móvil algunas tablas se muestran con scroll horizontal).</li>
+  <li>Archivos: PDFs, JPG/JPEG, PNG; máximo 5 MB por archivo y hasta 10 archivos por documento (restricciones del frontend).</li>
+</ul>
+
+<hr />
+
+<h2 id="2-acceso-a-la-aplicación">2. Acceso a la Aplicación</h2>
+
+<p><strong>Esta sección te guía a través del proceso de autenticación y configuración inicial.</strong></p>
+
+<h3 id="21-url-de-acceso">2.1 URL de acceso</h3>
+
+<ul>
+  <li><strong>Desarrollo:</strong> <code class="language-plaintext highlighter-rouge">http://localhost:3000</code></li>
+  <li><strong>Producción:</strong> <code class="language-plaintext highlighter-rouge">https://rinderline-webapp.vercel.app</code></li>
+</ul>
+
+<p>Rutas públicas principales: <code class="language-plaintext highlighter-rouge">/</code>, <code class="language-plaintext highlighter-rouge">/login</code>, <code class="language-plaintext highlighter-rouge">/signup</code>. Rutas protegidas: <code class="language-plaintext highlighter-rouge">/web/*</code> (dashboard, gastos, aprobaciones, admin, settings).</p>
+
+<h3 id="22-inicio-de-sesión">2.2 Inicio de sesión</h3>
+
+<ol>
+  <li>Accede a <code class="language-plaintext highlighter-rouge">/login</code>.</li>
+  <li>Ingresa usuario (o email) y contraseña. Validaciones en cliente: username 3–20 caracteres; password mínimo 6 caracteres.</li>
+  <li>Al enviar, la app hace <code class="language-plaintext highlighter-rouge">POST /auth/login/</code> y recibe <code class="language-plaintext highlighter-rouge">{ token, user, redirectTo }</code>.</li>
+  <li>El token se guarda en <code class="language-plaintext highlighter-rouge">localStorage</code> y queda incluido en el header <code class="language-plaintext highlighter-rouge">Authorization: Token {token}</code> para las siguientes peticiones.</li>
+</ol>
+
+<p><strong>Estado y manejo de errores:</strong> 401 limpia token y redirige a <code class="language-plaintext highlighter-rouge">/login</code>; errores 500 muestran mensaje genérico.</p>
+
+<h3 id="23-primer-acceso-y-configuración-inicial">2.3 Primer acceso y configuración inicial</h3>
+
+<ul>
+  <li>Tras registro automático (signup) el usuario es redirigido a <code class="language-plaintext highlighter-rouge">/web/settings</code> para completar su perfil.</li>
+  <li>Se recomienda subir foto, verificar datos de la empresa/área y configurar preferencias (idioma, notificaciones).</li>
+  <li>En caso de que sea un registro, es necesario conocer el RUT de la empresa a la que se va a pertenecer, sino existe devolverá un error.</li>
+</ul>
+
+<h3 id="24-cierre-de-sesión">2.4 Cierre de sesión</h3>
+
+<ul>
+  <li>Desde el avatar/menú: <code class="language-plaintext highlighter-rouge">Logout</code> → (opcional) <code class="language-plaintext highlighter-rouge">POST /auth/logout/</code>.</li>
+  <li>Al cerrar sesión se elimina el token de <code class="language-plaintext highlighter-rouge">localStorage</code>, se limpia el estado global y se redirige a <code class="language-plaintext highlighter-rouge">/login</code>.</li>
+  <li>Sincronización entre pestañas: la app escucha eventos <code class="language-plaintext highlighter-rouge">storage</code> para propagar logout.</li>
+</ul>
+
+<hr />
+
+<h2 id="3-roles-y-permisos">3. Roles y Permisos</h2>
+
+<p><strong>Comprende los diferentes tipos de usuario y sus capacidades en el sistema.</strong></p>
+
+<h3 id="31-tipos-de-usuarios">3.1 Tipos de usuarios</h3>
+
+<ul>
+  <li><strong>USER (Empleado):</strong> Crea y edita sus documentos; no puede aprobar sus propios documentos.</li>
+  <li><strong>APPROVER:</strong> Usuario con permiso para aprobar en alguno de los niveles definidos por la empresa.</li>
+  <li><strong>ADMIN:</strong> Gestión total (usuarios, catálogos, configuración, paneles de administración).</li>
+</ul>
+
+<h3 id="32-permisos-y-restricciones-por-rol">3.2 Permisos y restricciones por rol</h3>
+
+<ul>
+  <li>Los aprobadores ven paneles distintos (dashboard de aprobador) y accesos a endpoints de revisión y aprobación.</li>
+  <li>Los administradores pueden gestionar compañías, áreas, centros de costo, monedas, impuestos y permisos.</li>
+  <li>Accesos a menús y botones cambian dinámicamente según el rol del token autenticado.</li>
+</ul>
+
+<h3 id="33-acciones-no-permitidas--reglas-de-negocio-clave">3.3 Acciones no permitidas / reglas de negocio clave</h3>
+
+<ul>
+  <li><strong>Un usuario no puede aprobar sus propios documentos.</strong> Si un usuario creó o ya intervino en un documento, el sistema evita que ese mismo usuario emita la aprobación final en ese mismo documento, por lo tanto ya no lo podrá visualizar.</li>
+  <li><strong>Estados y transiciones:</strong> SAVED → PENDING → (PENDING_L2/PENDING_L3) → APPROVED → PAID. Rechazos devuelven a REJECTED y permiten edición+reenvío (en desarrollo).</li>
+  <li><strong>Borrado lógico:</strong> documentos y items usan <code class="language-plaintext highlighter-rouge">erased_at</code> (soft delete) — no se eliminan físicamente por seguridad/auditoría.</li>
+</ul>
+
+<hr />
+
+<h2 id="4-interfaz-principal-frontend">4. Interfaz Principal (Frontend)</h2>
+
+<p><strong>Conoce la estructura visual y componentes de la aplicación.</strong></p>
+
+<h3 id="41-descripción-general-del-dashboard">4.1 Descripción general del dashboard</h3>
+
+<ul>
+  <li>Dashboard con KPI cards (gastos por categoría, montos, tendencias), tablas de documentos y gráficos (bar/pie) para analítica rápida.</li>
+  <li>Cards y gráficos son interactivos: click en un segmento o fila abre detalles en modal/drawer.</li>
+</ul>
+
+<h3 id="42-menú-de-navegación">4.2 Menú de navegación</h3>
+
+<ul>
+  <li>Sidebar colapsable, con items según rol: Dashboard, Mis Gastos, Aprobaciones (si aplica), Reportes, Admin, Configuración.</li>
+  <li>En móvil el sidebar viene colapsado y es accesible desde el trigger en el header.</li>
+</ul>
+
+<h3 id="43-barra-superior-perfil-notificaciones-logout">4.3 Barra superior (perfil, notificaciones, logout)</h3>
+
+<ul>
+  <li>Contiene: trigger del sidebar (mobile), título dinámico, botones de acción (ej. “Subir Gasto”), icono de notificaciones y avatar con menú de cuenta/logout.</li>
+</ul>
+
+<h3 id="44-elementos-comunes-de-la-ui">4.4 Elementos comunes de la UI</h3>
+
+<ul>
+  <li><strong>Tablas:</strong> Columnas dinámicas, paginación (5/10/20), checkboxes de selección, acciones inline.</li>
+  <li><strong>Filtros:</strong> Search con debounce 500ms, select por estado (SAVED/PENDING/APPROVED/REJECTED), date range, select por tipo/centro de costo.</li>
+  <li><strong>Modales:</strong> Create/Edit, Approval Confirmation, Delete Confirmation, Details (drawer/modal).</li>
+  <li><strong>Adjuntos:</strong> Drag-and-drop para PDFs e imágenes con preview y barra de progreso.</li>
+  <li><strong>Badges/Indicadores de estado:</strong> colores por estado (ej. amarillo=PENDING, verde=APPROVED, rojo=REJECTED).</li>
+</ul>
+
+<hr />
+
+<h2 id="5-gestión-de-usuarios-si-aplica">5. Gestión de Usuarios (Si aplica)</h2>
+
+<p><strong>Solo para administradores: crear, editar y gestionar usuarios del sistema.</strong></p>
+
+<blockquote>
+  <p>Nota: acceso a este módulo normalmente reservado a administradores.</p>
+</blockquote>
+
+<h3 id="51-ver-lista-de-usuarios">5.1 Ver lista de usuarios</h3>
+
+<ul>
+  <li>Vista con paginación y filtros (por empresa, rol, estado activo/inactivo).</li>
+  <li>Columnas típicas: Nombre, Email, Rol, Empresa, Área, Último login, Estado.</li>
+</ul>
+
+<h3 id="52-crear-usuario">5.2 Crear usuario</h3>
+
+<ul>
+  <li>Formulario: email, username, nombre, apellido, empresa, área, rol, contraseña temporal.</li>
+  <li>Validaciones cliente+servidor: email único, username 3–20 chars, contraseña con políticas mínimas.</li>
+</ul>
+
+<h3 id="53-editar-perfil-propio">5.3 Editar perfil propio</h3>
+
+<ul>
+  <li>Los usuarios pueden editar su propio perfil desde <code class="language-plaintext highlighter-rouge">/web/settings</code>: nombre, teléfono, foto, preferencia de idioma y seguridad (2FA si activa).</li>
+</ul>
+
+<h3 id="54-editar-rolespermisos">5.4 Editar roles/permisos</h3>
+
+<ul>
+  <li>Solo Admin puede cambiar rol y permisos. Cambios de rol actualizan menú y accesos al siguiente inicio de sesión (se recomienda invalidar sesión y forzar re-login si hay cambio crítico).</li>
+</ul>
+
+<h3 id="55-desactivar-usuario">5.5 Desactivar usuario</h3>
+
+<ul>
+  <li>Opción para desactivar (no eliminar). Usuario desactivado no puede iniciar sesión; datos permanecen para auditoría. Admin puede reactivar.</li>
+</ul>
+
+<hr />
+
+<h2 id="6-módulo-principal-de-la-aplicación--documentos-y-gastos">6. Módulo Principal de la Aplicación — Documentos y Gastos</h2>
+
+<p><strong>Crea, edita y gestiona documentos de gasto con adjuntos.</strong></p>
+
+<h3 id="61-crear-documento">6.1 Crear documento</h3>
+
+<ol>
+  <li>Ir a <strong>Mis Documentos / Mis Gastos</strong>.</li>
+  <li>Dar clic en <strong>“Nuevo Documento”</strong>.</li>
+  <li>Completar los campos obligatorios: tipo de gasto, fecha, monto, descripción, moneda y centro de costo.</li>
+  <li>Guardar como <strong>Draft (SAVED)</strong> o enviar directamente a aprobación.</li>
+</ol>
+
+<p><strong>Reglas importantes:</strong></p>
+
+<ul>
+  <li>Validaciones en frontend para prevenir datos incompletos.</li>
+  <li>Se utiliza <em>soft delete</em> para mantener trazabilidad.</li>
+</ul>
+
+<h3 id="62-subir-archivos-pdf-imágenes">6.2 Subir archivos (PDF, imágenes)</h3>
+
+<ul>
+  <li>Se permite arrastrar y soltar archivos o seleccionarlos desde el explorador.</li>
+  <li>Tipos permitidos: <strong>PDF, JPG, PNG</strong>.</li>
+  <li>Tamaño máximo por archivo: <strong>5 MB</strong>.</li>
+  <li>Vista previa incluida; errores de formato o peso se muestran inmediatamente.</li>
+</ul>
+
+<p>El sistema realiza la subida al servidor o almacenamiento externo.</p>
+
+<h3 id="63-editar-documento-en-desarrollo">6.3 Editar documento (EN DESARROLLO)</h3>
+
+<ul>
+  <li>Los documentos en estado <strong>SAVED</strong> o <strong>REJECTED</strong> pueden editarse.</li>
+  <li>Los documentos en <strong>PENDING</strong> o superiores no pueden modificarse.</li>
+  <li>La edición incluye: actualizar montos, corregir descripciones, reemplazar o eliminar anexos.</li>
+</ul>
+
+<h3 id="64-archivar-o-eliminar-documento">6.4 Archivar o eliminar documento</h3>
+
+<ul>
+  <li>No existe eliminación permanente; se usa <strong>borrado lógico</strong>, esto significa que existirá en la base de datos aunque haya sido eliminado eliminado.</li>
+</ul>
+
+<h3 id="65-filtros-y-búsqueda">6.5 Filtros y búsqueda</h3>
+
+<ul>
+  <li>Búsqueda por texto con <em>debounce</em>.</li>
+  <li>Filtros por estado (SAVED, PENDING, APPROVED, REJECTED), por rango de fechas y por centro de costo.</li>
+  <li>Filtro por tipo de documento (viajes, reembolsos, gastos operativos, etc.).</li>
+</ul>
+
+<h3 id="66-historial-del-documento">6.6 Historial del documento</h3>
+
+<ul>
+  <li>Incluye: fecha de creación, últimos cambios, aprobaciones previas, rechazos, usuario responsable y comentarios.</li>
+  <li>El backend registra cada transición de estado.</li>
+</ul>
+
+<hr />
+
+<h2 id="7-módulo-de-aprobaciones">7. Módulo de Aprobaciones</h2>
+
+<p>Este módulo solo está disponible para usuarios con rol <strong>APROVADOR</strong> o <strong>ADMIN</strong>.</p>
+
+<h3 id="71-flujo-de-aprobación">7.1 Flujo de aprobación</h3>
+
+<p>Los documentos pasan por un flujo de aprobación en uno o varios niveles (L1, L2, L3). El flujo se define según:</p>
+
+<ul>
+  <li>Tipo de documento.</li>
+  <li>Centro de costo.</li>
+  <li>Empresa.</li>
+</ul>
+
+<h3 id="72-aprobar-o-rechazar">7.2 Aprobar o rechazar</h3>
+
+<ol>
+  <li>Acceder a <strong>Aprobaciones</strong>.</li>
+  <li>Seleccionar documento pendiente.</li>
+  <li>Ver detalles, anexos y comentarios.</li>
+  <li>Seleccionar: <strong>Aprobar</strong> o <strong>Rechazar</strong>.</li>
+  <li>Confirmar en el modal.</li>
+</ol>
+
+<h3 id="73-motivo-de-rechazo">7.3 Motivo de rechazo</h3>
+
+<ul>
+  <li>Si el usuario rechaza el documento, debe indicar un motivo.</li>
+</ul>
+
+<h3 id="74-niveles-de-aprobación">7.4 Niveles de aprobación</h3>
+
+<ul>
+  <li>Un documento puede requerir 1, 2 o 3 niveles.</li>
+  <li>Cuando un nivel aprueba, el documento pasa automáticamente al siguiente.</li>
+  <li>En L3, la aprobación marca el documento como <strong>APPROVED</strong>.</li>
+</ul>
+
+<h3 id="75-restricciones-del-sistema">7.5 Restricciones del sistema</h3>
+
+<ul>
+  <li>Un aprobador <strong>no puede volver a aprobar</strong> un documento que ya aprobó.</li>
+  <li>Un usuario <strong>jamás puede aprobar su propio documento</strong>.</li>
+  <li>Si el documento no pertenece al centro de costo, empresa o flujo del aprobador, el sistema bloquea la acción.</li>
+</ul>
+
+<hr />
+
+<h2 id="8-configuración-de-la-cuenta">8. Configuración de la Cuenta</h2>
+
+<h3 id="81-actualizar-datos-personales">8.1 Actualizar datos personales</h3>
+
+<ul>
+  <li>Desde el menú, opción <strong>“settings”</strong>.</li>
+  <li>Modificar: nombre, teléfono, idioma y zona horaria.</li>
+</ul>
+
+<h3 id="82-cambiar-contraseña">8.2 Cambiar contraseña</h3>
+
+<ul>
+  <li>Acceder a <strong>settings</strong>.</li>
+  <li>Validación de contraseña actual y nueva.</li>
+</ul>
+
+<h3 id="83-preferencias-de-usuario">8.3 Preferencias de usuario</h3>
+
+<ul>
+  <li>Configuración de idioma (ES/EN/DE/FR).</li>
+</ul>
+
+<hr />
+
+<h2 id="11-administración-del-sistema">11. Administración del Sistema</h2>
+
+<p>Este módulo es exclusivo para perfiles con rol <strong>ADMIN</strong>.</p>
+
+<h3 id="111-configuración-global">11.1 Configuración global</h3>
+
+<ul>
+  <li>Ajustes de empresa como logotipo, nombre, políticas internas y configuración de aprobación.</li>
+  <li>Parámetros generales: límites de carga de archivos, moneda por defecto, métodos de autenticación.</li>
+</ul>
+
+<h3 id="112-catálogos-y-listas">11.2 Catálogos y listas</h3>
+
+<ul>
+  <li>Administración de catálogos como: <strong>Monedas, Áreas, Empresas, Centros de Costo, Tipos de Documento</strong>.</li>
+  <li>Posibilidad de crear, editar, desactivar y reactivar elementos.</li>
+</ul>
+
+<h3 id="113-gestión-de-permisos">11.3 Gestión de permisos</h3>
+
+<ul>
+  <li>Asignación o modificación de roles.</li>
+  <li>Activación de usuarios como aprobadores.</li>
+  <li>Configuración de niveles de aprobación según empresa/área.</li>
+</ul>
+
+<h3 id="114-tareas-programadas--panel-admin">11.4 Tareas programadas / Panel admin</h3>
+
+<ul>
+  <li>Acceso directo al panel administrativo del backend (si está habilitado).</li>
+  <li>Visualización de logs, ejecuciones automáticas y tareas internas.</li>
+</ul>
+
+<hr />
+
+<hr />
+
+<h2 id="errores-y-soluciones-comunes">ERRORES Y SOLUCIONES COMUNES</h2>
+
+<h3 id="problema-no-puedo-iniciar-sesión">Problema: No puedo iniciar sesión</h3>
+
+<ul>
+  <li>Verifique que el usuario esté activo.</li>
+  <li>Asegúrese de que su contraseña es correcta.</li>
+  <li>Si olvidó su contraseña, comuniquese con un supervisor.</li>
+</ul>
+
+<h3 id="problema-no-carga-un-archivo-pdf">Problema: No carga un archivo PDF</h3>
+
+<ul>
+  <li>Verifique el tamaño (máx. 5MB) y el formato del archivo.</li>
+  <li>Revise su conexión a internet.</li>
+</ul>
+
+<h3 id="problema-no-se-muestra-información-en-la-tabla">Problema: No se muestra información en la tabla</h3>
+
+<ul>
+  <li>Compruebe que los filtros no estén restringiendo la búsqueda.</li>
+  <li>Actualice la página.</li>
+</ul>
+
+<h3 id="problema-no-puedo-aprobar-un-documento">Problema: No puedo aprobar un documento</h3>
+
+<p>###</p>
+
+<ul>
+  <li>Verifique que el documento pertenece a su nivel de aprobación.</li>
+  <li>Asegúrese de no haber aprobado el documento previamente.</li>
+  <li>Confirme que no es el creador del documento.</li>
+</ul>
+
+<h3 id="problema-error-500-o-403">Problema: Error 500 o 403</h3>
+
+<ul>
+  <li>El error 403 generalmente ocurre por permisos insuficientes.</li>
+  <li>El error 500 indica problemas internos; contacte a soporte.</li>
+</ul>
+
+<hr />
+
+<h2 id="preguntas-frecuentes-faq">Preguntas Frecuentes (FAQ)</h2>
+
+<h3 id="por-qué-no-me-aparecen-mis-documentos">¿Por qué no me aparecen mis documentos?</h3>
+
+<ul>
+  <li>Puede haber filtros activos.</li>
+  <li>El documento pudo ser archivado.</li>
+</ul>
+
+<h3 id="qué-significa-el-estado-x">¿Qué significa el estado X?</h3>
+
+<ul>
+  <li><strong>SAVED</strong>: Borrador.</li>
+  <li><strong>PENDING</strong>: En proceso de aprobación.</li>
+  <li><strong>REJECTED</strong>: Requiere corrección.</li>
+  <li><strong>APPROVED</strong>: Completamente aprobado.</li>
+</ul>
+
+<h3 id="cómo-sé-si-ya-aprobaron-mi-documento">¿Cómo sé si ya aprobaron mi documento?</h3>
+
+<ul>
+  <li>Recibirá una notificación.</li>
+  <li>Puede revisar el historial del documento.</li>
+</ul>
+
+<hr />
+
+<h2 id="anexos">Anexos</h2>
+
+<h3 id="141-glosario">14.1 Glosario</h3>
+
+<ul>
+  <li><strong>Borrador (SAVED):</strong> Documento aún no enviado.</li>
+  <li><strong>Pendiente (PENDING):</strong> En espera de aprobación.</li>
+  <li><strong>Rechazado (REJECTED):</strong> Requiere correcciones.</li>
+  <li><strong>Aprobado (APPROVED):</strong> Con todas las aprobaciones completas.</li>
+  <li><strong>Soft Delete:</strong> Eliminación lógica del documento.</li>
+</ul>
+
+<h3 id="142-screenshots-del-sistema">14.2 Screenshots del sistema</h3>
+
+<ul>
+  <li>Pantallas del dashboard.</li>
+  <li>Vista de documentos.</li>
+  <li>Vista de aprobaciones.</li>
+  <li>Tablas con filtros.</li>
+</ul>
+
+<h3 id="143-flujos-de-procesos">14.3 Flujos de procesos</h3>
+
+<ul>
+  <li>Flujo de creación de documentos.</li>
+  <li>Flujo completo de aprobaciones.</li>
+  <li>Flujo de recuperación de contraseña.</li>
+</ul>
+
+<h3 id="144-contacto-de-soporte">14.4 Contacto de soporte</h3>
+
+<ul>
+  <li>Email: <a href="mailto:soporte@rinderline.com">soporte@rinderline.com</a></li>
+  <li>Disponibilidad: Lunes a viernes de 9am a 6pm.</li>
+</ul>
+
+<hr />
+
+<p><strong>Fin del Manual de Usuario — Rinderline (Partes 1, 2 y 3)</strong>.</p>
+
+<h3 id="anexos-recomendados-para-esta-sección">Anexos recomendados para esta sección</h3>
+
+<ol>
+  <li>Flujo visual de creación de documento.</li>
+  <li>Ejemplo de tabla con filtros activos.</li>
+  <li>Pantalla del módulo de aprobaciones.</li>
+  <li>Modal de aprobación/rechazo.</li>
+  <li>Vista del panel de notificaciones.</li>
+  <li>Pantalla de configuración de cuenta.</li>
+</ol>
+
+<hr />
+
+<p><em>Fin de la Parte 2 (Puntos 6–9). La Parte 3 contendrá los puntos 10–14 junto con la propuesta completa de anexos y glosario.</em></p>
+
+<h3 id="anexos-imágenes-a-incluir-para-estos-primeros-5-puntos">Anexos (imágenes a incluir para estos primeros 5 puntos)</h3>
+
+<p><strong>Imágenes/diagramas recomendados (se ubicarán al final del documento):</strong></p>
+
+<ol>
+  <li><strong>Diagrama general de la aplicación</strong> (arquitectura cliente-servidor, endpoints principales).</li>
+  <li><strong>Flujo de inicio de sesión / recuperación de contraseña</strong> (pantallas y endpoints).</li>
+  <li><strong>Mapa de roles y permisos</strong> (quién puede ver/hacer qué).</li>
+  <li><strong>Wireframe del dashboard</strong> (sidebar, header, KPI cards, tabla).</li>
+  <li><strong>Formulario de creación de usuario</strong> (campos y validaciones visibles).</li>
+</ol>
+
+<hr />
+
+<p><em>Fin de la Parte 1 (Puntos 1–5). En la Parte 2 entregaré los puntos 6–9 y en la Parte 3 los puntos 10–14 junto con los anexos visuales y el glosario.</em></p>
+
+
+      
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/anchor-js/4.1.0/anchor.min.js" integrity="sha256-lZaRhKri35AyJSypXXs4o6OPFTbTmUoltBbDCbdzegg=" crossorigin="anonymous"></script>
+    <script>anchors.add();</script>
+  </body>
+</html>
