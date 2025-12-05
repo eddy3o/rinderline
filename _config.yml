@@ -5,11 +5,20 @@ description: "Complete technical and user documentation for Rinderline"
 url: "https://eddy3o.github.io/rinderline"
 baseurl: "/rinderline"
 
-# Minimal theme
+# Markdown processor
 markdown: kramdown
 kramdown:
   syntax_highlighter: rouge
   toc_levels: 2..6
+
+# Keep markdown files and generate HTML
+keep_files:
+  - docs
+
+# Include all markdown files
+include:
+  - "*.md"
+  - "docs/*.md"
 
 # Build settings
 exclude:
@@ -30,6 +39,6 @@ exclude:
   - frontend.md
   - manual.md
 
-# Enable all plugins
+# Enable plugins
 plugins:
   - jekyll-seo-tag
