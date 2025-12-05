@@ -1,0 +1,35 @@
+# Jekyll configuration for Rinderline Documentation
+
+title: Rinderline Documentation
+description: "Complete technical and user documentation for Rinderline"
+url: "https://eddy3o.github.io/rinderline"
+baseurl: "/rinderline"
+
+# Minimal theme
+markdown: kramdown
+kramdown:
+  syntax_highlighter: rouge
+  toc_levels: 2..6
+
+# Build settings
+exclude:
+  - .gitignore
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - vendor/
+  - .git
+  - .github
+  - run-docs.ps1
+  - run-docs.sh
+  - README.md
+  - JEKYLL_SETUP.md
+  - SETUP_COMPLETE.md
+  - START_HERE.md
+  - backend.md
+  - frontend.md
+  - manual.md
+
+# Enable all plugins
+plugins:
+  - jekyll-seo-tag
