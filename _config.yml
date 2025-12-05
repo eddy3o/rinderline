@@ -5,12 +5,13 @@ description: "Complete technical and user documentation for Rinderline expense m
 url: "https://eddy3o.github.io/rinderline"
 baseurl: "/rinderline"
 
-# Theme - Use just-the-docs
-theme: just-the-docs
+# Theme - Use just-the-docs as remote theme
+remote_theme: just-the-docs/just-the-docs@v0.8.1
 
 # Plugins
 plugins:
   - jekyll-seo-tag
+  - jekyll-remote-theme
 
 # Appearance
 color_scheme: light
